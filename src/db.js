@@ -3,7 +3,7 @@ const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pokemon`,  
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/movies`,  
   {
     logging: false,
     native: false,

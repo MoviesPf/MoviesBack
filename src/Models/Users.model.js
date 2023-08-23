@@ -1,0 +1,48 @@
+import { DataTypes, UUIDV4 } from "sequelize";
+import { sequelize } from "../db.js";
+
+const Users = sequelize.define(
+  "Users",
+  {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: UUIDV4,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+    },
+    nickname: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    avatar: {
+      type: DataTypes.STRING,
+    },
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+    },
+    status: {
+      type: DataTypes.STRING,
+    },
+    donator: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    admin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    banned: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+  },
+  { timestamps: false }
+);
+
+module.exports = Users;
