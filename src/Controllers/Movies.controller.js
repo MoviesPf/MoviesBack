@@ -1,5 +1,36 @@
 const Movies = require("../Models/Movies.model");
 
+const getAllMovieController = async () => {
+  const data = await Movies.findAll();
+
+  const totalMovies = data.length;
+
+  return {
+    totalMovies,
+    data,
+  };
+};
+
+const getActiveMovieController = async () => {
+  const data = await Movies.findAll({
+    where: {
+      banned: false,
+    },
+  });
+
+  return {
+    data,
+  };
+};
+
+const getIdMovieController = async (id) => {
+  const data = await Movies.findOne();
+
+  return {
+    data,
+  };
+};
+
 const createMovieController = async (body) => {
   await Movies.create(body);
 
@@ -47,14 +78,17 @@ const updateMovieController = async (
 
 const deleteMovieController = async (id) => {
   const movie = await getIdMovieController(id);
-  
+
   movie.banned = !movie.banned;
 
   return { message: "se actualizaron los datos correctamente" };
 };
 
 module.exports = {
+  getAllMovieController,
+  getActiveMovieController,
+  getIdMovieController,
   createMovieController,
   updateMovieController,
-  deleteMovieController
+  deleteMovieController,
 };
