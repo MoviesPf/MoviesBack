@@ -4,6 +4,9 @@ const {
   getActiveMovieHandler,
   getIdMovieHandler,
   getNameMovieHandler,
+  createMovieHandler,
+  deleteMovieHandler,
+  updateMovieHandler,
 } = require("../Handlers/Movies.handler");
 
 const router = Router();
@@ -16,5 +19,14 @@ router.get("/", getActiveMovieHandler);
 
 // GET DE LAS PELICULAS POR ID
 router.get("/:movieId", getIdMovieHandler);
+
+// POST - CREAR PELICULAS
+router.post("/", createMovieHandler);
+
+// PATCH - EDITAR PELICULAS
+router.patch("/", updateMovieHandler);
+
+// DELETE - BANEAR PELICULAS
+router.delete("/", deleteMovieHandler);
 
 module.exports = router;
