@@ -1,11 +1,11 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../db.js";
+const { DataTypes } = require("sequelize");
+const sequelize = require("../db");
 
 const Movies = sequelize.define(
   "Movies",
   {
     id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -26,7 +26,7 @@ const Movies = sequelize.define(
       type: DataTypes.STRING,
     },
     runtime: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
     },
     companies: {
       type: DataTypes.STRING,
@@ -38,16 +38,16 @@ const Movies = sequelize.define(
       type: DataTypes.BOOLEAN,
     },
     revenue: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
     },
     budget: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
     },
     cast: {
       type: DataTypes.STRING,
     },
     popularity: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
     },
     banned: {
       type: DataTypes.BOOLEAN,
