@@ -1,16 +1,16 @@
-import { DataTypes, UUIDV4 } from "sequelize";
-import { sequelize } from "../db.js";
+const { DataTypes } = require("sequelize");
+const sequelize = require("../db");
 
 const Reviews = sequelize.define(
   "Reviews",
   {
     id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
     rating: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
     },
     comments: {
       type: DataTypes.STRING,
@@ -22,7 +22,7 @@ const Reviews = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    baned: {
+    banned: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },

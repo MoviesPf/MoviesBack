@@ -1,5 +1,5 @@
-import { DataTypes, UUIDV4 } from "sequelize";
-import { sequelize } from "../db.js";
+const { DataTypes, UUIDV4 } = require("sequelize");
+const sequelize = require("../db");
 
 const Users = sequelize.define(
   "Users",
