@@ -1,11 +1,14 @@
-const { DB, DB_USER, DB_PASWORD, DB_HOST } = require("dotenv").config().parsed;
+require("dotenv").config();
+const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
+const { Sequelize } = require('sequelize');
 
-const { Sequelize } = require("sequelize");
-const sequelize = new Sequelize(DB, DB_USER, DB_PASWORD, {
-  host: DB_HOST,
-  dialect: "postgres",
-  logging: false,
-  native: false,
-});
+const sequelize = new Sequelize(
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/movies`,  
+  {
+    logging: false,
+    native: false,
+  })
+  
+  module.exports = sequelize;
 
-module.exports = sequelize;
+  
