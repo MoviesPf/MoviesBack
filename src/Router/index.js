@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const axios = require("axios");
+const platformsRouter = require("./Plataforms.routes");
 
 const router = Router();
 
@@ -11,5 +12,7 @@ router.get("/", async (req, res) => {
   console.log(response);
   res.send(response.data);
 });
+
+router.use(platformsRouter);
 
 module.exports = router;
