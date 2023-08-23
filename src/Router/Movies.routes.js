@@ -3,7 +3,6 @@ const {
   getAllMovieHandler,
   getActiveMovieHandler,
   getIdMovieHandler,
-  getNameMovieHandler,
   createMovieHandler,
   deleteMovieHandler,
   updateMovieHandler,

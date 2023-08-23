@@ -29,6 +29,9 @@ const updateMovieHandler = (req, res) => {};
 const deleteMovieHandler = (req, res) => {};
 
 module.exports = {
+  getAllMovieHandler,
+  getActiveMovieHandler,
+  getIdMovieHandler,
   createMovieHandler,
   updateMovieHandler,
   deleteMovieHandler,
