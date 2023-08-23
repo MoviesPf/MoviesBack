@@ -2,7 +2,11 @@ const {
   getAllMovieController,
   getActiveMovieController,
   getIdMovieController,
+  createMovieController,
+  updateMovieController,
+  deleteMovieController,
 } = require("../Controllers/Movies.controller");
+
 
 const getAllMovieHandler = async (req, res, next) => {
   try {
@@ -37,22 +41,34 @@ const getIdMovieHandler = async (req, res, next) => {
   }
 };
 
-const createMovieHandler = (req, res, next) => {
+const createMovieHandler = async (req, res, next) => {
   try {
+    const body = req.body;
+    // validacion (body)
+    const data = await createMovieController(body);
+    return res.status(200).json(data);
   } catch (error) {
     next(error);
   }
 };
 
-const updateMovieHandler = (req, res, next) => {
+const updateMovieHandler = async (req, res, next) => {
   try {
+    const body = req.body;
+    // validacion (body)
+    const data = await updateMovieController(body);
+    return res.status(200).json(data);
   } catch (error) {
     next(error);
   }
 };
 
-const deleteMovieHandler = (req, res, next) => {
+const deleteMovieHandler = async (req, res, next) => {
   try {
+    const { id } = req.params;
+    //validation()
+    const data = await deleteMovieController(id);
+    return res.status(200).json(data);
   } catch (error) {
     next(error);
   }
