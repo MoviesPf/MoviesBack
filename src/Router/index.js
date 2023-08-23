@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const axios = require("axios");
 const platformsRouter = require("./Plataforms.routes");
+const moviesRouter = require('./Movies.routes')
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.get("/", async (req, res) => {
 });
 
 router.use(platformsRouter);
+router.use('/movies', moviesRouter);
 
 module.exports = router;
