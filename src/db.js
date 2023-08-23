@@ -1,9 +1,7 @@
-const { DB, DB_PASSWORD, DB_USER, DB_HOST } = require("dotenv").config().parsed;
-
-console.log(DB);
+const { DB, DB_USER, DB_PASWORD, DB_HOST } = require("dotenv").config().parsed;
 
 const { Sequelize } = require("sequelize");
-const sequelize = new Sequelize(DB, DB_USER, DB_PASSWORD, {
+const sequelize = new Sequelize(DB, DB_USER, DB_PASWORD, {
   host: DB_HOST,
   dialect: "postgres",
   logging: false,
