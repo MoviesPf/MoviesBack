@@ -1,17 +1,26 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db");
 
-const Platforms = sequelize.define(
-  "Platforms",
+const Reviews = sequelize.define(
+  "Reviews",
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    name: {
+    rating: {
+      type: DataTypes.INTEGER,
+    },
+    comments: {
       type: DataTypes.STRING,
-      unique: true,
+    },
+    date: {
+      type: DataTypes.DATEONLY,
+    },
+    reported: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
     banned: {
       type: DataTypes.BOOLEAN,
@@ -21,4 +30,4 @@ const Platforms = sequelize.define(
   { timestamps: false }
 );
 
-module.exports = Platforms;
+module.exports = Reviews;

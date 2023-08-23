@@ -1,11 +1,11 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../db.js";
+const { DataTypes } = require("sequelize");
+const sequelize = require("../db");
 
 const Genres = sequelize.define(
   "Genres",
   {
     id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
