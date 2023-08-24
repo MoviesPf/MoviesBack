@@ -4,9 +4,21 @@ const getAllMovieController = async () => {
   const data = await Movies.findAll();
 
   const totalMovies = data.length;
+  let adultMovies = 0;
+  let activeMovies = 0;
+  let bannedMovies = 0;
+
+  for (const value of data) {
+    if (value.adult) adultMovies++;
+    if (value.banned) activeMovies++;  
+    else bannedMovies++;
+  }
 
   return {
     totalMovies,
+    adultMovies,
+    activeMovies,
+    bannedMovies,
     data,
   };
 };
@@ -18,13 +30,20 @@ const getActiveMovieController = async () => {
     },
   });
 
+  const totalMovies = data.length;
+
   return {
+    totalMovies,
     data,
   };
 };
 
 const getIdMovieController = async (id) => {
-  const data = await Movies.findOne();
+  const data = await Movies.findOne({
+    where: {
+      id,
+    },
+  });
 
   return {
     data,

@@ -7,7 +7,6 @@ const {
   deleteMovieController,
 } = require("../Controllers/Movies.controller");
 
-
 const getAllMovieHandler = async (req, res, next) => {
   try {
     const data = await getAllMovieController();
@@ -30,10 +29,9 @@ const getActiveMovieHandler = async (req, res, next) => {
 
 const getIdMovieHandler = async (req, res, next) => {
   try {
-    const { id } = req.params
+    const { movieId } = req.params;
 
-    console.log(id)
-    const data = await getIdMovieController(id);
+    const data = await getIdMovieController(movieId);
 
     return res.status(200).json(data);
   } catch (error) {
