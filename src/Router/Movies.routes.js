@@ -23,9 +23,9 @@ router.get("/:movieId", getIdMovieHandler);
 router.post("/", createMovieHandler);
 
 // PATCH - EDITAR PELICULAS
-router.patch("/", updateMovieHandler);
+router.patch("/:movieId", updateMovieHandler);
 
 // DELETE - BANEAR PELICULAS
-router.delete("/", deleteMovieHandler);
+router.delete("/:movieId", deleteMovieHandler);
 
 module.exports = router;
