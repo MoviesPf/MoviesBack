@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Movies = require("../Models/Movies.model");
 
 const getAllMovieController = async () => {
@@ -7,6 +8,20 @@ const getAllMovieController = async () => {
 
   return {
     totalMovies,
+    data,
+  };
+};
+
+const getAllNameMovieController = async (title) => {
+  const data = await Movies.findAll({
+    where: {
+      title: {
+        [Op.iLike]: `%${title}%`,
+      },
+    },
+  });
+
+  return {
     data,
   };
 };
@@ -23,8 +38,25 @@ const getActiveMovieController = async () => {
   };
 };
 
+const getNameMovieController = async (title) => {
+  const data = await Movies.findAll({
+    where: {
+      title: {
+        [Op.iLike]: `%${title}%`,
+      },
+      banned: false,
+    },
+  });
+
+  return {
+    data,
+  };
+};
+
 const getIdMovieController = async (id) => {
-  const data = await Movies.findOne();
+  const data = await Movies.findOne({
+    where: { id },
+  });
 
   return {
     data,
@@ -55,38 +87,42 @@ const updateMovieController = async (
     popularity,
   }
 ) => {
-  const movie = await getIdMovieController(id);
+  const { data } = await getIdMovieController(id);
 
-  movie.title = title || movie.title;
-  movie.overview = overview || movie.overview;
-  movie.release_date = release_date || movie.release_date;
-  movie.backdrop = backdrop || movie.backdrop;
-  movie.poster = poster || movie.poster;
-  movie.runtime = runtime || movie.runtime;
-  movie.companies = companies || movie.companies;
-  movie.trailer = trailer || movie.trailer;
-  movie.adult = adult || movie.adult;
-  movie.revenue = revenue || movie.revenue;
-  movie.budget = budget || movie.budget;
-  movie.cast = cast || movies.cast;
-  movie.popularity = popularity || movie.popularity;
+  data.title = title || data.title;
+  data.overview = overview || data.overview;
+  data.release_date = release_date || data.release_date;
+  data.backdrop = backdrop || data.backdrop;
+  data.poster = poster || data.poster;
+  data.runtime = runtime || data.runtime;
+  data.companies = companies || data.companies;
+  data.trailer = trailer || data.trailer;
+  data.adult = adult || data.adult;
+  data.revenue = revenue || data.revenue;
+  data.budget = budget || data.budget;
+  data.cast = cast || data.cast;
+  data.popularity = popularity || data.popularity;
 
-  await movie.save();
+  await data.save();
 
   return { message: "se actualizaron los datos correctamente" };
 };
 
 const deleteMovieController = async (id) => {
-  const movie = await getIdMovieController(id);
+  const { data } = await getIdMovieController(id);
 
-  movie.banned = !movie.banned;
+  data.banned = !data.banned;
+
+  await data.save();
 
   return { message: "se actualizaron los datos correctamente" };
 };
 
 module.exports = {
   getAllMovieController,
+  getAllNameMovieController,
   getActiveMovieController,
+  getNameMovieController,
   getIdMovieController,
   createMovieController,
   updateMovieController,
