@@ -11,6 +11,6 @@ router.get("/", getPlatformsHandler);
 
 router.post("/", createPlatformHandler);
 
-router.delete("/:platformId", deletePlatformHandler);
+router.delete("/:id", deletePlatformHandler);
 
 module.exports = router;
