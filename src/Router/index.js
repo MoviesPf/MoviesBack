@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const axios = require("axios");
 const platformsRouter = require("./Plataforms.routes");
+const reviewRouter = require("./Reviews.routes");
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.get("/", async (req, res) => {
 });
 
 router.use(platformsRouter);
+router.use(reviewRouter);
 
 module.exports = router;
