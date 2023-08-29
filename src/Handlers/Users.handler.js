@@ -43,12 +43,12 @@ const banDesbanUser = async (req, res) => {
 
 const editUser = async (req, res) => {
     try {
-        if (!req.body) {  
+        const {id} = req.params;
+        const body = req.body;
+        if (!body) {  
             return res.status(400).json({ error: 'Datos insuficientes'});
         }
-        const data = req.body
-        const editedUser = await userEdit(data)
-        
+        const editedUser = await userEdit(id, body)
         return res.status(200).json(editedUser)
     } catch (error) {
         res.status(400).json({ error: error.message})

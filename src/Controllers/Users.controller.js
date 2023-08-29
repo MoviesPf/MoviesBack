@@ -51,8 +51,8 @@ const banUserById = async (id) => {
     
 }
 
-const userEdit = async (data) => {
-    const { id, name, nickname, avatar, password, status } = data;
+const userEdit = async (id, body) => {
+    const { name, nickname, avatar, password, status } = body;
 
     const {userById} = await findUserById(id);
 
