@@ -4,6 +4,16 @@ const express = require("express");
 const cors = require("cors");
 const router = require("./Router/index.js");
 const port = process.env.PORT || 3001;
+
+// Se importan los modelos para que se creen las tablas
+const {
+  Users,
+  Reviews,
+  Movies,
+  Platforms,
+  Genres,
+} = require("./Models/Relations.js");
+
 const app = express();
 
 // MIDDLEWARES
