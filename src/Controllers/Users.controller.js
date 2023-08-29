@@ -2,7 +2,7 @@ const Users = require("../Models/Users.model");
 
 const createUser = async (name, nickname, avatar, email, password, status) => {
     const [userCreated, created] = await Users.findOrCreate({
-        where: { email },
+        where: { email, nickname },
         defaults: {
             name,
             nickname,
@@ -15,7 +15,7 @@ const createUser = async (name, nickname, avatar, email, password, status) => {
     if(created) {
         return userCreated;
     } else {
-        throw Error("El mail ya esta en uso")
+        throw Error("El mail o el nickname ya esta en uso")
     };
 }
 
@@ -32,7 +32,7 @@ const getAllUsers = async () => {
         },
     });
     
-    return allUsers = [allUsersActive, allUsersBanned];
+    return allUsers = {active: allUsersActive, banned: allUsersBanned};
 }
 
 const findUserById = async (id) => {
@@ -43,16 +43,16 @@ const findUserById = async (id) => {
 const banUserById = async (id) => {
     const { userById } = await findUserById(id);
 
-    userById.banned = !bannedUser;
+    userById.banned = !userById.banned;
 
     await userById.save();
 
-    return "Se baneo correctamente al usuario";
+    return userById;
     
 }
 
-const userEdit = async (data) => {
-    const { id, name, nickname, avatar, password, status } = data;
+const userEdit = async (id, body) => {
+    const { name, nickname, avatar, password, status } = body;
 
     const {userById} = await findUserById(id);
 

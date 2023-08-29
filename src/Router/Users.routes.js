@@ -3,7 +3,7 @@ const {
     postUser,
     getUsers,
     getUserById, 
-    banUser, 
+    banDesbanUser, 
     editUser
 } = require("../Handlers/Users.handler.js");
 
@@ -15,7 +15,7 @@ router.get("/", getUsers);
 
 router.get("/:id", getUserById);
 
-router.delete("/:id", banUser);
+router.delete("/:id", banDesbanUser);
 
 router.patch("/:id", editUser);
 
