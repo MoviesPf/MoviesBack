@@ -31,11 +31,11 @@ const getUserById = async (req, res) => {
     }
 }
 
-const banUser = async (req, res) => {
+const banDesbanUser = async (req, res) => {
     const {id} = req.params;
     try {
-        const BannedUser = await banUserById(id);
-        res.status(200).json(BannedUser)
+        const bannedUser = await banUserById(id);
+        res.status(200).json(bannedUser)
     } catch (error) {
         res.status(400).json({error: error.message});
     }
@@ -59,6 +59,6 @@ module.exports = {
     postUser,
     getUsers,
     getUserById, 
-    banUser, 
+    banDesbanUser, 
     editUser
 };
