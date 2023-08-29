@@ -1,10 +1,10 @@
-require("dotenv").config();
+require('dotenv').config();
 
-const express = require("express");
-const cors = require("cors");
-const pool = require("./db");
-const router = require("./Router/index.js");
-// const port = process.env.PORT || 3001;
+const express = require('express');
+const cors = require('cors');
+// const pool = require('./db');
+const router = require('./Router/index.js');
+const port = process.env.PORT || 3001;
 
 // Se importan los modelos para que se creen las tablas
 const {
@@ -12,8 +12,9 @@ const {
   Reviews,
   Movies,
   Platforms,
-  Genres,
-} = require("./Models/Relations.js");
+  Genres
+} = require('./Models/Relations.js');
+const sequelize = require('./db');
 
 const app = express();
 
@@ -21,10 +22,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/", router);
+app.use('/', router);
 
-// app.listen(port, () => console.log("Server is running on port", port))
+sequelize.sync().then(() => console.log('db conectada'));
 
+app.listen(port, () => console.log('Server is running on port', port));
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;
