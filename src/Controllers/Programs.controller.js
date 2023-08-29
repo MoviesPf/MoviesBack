@@ -1,31 +1,31 @@
 const { Op } = require("sequelize");
-const Movies = require("../Models/Movies.model");
+const Programs = require("../Models/Programs.model");
 
-const getAllMovieController = async () => {
-  const data = await Movies.findAll();
+const getAllProgramsController = async () => {
+  const data = await Programs.findAll();
 
-  const totalMovies = data.length;
-  let adultMovies = 0;
-  let activeMovies = 0;
-  let bannedMovies = 0;
+  const totalPrograms = data.length;
+  let adultPrograms = 0;
+  let activePrograms = 0;
+  let bannedPrograms = 0;
 
   for (const value of data) {
-    if (value.adult) adultMovies++;
-    if (value.banned) activeMovies++;
-    else bannedMovies++;
+    if (value.adult) adultPrograms++;
+    if (value.banned) activePrograms++;
+    else bannedPrograms++;
   }
 
   return {
-    totalMovies,
-    adultMovies,
-    activeMovies,
-    bannedMovies,
+    totalPrograms,
+    adultPrograms,
+    activePrograms,
+    bannedPrograms,
     data,
   };
 };
 
-const getAllNameMovieController = async (title) => {
-  const data = await Movies.findAll({
+const getAllNameProgramsController = async (title) => {
+  const data = await Programs.findAll({
     where: {
       title: {
         [Op.iLike]: `%${title}%`,
@@ -38,23 +38,23 @@ const getAllNameMovieController = async (title) => {
   };
 };
 
-const getActiveMovieController = async () => {
-  const data = await Movies.findAll({
+const getActiveProgramsController = async () => {
+  const data = await Programs.findAll({
     where: {
       banned: false,
     },
   });
 
-  const totalMovies = data.length;
+  const totalPrograms = data.length;
 
   return {
-    totalMovies,
+    totalPrograms,
     data,
   };
 };
 
-const getNameMovieController = async (title) => {
-  const data = await Movies.findAll({
+const getNameProgramsController = async (title) => {
+  const data = await Programs.findAll({
     where: {
       title: {
         [Op.iLike]: `%${title}%`,
@@ -68,8 +68,8 @@ const getNameMovieController = async (title) => {
   };
 };
 
-const getIdMovieController = async (id) => {
-  const data = await Movies.findOne({
+const getIdProgramsController = async (id) => {
+  const data = await Programs.findOne({
     where: {
       id,
     },
@@ -80,13 +80,13 @@ const getIdMovieController = async (id) => {
   };
 };
 
-const createMovieController = async (body) => {
-  await Movies.create(body);
+const createProgramsController = async (body) => {
+  await Programs.create(body);
 
   return { message: "the movie was created correctly" };
 };
 
-const updateMovieController = async (
+const updateProgramsController = async (
   id,
   {
     title,
@@ -102,9 +102,10 @@ const updateMovieController = async (
     budget,
     cast,
     popularity,
+    type
   }
 ) => {
-  const { data } = await getIdMovieController(id);
+  const { data } = await getIdProgramsController(id);
 
   data.title = title || data.title;
   data.overview = overview || data.overview;
@@ -119,14 +120,15 @@ const updateMovieController = async (
   data.budget = budget || data.budget;
   data.cast = cast || data.cast;
   data.popularity = popularity || data.popularity;
+  data.type = type || data.type;
 
   await data.save();
 
   return { message: "data was updated correctly" };
 };
 
-const deleteMovieController = async (id) => {
-  const { data } = await getIdMovieController(id);
+const deleteProgramsController = async (id) => {
+  const { data } = await getIdProgramsController(id);
 
   data.banned = !data.banned;
 
@@ -136,12 +138,12 @@ const deleteMovieController = async (id) => {
 };
 
 module.exports = {
-  getAllMovieController,
-  getAllNameMovieController,
-  getActiveMovieController,
-  getNameMovieController,
-  getIdMovieController,
-  createMovieController,
-  updateMovieController,
-  deleteMovieController,
+  getAllProgramsController,
+  getAllNameProgramsController,
+  getActiveProgramsController,
+  getNameProgramsController,
+  getIdProgramsController,
+  createProgramsController,
+  updateProgramsController,
+  deleteProgramsController,
 };
