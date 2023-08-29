@@ -1,6 +1,6 @@
 const Users = require('./Users.model')
 const Reviews = require('./Reviews.model')
-const Movies = require('./Movies.model')
+const Programs = require('./Programs.model')
 const Genres = require('./Genres.model')
 const Platforms = require('./Platforms.model')
 
@@ -8,22 +8,22 @@ const Platforms = require('./Platforms.model')
 Users.hasMany(Reviews) // Uno a muchos
 Reviews.belongsTo(Users) // FK
 
-// Relaciones de Movies
-Movies.hasMany(Reviews) // Uno a muchos
-Reviews.belongsTo(Movies) //FK
+// Relaciones de Programs
+Programs.hasMany(Reviews) // Uno a muchos
+Reviews.belongsTo(Programs) //FK
 
 // Relaciones de Genres -- Muchos a muchos
-Movies.belongsToMany(Genres, { through: 'mg'}) 
-Genres.belongsToMany(Movies, { through: 'mg'}) 
+Programs.belongsToMany(Genres, { through: 'mg'}) 
+Genres.belongsToMany(Programs, { through: 'mg'}) 
 
 // Relaciones de Platforms -- Muchos a muchos
-Movies.belongsToMany(Platforms, { through: 'mp'})
-Platforms.belongsToMany(Movies, { through: 'mp'})
+Programs.belongsToMany(Platforms, { through: 'mp'})
+Platforms.belongsToMany(Programs, { through: 'mp'})
 
 module.exports = {
   Users,
   Genres,
-  Movies,
+  Programs,
   Platforms,
   Reviews
 }

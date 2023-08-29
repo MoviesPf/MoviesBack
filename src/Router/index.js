@@ -2,7 +2,7 @@ const { Router } = require('express');
 const axios = require('axios');
 
 const platformsRouter = require('./Platforms.routes');
-const moviesRouter = require('./Movies.routes');
+const programsRouter = require('./Programs.routes');
 const genresRouter = require('./Genres.routes');
 const reviewRouter = require('./Reviews.routes');
 const usersRouter = require('./Users.routes');
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
   res.send(response.data);
 });
 
-router.use('/movies', moviesRouter);
+router.use('/programs', programsRouter);
 router.use('/genres', genresRouter);
 router.use('/platforms', platformsRouter);
 router.use('/review', reviewRouter);
