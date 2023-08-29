@@ -32,7 +32,7 @@ const getAllUsers = async () => {
         },
     });
     
-    return allUsers = [allUsersActive, allUsersBanned];
+    return allUsers = {active: allUsersActive, banned: allUsersBanned};
 }
 
 const findUserById = async (id) => {
