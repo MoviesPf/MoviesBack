@@ -5,6 +5,7 @@ const platformsRouter = require('./Platforms.routes');
 const moviesRouter = require('./Movies.routes');
 const genresRouter = require('./Genres.routes');
 const reviewRouter = require('./Reviews.routes');
+const usersRouter = require('./Users.routes');
 
 const router = Router();
 
@@ -20,6 +21,7 @@ router.get('/', async (req, res) => {
 router.use('/movies', moviesRouter);
 router.use('/genres', genresRouter);
 router.use('/platforms', platformsRouter);
-router.use('review', reviewRouter);
+router.use('/review', reviewRouter);
+router.use('/users', usersRouter);
 
 module.exports = router;

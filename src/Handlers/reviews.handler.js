@@ -71,7 +71,7 @@ const deleteReviewById = async (req, res) => {
   }
 };
 
-const editRviewComment = async (req, res) => {
+const editReviewComment = async (req, res) => {
   try {
     if (!req.body) {
       return res
@@ -97,5 +97,5 @@ module.exports = {
   createNewReview,
   getReviewByUser,
   deleteReviewById,
-  editRviewComment
+  editReviewComment
 };
