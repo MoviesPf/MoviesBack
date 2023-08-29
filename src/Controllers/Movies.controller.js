@@ -83,7 +83,7 @@ const getIdMovieController = async (id) => {
 const createMovieController = async (body) => {
   await Movies.create(body);
 
-  return { message: "se creo la pelicula correctamente" };
+  return { message: "the movie was created correctly" };
 };
 
 const updateMovieController = async (
@@ -122,7 +122,7 @@ const updateMovieController = async (
 
   await data.save();
 
-  return { message: "se actualizaron los datos correctamente" };
+  return { message: "data was updated correctly" };
 };
 
 const deleteMovieController = async (id) => {
@@ -132,7 +132,7 @@ const deleteMovieController = async (id) => {
 
   await data.save();
 
-  return { message: "se actualizaron los datos correctamente" };
+  return { message: "data was updated correctly" };
 };
 
 module.exports = {
