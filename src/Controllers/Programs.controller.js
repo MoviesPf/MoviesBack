@@ -87,7 +87,7 @@ const createProgramsController = async (body) => {
   console.log(body.generos);
   console.log(body.playlist);
 
-  return { message: "se creo la pelicula correctamente" };
+  return { message: "the movie was created correctly" };
 };
 
 const updateProgramsController = async (
@@ -128,7 +128,7 @@ const updateProgramsController = async (
 
   await data.save();
 
-  return { message: "se actualizaron los datos correctamente" };
+  return { message: "data was updated correctly" };
 };
 
 const deleteProgramsController = async (id) => {
@@ -138,7 +138,7 @@ const deleteProgramsController = async (id) => {
 
   await data.save();
 
-  return { message: "se actualizaron los datos correctamente" };
+  return { message: "data was updated correctly" };
 };
 
 module.exports = {

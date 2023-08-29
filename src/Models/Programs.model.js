@@ -53,9 +53,6 @@ const Programs = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    type: {
-      type: DataTypes.STRING
-    },
   },
   { timestamps: false }
 );
