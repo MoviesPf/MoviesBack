@@ -83,6 +83,10 @@ const getIdProgramsController = async (id) => {
 const createProgramsController = async (body) => {
   await Programs.create(body);
 
+  console.log(body.platforms);
+  console.log(body.generos);
+  console.log(body.playlist);
+
   return { message: "se creo la pelicula correctamente" };
 };
 
