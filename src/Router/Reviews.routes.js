@@ -1,16 +1,16 @@
 const { Router } = require("express");
-const {getReviews,createNewReview,getReviewByUser,  deleteReviewById, editRviewComment} = require("../Handlers/reviewsHandler.js");
+const {getReviews,createNewReview,getReviewByUser,  deleteReviewById, editRviewComment} = require("../Handlers/reviews.handler.js");
 
 const router = Router();
 
-router.get("/review", getReviews);
+router.get("/", getReviews);
 
-router.get("/review", getReviewByUser);
+router.get("/", getReviewByUser);
 
-router.post("/review", createNewReview);
+router.post("/", createNewReview);
 
-router.delete("/review/:id", deleteReviewById);
+router.delete("/r:id", deleteReviewById);
 
-router.patch("/review", editRviewComment);
+router.patch("/", editRviewComment);
 
 module.exports = router;
