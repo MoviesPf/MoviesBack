@@ -1,0 +1,2 @@
+.env
+POSTGRES_URL="postgres://default:kfIPFKdTZV96@ep-damp-night-98907705-pooler.us-west-2.postgres.vercel-storage.com:5432/verceldb" 
