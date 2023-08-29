@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db");
 
-const Movies = sequelize.define(
-  "Movies",
+const Programs = sequelize.define(
+  "Programs",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -53,8 +53,11 @@ const Movies = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    type: {
+      type: DataTypes.STRING
+    },
   },
   { timestamps: false }
 );
 
-module.exports = Movies;
+module.exports = Programs;
