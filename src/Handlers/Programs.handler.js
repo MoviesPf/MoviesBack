@@ -9,8 +9,8 @@ const {
   getNameProgramsController,
 } = require("../Controllers/Programs.controller");
 const {
-  validationBody,
-  validationId,
+  // validationBody,
+  // validationId,
 } = require("../Validations/Programs.validations");
 
 const getAllProgramsHandler = async (req, res, next) => {
@@ -50,7 +50,7 @@ const getActiveProgramsHandler = async (req, res, next) => {
 const getIdProgramsHandler = async (req, res, next) => {
   try {
     const { ProgramsId } = req.params;
-    validationId(ProgramsId);
+    // validationId(ProgramsId);
 
     const data = await getIdProgramsController(ProgramsId);
 

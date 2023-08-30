@@ -17,7 +17,7 @@ const Programs = sequelize.define(
       type: DataTypes.STRING,
     },
     release_date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.STRING,
     },
     backdrop: {
       type: DataTypes.STRING,

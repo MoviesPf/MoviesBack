@@ -1,8 +1,10 @@
-const { Op } = require('sequelize');
-const Programs = require('../Models/Programs.model');
+const { Op, where } = require('sequelize');
+const { Programs, Genres, Platforms } = require('../Models/Relations');
 
 const getAllProgramsController = async () => {
-  const data = await Programs.findAll();
+  const data = await Programs.findAll({
+    include: [{ model: Genres }, { model: Platforms }]
+  });
 
   const totalPrograms = data.length;
   let adultPrograms = 0;
@@ -30,7 +32,8 @@ const getAllNameProgramsController = async (title) => {
       title: {
         [Op.iLike]: `%${title}%`
       }
-    }
+    },
+    include: [{ model: Genres }, { model: Platforms }]
   });
 
   return {
@@ -42,7 +45,8 @@ const getActiveProgramsController = async () => {
   const data = await Programs.findAll({
     where: {
       banned: false
-    }
+    },
+    include: [{ model: Genres }, { model: Platforms }]
   });
 
   const totalPrograms = data.length;
@@ -60,7 +64,8 @@ const getNameProgramsController = async (title) => {
         [Op.iLike]: `%${title}%`
       },
       banned: false
-    }
+    },
+    include: [{ model: Genres }, { model: Platforms }]
   });
 
   return {
@@ -72,7 +77,8 @@ const getIdProgramsController = async (id) => {
   const data = await Programs.findOne({
     where: {
       id
-    }
+    },
+    include: [{ model: Genres }, { model: Platforms }]
   });
 
   return {
@@ -81,7 +87,21 @@ const getIdProgramsController = async (id) => {
 };
 
 const createProgramsController = async (body) => {
-  await Programs.create(body);
+  const platform = await Platforms.findAll({
+    where: {
+      name: body.platforms
+    }
+  });
+  const genre = await Genres.findAll({
+    where: {
+      name: body.genres
+    }
+  });
+
+  const program = await Programs.create(body);
+
+  await program.setPlatforms(platform);
+  await program.setGenres(genre);
 
   return { message: 'the movie was created correctly' };
 };
