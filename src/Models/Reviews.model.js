@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db");
-
 const Reviews = sequelize.define(
   "Reviews",
   {
@@ -25,7 +24,7 @@ const Reviews = sequelize.define(
     banned: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
-    },
+    }
   },
   { timestamps: false }
 );
