@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
-const Playlist = sequelize.define(
+const Playlists = sequelize.define(
   'Playlist',
   {
     id: {
@@ -16,4 +16,4 @@ const Playlist = sequelize.define(
   { timestamps: false }
 );
 
-module.exports = Playlist;
+module.exports = Playlists;

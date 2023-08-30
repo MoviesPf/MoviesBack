@@ -5,7 +5,7 @@ const platformsRouter = require('./Platforms.routes');
 const programsRouter = require('./Programs.routes');
 const genresRouter = require('./Genres.routes');
 const reviewRouter = require('./Reviews.routes');
-const playlistRouter = require('./Playlist.routes')
+const playlistsRouter = require('./Playlists.routes');
 const usersRouter = require('./Users.routes');
 
 const router = Router();
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 router.use('/programs', programsRouter);
 router.use('/genres', genresRouter);
 router.use('/platforms', platformsRouter);
-router.use('/playlist', playlistRouter)
+router.use('/playlists', playlistsRouter);
 router.use('/review', reviewRouter);
 router.use('/users', usersRouter);
 

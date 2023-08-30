@@ -4,7 +4,7 @@ const Reviews = require("./Reviews.model");
 const Programs = require("./Programs.model");
 const Genres = require("./Genres.model");
 const Platforms = require("./Platforms.model");
-const Playlist = require("./Playlist.model");
+const Playlists = require("./Playlists.model");
 
 // Relaciones de Users
 Users.hasMany(Reviews); // Uno a muchos
@@ -25,11 +25,11 @@ Programs.belongsToMany(Platforms, { through: "ProgramsPlatform" });
 Platforms.belongsToMany(Programs, { through: "ProgramsPlatform" });
 
 // Relaciones de Playlist 
-Playlist.belongsToMany(Programs, { through: 'pp'}) // muchos a muchos
-Programs.belongsToMany(Playlist, { through: 'pp'}) // muchos a muchos
+Playlists.belongsToMany(Programs, { through: 'pp'}) // muchos a muchos
+Programs.belongsToMany(Playlists, { through: 'pp'}) // muchos a muchos
 
-Users.hasMany(Playlist) // Uno a muchos
-Playlist.hasMany(Users) // FK
+Users.hasMany(Playlists) // Uno a muchos
+Playlists.hasMany(Users) // FK
 
 
 
@@ -40,5 +40,5 @@ module.exports = {
   Programs,
   Platforms,
   Reviews,
-  Playlist
+  Playlists
 };
