@@ -4,6 +4,7 @@ const Reviews = require("./Reviews.model");
 const Programs = require("./Programs.model");
 const Genres = require("./Genres.model");
 const Platforms = require("./Platforms.model");
+const Playlist = require("./Playlist.model");
 
 // Relaciones de Users
 Users.hasMany(Reviews); // Uno a muchos
@@ -39,4 +40,5 @@ module.exports = {
   Programs,
   Platforms,
   Reviews,
+  Playlist
 };
