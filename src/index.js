@@ -6,7 +6,9 @@ const cors = require("cors");
 const router = require("./Router/index.js");
 const port = process.env.PORT || 3001;
 
-const sequelize = require('./db');
+const sequelize = require("./db");
+
+const createInitialPlatforms = require("./utils/createInitialPlatforms.js");
 
 // Se importan los modelos para que se creen las tablas
 const {
@@ -14,8 +16,8 @@ const {
   Reviews,
   Programs,
   Platforms,
-  Genres
-} = require('./Models/Relations.js');
+  Genres,
+} = require("./Models/Relations.js");
 
 sequelize.models.User = Users;
 sequelize.models.Review = Reviews;
@@ -31,13 +33,18 @@ app.use(cors());
 
 app.use("/", router);
 
-sequelize.sync({ force: true }).then(() => {
-  app.listen(port, () => console.log('Server is running on port', port))
+sequelize.sync({ force: true }).then(async () => {
+  console.log("db conectada");
+
+  // Llamada a la función para asociar platforms a programs
+  await createInitialPlatforms();
+
+  app.listen(port, () => console.log("Server is running on port", port));
 });
 
-const { loadGenresApi } = require("./loadGenres.js")
+const { loadGenresApi } = require("./loadGenres.js");
 loadGenresApi();
-const { loadPlatformsApi } = require("./loadPlatforms.js")
+const { loadPlatformsApi } = require("./loadPlatforms.js");
 loadPlatformsApi();
 
 app.use((err, req, res, next) => {
