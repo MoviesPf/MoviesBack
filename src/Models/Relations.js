@@ -10,8 +10,9 @@ Users.hasMany(Reviews); // Uno a muchos
 Reviews.belongsTo(Users); // FK
 
 // Relaciones de Programs
-Programs.hasMany(Reviews); // Uno a muchos
-Reviews.belongsTo(Programs); //FK
+
+Programs.hasMany(Reviews) // Uno a muchos
+Reviews.belongsTo(Programs) // FK
 
 // Relaciones de Genres -- Muchos a muchos
 
@@ -21,6 +22,16 @@ Genres.belongsToMany(Programs, { through: "mg" });
 // Relaciones de Platforms -- Muchos a muchos
 Programs.belongsToMany(Platforms, { through: "ProgramsPlatform" });
 Platforms.belongsToMany(Programs, { through: "ProgramsPlatform" });
+
+// Relaciones de Playlist 
+Playlist.belongsToMany(Programs, { through: 'pp'}) // muchos a muchos
+Programs.belongsToMany(Playlist, { through: 'pp'}) // muchos a muchos
+
+Users.hasMany(Playlist) // Uno a muchos
+Playlist.hasMany(Users) // FK
+
+
+
 
 module.exports = {
   Users,
