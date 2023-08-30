@@ -9,7 +9,7 @@ const Playlist = sequelize.define(
       primaryKey: true,
       autoIncrement: true
     },
-    type: {
+    name: {
       type: DataTypes.STRING
     }
   },

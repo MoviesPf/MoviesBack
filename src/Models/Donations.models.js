@@ -3,7 +3,7 @@ const sequelize = require('../db');
 
 const Donations = sequelize.define(
   'Donations',
-  {
+  { 
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,

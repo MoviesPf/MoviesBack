@@ -1,5 +1,5 @@
-const { Op } = require("sequelize");
-const Programs = require("../Models/Programs.model");
+const { Op } = require('sequelize');
+const Programs = require('../Models/Programs.model');
 
 const getAllProgramsController = async () => {
   const data = await Programs.findAll();
@@ -20,7 +20,7 @@ const getAllProgramsController = async () => {
     adultPrograms,
     activePrograms,
     bannedPrograms,
-    data,
+    data
   };
 };
 
@@ -28,28 +28,28 @@ const getAllNameProgramsController = async (title) => {
   const data = await Programs.findAll({
     where: {
       title: {
-        [Op.iLike]: `%${title}%`,
-      },
-    },
+        [Op.iLike]: `%${title}%`
+      }
+    }
   });
 
   return {
-    data,
+    data
   };
 };
 
 const getActiveProgramsController = async () => {
   const data = await Programs.findAll({
     where: {
-      banned: false,
-    },
+      banned: false
+    }
   });
 
   const totalPrograms = data.length;
 
   return {
     totalPrograms,
-    data,
+    data
   };
 };
 
@@ -57,33 +57,33 @@ const getNameProgramsController = async (title) => {
   const data = await Programs.findAll({
     where: {
       title: {
-        [Op.iLike]: `%${title}%`,
+        [Op.iLike]: `%${title}%`
       },
-      banned: false,
-    },
+      banned: false
+    }
   });
 
   return {
-    data,
+    data
   };
 };
 
 const getIdProgramsController = async (id) => {
   const data = await Programs.findOne({
     where: {
-      id,
-    },
+      id
+    }
   });
 
   return {
-    data,
+    data
   };
 };
 
 const createProgramsController = async (body) => {
   await Programs.create(body);
 
-  return { message: "the movie was created correctly" };
+  return { message: 'the movie was created correctly' };
 };
 
 const updateProgramsController = async (
@@ -124,7 +124,7 @@ const updateProgramsController = async (
 
   await data.save();
 
-  return { message: "data was updated correctly" };
+  return { message: 'data was updated correctly' };
 };
 
 const deleteProgramsController = async (id) => {
@@ -134,7 +134,7 @@ const deleteProgramsController = async (id) => {
 
   await data.save();
 
-  return { message: "data was updated correctly" };
+  return { message: 'data was updated correctly' };
 };
 
 module.exports = {
@@ -145,5 +145,5 @@ module.exports = {
   getIdProgramsController,
   createProgramsController,
   updateProgramsController,
-  deleteProgramsController,
+  deleteProgramsController
 };

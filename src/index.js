@@ -24,7 +24,7 @@ app.use(cors());
 
 app.use('/', router);
 
-sequelize.sync().then(() => console.log('db conectada'));
+sequelize.sync({force: false}).then(() => console.log('db conectada'));
 
 app.listen(port, () => console.log('Server is running on port', port));
 
