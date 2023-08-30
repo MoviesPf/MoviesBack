@@ -3,7 +3,10 @@ const { Programs, Genres, Platforms } = require('../Models/Relations');
 
 const getAllProgramsController = async () => {
   const data = await Programs.findAll({
-    include: [{ model: Genres }, { model: Platforms }]
+    include: [
+      { model: Genres, through: { attributes: [] } },
+      { model: Platforms, through: { attributes: [] } }
+    ]
   });
 
   const totalPrograms = data.length;
@@ -33,7 +36,10 @@ const getAllNameProgramsController = async (title) => {
         [Op.iLike]: `%${title}%`
       }
     },
-    include: [{ model: Genres }, { model: Platforms }]
+    include: [
+      { model: Genres, through: { attributes: [] } },
+      { model: Platforms, through: { attributes: [] } }
+    ]
   });
 
   return {
@@ -46,7 +52,10 @@ const getActiveProgramsController = async () => {
     where: {
       banned: false
     },
-    include: [{ model: Genres }, { model: Platforms }]
+    include: [
+      { model: Genres, through: { attributes: [] } },
+      { model: Platforms, through: { attributes: [] } }
+    ]
   });
 
   const totalPrograms = data.length;
@@ -65,7 +74,10 @@ const getNameProgramsController = async (title) => {
       },
       banned: false
     },
-    include: [{ model: Genres }, { model: Platforms }]
+    include: [
+      { model: Genres, through: { attributes: [] } },
+      { model: Platforms, through: { attributes: [] } }
+    ]
   });
 
   return {
@@ -78,7 +90,10 @@ const getIdProgramsController = async (id) => {
     where: {
       id
     },
-    include: [{ model: Genres }, { model: Platforms }]
+    include: [
+      { model: Genres, through: { attributes: [] } },
+      { model: Platforms, through: { attributes: [] } }
+    ]
   });
 
   return {
