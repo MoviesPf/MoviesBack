@@ -1,3 +1,4 @@
+
 const Users = require("./Users.model");
 const Reviews = require("./Reviews.model");
 const Programs = require("./Programs.model");
@@ -13,6 +14,7 @@ Programs.hasMany(Reviews); // Uno a muchos
 Reviews.belongsTo(Programs); //FK
 
 // Relaciones de Genres -- Muchos a muchos
+
 Programs.belongsToMany(Genres, { through: "mg" });
 Genres.belongsToMany(Programs, { through: "mg" });
 
