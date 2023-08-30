@@ -1,14 +1,19 @@
 const Playlist = require('../Models/Playlist.model');
+const Programs = require('../Models/Programs.model');
 
-const getAllPlaylistController = async () => {
-  const data = await Playlist.findAll();
+const getPlaylistController = async () => {
+  const data = await Playlist.findAll({
+    include: {
+      model: Programs, through: { attributes: [] }
+    }
+  });
 
   return {
     data
   };
 };
 
-const getAllIdPlaylistController = async (title) => {
+const getIdPlaylistController = async (id) => {
   const data = await Playlist.findOne({
     Where: {
       id
@@ -20,20 +25,54 @@ const getAllIdPlaylistController = async (title) => {
   };
 };
 
-const createPlaylistController = async (body) => {
-  await Playlist.create(body);
+const createPlaylistController = async ({ name }) => {
+  await Playlist.create({ name });
 
   return {
-    message: 'the playlist was created correctly'
+    message: 'The playlist was created correctly'
   };
 };
 
-const updatePlaylistController = async ( id, programs ) => {
+const addPlaylistController = async ({ id, programId }) => {
+  const program = await Programs.findOne({
+    where: { id: programId }
+  });
 
-}
+  const playlist = await Playlist.findOne({
+    where: {
+      id
+    }
+  });
+
+  await playlist.addProgram(program);
+
+  return {
+    message: 'Content has been successfully added'
+  };
+};
+
+const removePlaylistController = async ({ id, programId }) => {
+  const program = await Programs.findOne({
+    where: { id: programId }
+  });
+
+  const playlist = await Playlist.findOne({
+    where: {
+      id
+    }
+  });
+
+  await playlist.removeProgram(program);
+
+  return {
+    message: 'Content has been successfully deleted'
+  };
+};
 
 module.exports = {
-  getAllPlaylistController,
-  getAllIdPlaylistController,
+  getPlaylistController,
+  getIdPlaylistController,
   createPlaylistController,
+  addPlaylistController,
+  removePlaylistController
 };

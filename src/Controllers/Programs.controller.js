@@ -1,8 +1,13 @@
-const { Op } = require("sequelize");
-const Programs = require("../Models/Programs.model");
+const { Op, where } = require('sequelize');
+const { Programs, Genres, Platforms } = require('../Models/Relations');
 
 const getAllProgramsController = async () => {
-  const data = await Programs.findAll();
+  const data = await Programs.findAll({
+    include: [
+      { model: Genres, through: { attributes: [] } },
+      { model: Platforms, through: { attributes: [] } }
+    ]
+  });
 
   const totalPrograms = data.length;
   let adultPrograms = 0;
@@ -20,7 +25,7 @@ const getAllProgramsController = async () => {
     adultPrograms,
     activePrograms,
     bannedPrograms,
-    data,
+    data
   };
 };
 
@@ -28,28 +33,36 @@ const getAllNameProgramsController = async (title) => {
   const data = await Programs.findAll({
     where: {
       title: {
-        [Op.iLike]: `%${title}%`,
-      },
+        [Op.iLike]: `%${title}%`
+      }
     },
+    include: [
+      { model: Genres, through: { attributes: [] } },
+      { model: Platforms, through: { attributes: [] } }
+    ]
   });
 
   return {
-    data,
+    data
   };
 };
 
 const getActiveProgramsController = async () => {
   const data = await Programs.findAll({
     where: {
-      banned: false,
+      banned: false
     },
+    include: [
+      { model: Genres, through: { attributes: [] } },
+      { model: Platforms, through: { attributes: [] } }
+    ]
   });
 
   const totalPrograms = data.length;
 
   return {
     totalPrograms,
-    data,
+    data
   };
 };
 
@@ -57,33 +70,55 @@ const getNameProgramsController = async (title) => {
   const data = await Programs.findAll({
     where: {
       title: {
-        [Op.iLike]: `%${title}%`,
+        [Op.iLike]: `%${title}%`
       },
-      banned: false,
+      banned: false
     },
+    include: [
+      { model: Genres, through: { attributes: [] } },
+      { model: Platforms, through: { attributes: [] } }
+    ]
   });
 
   return {
-    data,
+    data
   };
 };
 
 const getIdProgramsController = async (id) => {
   const data = await Programs.findOne({
     where: {
-      id,
+      id
     },
+    include: [
+      { model: Genres, through: { attributes: [] } },
+      { model: Platforms, through: { attributes: [] } }
+    ]
   });
 
   return {
-    data,
+    data
   };
 };
 
 const createProgramsController = async (body) => {
-  await Programs.create(body);
+  const platform = await Platforms.findAll({
+    where: {
+      name: body.platforms
+    }
+  });
+  const genre = await Genres.findAll({
+    where: {
+      name: body.genres
+    }
+  });
 
-  return { message: "the movie was created correctly" };
+  const program = await Programs.create(body);
+
+  await program.setPlatforms(platform);
+  await program.setGenres(genre);
+
+  return { message: 'the movie was created correctly' };
 };
 
 const updateProgramsController = async (
@@ -124,7 +159,7 @@ const updateProgramsController = async (
 
   await data.save();
 
-  return { message: "data was updated correctly" };
+  return { message: 'data was updated correctly' };
 };
 
 const deleteProgramsController = async (id) => {
@@ -134,7 +169,7 @@ const deleteProgramsController = async (id) => {
 
   await data.save();
 
-  return { message: "data was updated correctly" };
+  return { message: 'data was updated correctly' };
 };
 
 module.exports = {
@@ -145,5 +180,5 @@ module.exports = {
   getIdProgramsController,
   createProgramsController,
   updateProgramsController,
-  deleteProgramsController,
+  deleteProgramsController
 };
