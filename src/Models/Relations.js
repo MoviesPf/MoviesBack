@@ -17,16 +17,16 @@ Reviews.belongsTo(Programs) // FK
 
 // Relaciones de Genres -- Muchos a muchos
 
-Programs.belongsToMany(Genres, { through: "mg" });
-Genres.belongsToMany(Programs, { through: "mg" });
+Programs.belongsToMany(Genres, { through: "ProgramGenres" });
+Genres.belongsToMany(Programs, { through: "ProgramGenres" });
 
 // Relaciones de Platforms -- Muchos a muchos
 Programs.belongsToMany(Platforms, { through: "ProgramsPlatform" });
 Platforms.belongsToMany(Programs, { through: "ProgramsPlatform" });
 
 // Relaciones de Playlist 
-Playlist.belongsToMany(Programs, { through: 'pp'}) // muchos a muchos
-Programs.belongsToMany(Playlist, { through: 'pp'}) // muchos a muchos
+Playlist.belongsToMany(Programs, { through: 'ProgramLists'}) // muchos a muchos
+Programs.belongsToMany(Playlist, { through: 'ProgramLists'}) // muchos a muchos
 
 Users.hasMany(Playlist) // Uno a muchos
 Playlist.hasMany(Users) // FK
