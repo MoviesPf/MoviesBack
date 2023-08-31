@@ -1,22 +1,22 @@
 const { Router } = require('express');
 const {
-  getPlaylistHandler,
-  getIdPlaylistHandler,
-  createPlaylistHandler,
-  addPlaylistHandler,
-  removePlaylistHandler
+  getPlaylistsHandler,
+  getIdPlaylistsHandler,
+  createPlaylistsHandler,
+  addPlaylistsHandler,
+  removePlaylistsHandler
 } = require('../Handlers/Playlists.handler');
 
-const router = Router()
+const router = Router();
 
-router.get("/", getPlaylistHandler)
+router.get('/', getPlaylistsHandler);
 
-router.get("/:id", getIdPlaylistHandler)
+router.get('/:id', getIdPlaylistsHandler);
 
-router.post("/create", createPlaylistHandler)
+router.post('/create', createPlaylistsHandler);
 
-router.patch("/add", addPlaylistHandler)
+router.patch('/add', addPlaylistsHandler);
 
-router.delete("/remove", removePlaylistHandler)
+router.delete('/remove', removePlaylistsHandler);
 
-module.exports = router
+module.exports = router;

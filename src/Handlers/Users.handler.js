@@ -4,7 +4,8 @@ const {
   findUserById,
   banUserById,
   userEdit,
-  forgotPasswordController
+  forgotPasswordController,
+  changePasswordController
 } = require('../Controllers/Users.controller.js');
 
 const postUser = async (req, res, next) => {
@@ -82,11 +83,24 @@ const forgotPasswordHandler = async (req, res, next) => {
   }
 };
 
+const changePasswordHandler = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const data = await changePasswordController(email, password);
+
+    return res.status(200).json(data)
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   postUser,
   getUsers,
   getUserById,
   banDesbanUser,
   editUser,
-  forgotPasswordHandler
+  forgotPasswordHandler,
+  changePasswordHandler
 };

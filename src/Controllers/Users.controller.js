@@ -89,11 +89,24 @@ const forgotPasswordController = async (email) => {
   };
 };
 
+const changePasswordController = async (email, password) => {
+  const user = await Users.findOne({ where: { email } });
+
+  if(!user) throw Error('User not found')
+
+  user.password = password;
+
+  await user.save();
+
+  return { data: 'Change password successfully' };
+};
+
 module.exports = {
   createUser,
   getAllUsers,
   findUserById,
   banUserById,
   userEdit,
-  forgotPasswordController
+  forgotPasswordController,
+  changePasswordController
 };
