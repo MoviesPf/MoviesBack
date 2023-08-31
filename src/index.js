@@ -15,10 +15,15 @@ const {
   Programs,
   Platforms,
   Genres,
+  Playlists,
+  Donations
 } = require("./Models/Relations.js");
 const sequelize = require("./db");
 
 const app = express();
+
+//node mailer
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 // MIDDLEWARES
 app.use(express.json());
@@ -31,9 +36,7 @@ sequelize.sync({ force: false }).then(async () => {
 
   // Llamada a la función para asociar platforms a programs
   await createInitialPlatforms();
-
-sequelize.sync({force: false}).then(() => 
-  console.log('db conectada'));
+  
   app.listen(port, () => 
     console.log('Server is running on port', port));
 });

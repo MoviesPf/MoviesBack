@@ -5,7 +5,7 @@ const {
   createPlaylistHandler,
   addPlaylistHandler,
   removePlaylistHandler
-} = require('../Handlers/Playlist.handler');
+} = require('../Handlers/Playlists.handler');
 
 const router = Router()
 

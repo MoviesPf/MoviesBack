@@ -1,8 +1,8 @@
-const Playlist = require('../Models/Playlist.model');
+const Playlists = require('../Models/Playlists.model');
 const Programs = require('../Models/Programs.model');
 
 const getPlaylistController = async () => {
-  const data = await Playlist.findAll({
+  const data = await Playlists.findAll({
     include: {
       model: Programs, through: { attributes: [] }
     }
@@ -14,7 +14,7 @@ const getPlaylistController = async () => {
 };
 
 const getIdPlaylistController = async (id) => {
-  const data = await Playlist.findOne({
+  const data = await Playlists.findOne({
     Where: {
       id
     }
@@ -26,7 +26,7 @@ const getIdPlaylistController = async (id) => {
 };
 
 const createPlaylistController = async ({ name }) => {
-  await Playlist.create({ name });
+  await Playlists.create({ name });
 
   return {
     message: 'The playlist was created correctly'
@@ -38,7 +38,7 @@ const addPlaylistController = async ({ id, programId }) => {
     where: { id: programId }
   });
 
-  const playlist = await Playlist.findOne({
+  const playlist = await Playlists.findOne({
     where: {
       id
     }
@@ -56,7 +56,7 @@ const removePlaylistController = async ({ id, programId }) => {
     where: { id: programId }
   });
 
-  const playlist = await Playlist.findOne({
+  const playlist = await Playlists.findOne({
     where: {
       id
     }
