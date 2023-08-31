@@ -10,6 +10,8 @@ const sequelize = require("./db");
 
 const createInitialPlatforms = require("./utils/createInitialPlatforms.js");
 
+const initializeInitialData = require("./utils/initializeInitialData.js");
+
 // Se importan los modelos para que se creen las tablas
 const {
   Users,
@@ -18,7 +20,7 @@ const {
   Platforms,
   Genres,
   Playlists,
-  Donations
+  Donations,
 } = require("./Models/Relations.js");
 
 sequelize.models.User = Users;
@@ -38,19 +40,17 @@ app.use(cors());
 
 app.use("/", router);
 
-sequelize.sync({ force: true }).then(async () => {
+sequelize.sync({ force: false }).then(async () => {
   console.log("db conectada");
+
+  // Inicializa los datos iniciales
+  await initializeInitialData();
 
   // Llamada a la función para asociar platforms a programs
   await createInitialPlatforms();
 
   app.listen(port, () => console.log("Server is running on port", port));
 });
-
-const { loadGenresApi } = require("./loadGenres.js");
-loadGenresApi();
-const { loadPlatformsApi } = require("./loadPlatforms.js");
-loadPlatformsApi();
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;
