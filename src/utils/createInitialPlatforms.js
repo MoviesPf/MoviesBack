@@ -10,6 +10,11 @@ const createInitialPlatforms = async () => {
 
       // Asocia las dos plataformas aleatorias a la película actual
       await program.addPlatforms(platforms);
+
+      /*  console.log(`Plataformas asociadas a la película ${program.title}:`);
+      for (const platform of platforms) {
+        console.log(`- ID: ${platform.id}, Nombre: ${platform.name}`);
+      } */
     }
   } catch (error) {
     throw new Error("Error during association of platforms with programs");
