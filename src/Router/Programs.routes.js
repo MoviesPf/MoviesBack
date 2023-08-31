@@ -7,8 +7,11 @@ const {
   deleteProgramsHandler,
   updateProgramsHandler,
 } = require("../Handlers/Programs.handler");
+const { loadProgramsApi } = require("../utils/loadPrograms");
 
 const router = Router();
+
+router.get("/load", loadProgramsApi);
 
 // GET DE TODAS LAS PROGRAMS
 router.get("/all", getAllProgramsHandler);
