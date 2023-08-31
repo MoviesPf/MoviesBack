@@ -49,7 +49,8 @@ sequelize.sync({ force: true }).then(async () => {
   // Llamada a la función para asociar platforms a programs
   await createInitialPlatforms();
 
-  app.listen(port, () => console.log("Server is running on port", port));
+  app.listen(port, () => 
+    console.log('Server is running on port', port));
 });
 
 app.use((err, req, res, next) => {

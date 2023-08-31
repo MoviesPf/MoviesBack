@@ -1,14 +1,14 @@
 const {
-  getPlaylistController,
-  getIdPlaylistController,
-  createPlaylistController,
-  addPlaylistController,
-  removePlaylistController
+  getPlaylistsController,
+  getIdPlaylistsController,
+  createPlaylistsController,
+  addPlaylistsController,
+  removePlaylistsController
 } = require('../Controllers/Playlists.controller');
 
-const getPlaylistHandler = async (req, res, next) => {
+const getPlaylistsHandler = async (req, res, next) => {
   try {
-    const data = await getPlaylistController();
+    const data = await getPlaylistsController();
 
     return res.status(200).json(data);
   } catch (error) {
@@ -16,11 +16,11 @@ const getPlaylistHandler = async (req, res, next) => {
   }
 };
 
-const getIdPlaylistHandler = async (req, res, next) => {
+const getIdPlaylistsHandler = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const data = await getIdPlaylistController(id);
+    const data = await getIdPlaylistsController(id);
 
     return res.status(200).json(data);
   } catch (error) {
@@ -28,12 +28,12 @@ const getIdPlaylistHandler = async (req, res, next) => {
   }
 };
 
-const createPlaylistHandler = async (req, res, next) => {
+const createPlaylistsHandler = async (req, res, next) => {
   try {
     const body = req.body;
     console.log(body);
 
-    const data = await createPlaylistController(body);
+    const data = await createPlaylistsController(body);
 
     return res.status(200).json(data);
   } catch (error) {
@@ -41,11 +41,11 @@ const createPlaylistHandler = async (req, res, next) => {
   }
 };
 
-const addPlaylistHandler = async (req, res, next) => {
+const addPlaylistsHandler = async (req, res, next) => {
   try {
     const body = req.body;
 
-    const data = await addPlaylistController(body);
+    const data = await addPlaylistsController(body);
 
     return res.status(200).json(data);
   } catch (error) {
@@ -53,11 +53,11 @@ const addPlaylistHandler = async (req, res, next) => {
   }
 };
 
-const removePlaylistHandler = async (req, res, next) => {
+const removePlaylistsHandler = async (req, res, next) => {
   try {
     const body = req.body;
 
-    const data = await removePlaylistController(body);
+    const data = await removePlaylistsController(body);
 
     return res.status(200).json(data);
   } catch (error) {
@@ -66,9 +66,9 @@ const removePlaylistHandler = async (req, res, next) => {
 };
 
 module.exports = {
-  getPlaylistHandler,
-  getIdPlaylistHandler,
-  createPlaylistHandler,
-  addPlaylistHandler,
-  removePlaylistHandler
+  getPlaylistsHandler,
+  getIdPlaylistsHandler,
+  createPlaylistsHandler,
+  addPlaylistsHandler,
+  removePlaylistsHandler
 };
