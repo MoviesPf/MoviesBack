@@ -4,10 +4,13 @@ const {
     getUsers,
     getUserById, 
     banDesbanUser, 
-    editUser
+    editUser,
+    forgotPasswordHandler
 } = require("../Handlers/Users.handler.js");
 
 const router = Router();
+
+router.patch("/forgot-password", forgotPasswordHandler)
 
 router.post("/", postUser);
 

@@ -24,7 +24,7 @@ Genres.belongsToMany(Programs, { through: "mg" });
 Programs.belongsToMany(Platforms, { through: "ProgramsPlatform" });
 Platforms.belongsToMany(Programs, { through: "ProgramsPlatform" });
 
-// Relaciones de Playlist 
+// Relaciones de Playlists 
 Playlists.belongsToMany(Programs, { through: 'pp'}) // muchos a muchos
 Programs.belongsToMany(Playlists, { through: 'pp'}) // muchos a muchos
 
