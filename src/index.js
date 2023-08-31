@@ -19,6 +19,8 @@ const {
   Programs,
   Platforms,
   Genres,
+  Playlists,
+  Donations,
 } = require("./Models/Relations.js");
 
 sequelize.models.User = Users;
@@ -28,6 +30,9 @@ sequelize.models.Platform = Platforms;
 sequelize.models.Genre = Genres;
 
 const app = express();
+
+//node mailer
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 // MIDDLEWARES
 app.use(express.json());
