@@ -5,8 +5,9 @@ const platformsRouter = require('./Platforms.routes');
 const programsRouter = require('./Programs.routes');
 const genresRouter = require('./Genres.routes');
 const reviewRouter = require('./Reviews.routes');
-const playlistRouter = require('./Playlist.routes')
+const playlistRouter = require('./Playlists.routes')
 const usersRouter = require('./Users.routes');
+const donationsRouter = require('./Donations.routes')
 
 const router = Router();
 
@@ -25,5 +26,6 @@ router.use('/platforms', platformsRouter);
 router.use('/playlist', playlistRouter)
 router.use('/review', reviewRouter);
 router.use('/users', usersRouter);
+router.use('/donations', donationsRouter)
 
 module.exports = router;

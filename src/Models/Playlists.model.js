@@ -1,8 +1,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
-const Playlist = sequelize.define(
-  'Playlist',
+const Playlists = sequelize.define(
+  'Playlists',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -16,4 +16,4 @@ const Playlist = sequelize.define(
   { timestamps: false }
 );
 
-module.exports = Playlist;
+module.exports = Playlists;

@@ -4,7 +4,7 @@ const {
   createPlaylistController,
   addPlaylistController,
   removePlaylistController
-} = require('../Controllers/Playlist.controller');
+} = require('../Controllers/Playlists.controller');
 
 const getPlaylistHandler = async (req, res, next) => {
   try {
