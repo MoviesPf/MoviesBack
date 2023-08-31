@@ -30,6 +30,7 @@ const getAllProgramsController = async () => {
 };
 
 const getAllNameProgramsController = async (title) => {
+  const search = title
   const data = await Programs.findAll({
     where: {
       title: {
@@ -43,6 +44,7 @@ const getAllNameProgramsController = async (title) => {
   });
 
   return {
+    search,
     data
   };
 };
@@ -67,6 +69,7 @@ const getActiveProgramsController = async () => {
 };
 
 const getNameProgramsController = async (title) => {
+  const search = title
   const data = await Programs.findAll({
     where: {
       title: {
@@ -81,6 +84,7 @@ const getNameProgramsController = async (title) => {
   });
 
   return {
+    search,
     data
   };
 };

@@ -26,7 +26,7 @@ app.use(cors());
 
 app.use("/", router);
 
-sequelize.sync({ force: false }).then(async () => {
+sequelize.sync({ force: true }).then(async () => {
   console.log("db conectada");
 
   // Llamada a la función para asociar platforms a programs
