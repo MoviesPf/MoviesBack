@@ -14,7 +14,7 @@ const Programs = sequelize.define(
       unique: true,
     },
     overview: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     release_date: {
       type: DataTypes.STRING,
