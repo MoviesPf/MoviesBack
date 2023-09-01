@@ -18,7 +18,11 @@ async function loadSeriesApi(req, res, next) {
                 if (clearedSeriesId.includes(id)) {
                     repeatedSeriesId.push(id)
                 } else {
-                    clearedSeriesId.push(id)
+                    if (id === 1930) {
+                        repeatedSeriesId.push(id)
+                    } else {
+                        clearedSeriesId.push(id)
+                    }
                 }
             });
         }
@@ -28,6 +32,7 @@ async function loadSeriesApi(req, res, next) {
         const allSeries = [];
         
         for( let i = 0; i < clearedSeriesId.length; i++){
+
             const serie = {};
 
             const serieData = await axios(`https://api.themoviedb.org/3/tv/${clearedSeriesId[i]}?api_key=${APY_KEY}`);
