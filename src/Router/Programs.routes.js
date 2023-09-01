@@ -9,8 +9,14 @@ const {
   getProgramsByGenre,
   getProgramsByPlatform,
 } = require("../Handlers/Programs.handler");
+const { loadMoviesApi } = require("../utils/loadMovies");
+const { loadSeriesApi } = require("../utils/loadSeries");
 
 const router = Router();
+
+router.get("/load/movies", loadMoviesApi);
+
+router.get("/load/series", loadSeriesApi);
 
 // GET DE TODAS LAS PROGRAMS
 router.get("/all", getAllProgramsHandler);
