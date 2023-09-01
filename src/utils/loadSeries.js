@@ -42,6 +42,7 @@ async function loadSeriesApi(req, res, next) {
                 return company.name;
             });
 
+            serie.id = serieData.data.id;
             serie.title = serieData.data.name;
             serie.overview = serieData.data.overview;
             serie.release_date = serieData.data.first_air_date;
