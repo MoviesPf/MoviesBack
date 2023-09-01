@@ -40,7 +40,7 @@ app.use(cors());
 
 app.use("/", router);
 
-sequelize.sync({ force: true }).then(async () => {
+sequelize.sync({ force: false }).then(async () => {
   console.log("db conectada");
 
   // Inicializa los datos iniciales
