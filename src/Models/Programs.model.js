@@ -11,10 +11,9 @@ const Programs = sequelize.define(
     },
     title: {
       type: DataTypes.STRING,
-      unique: true,
     },
     overview: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     release_date: {
       type: DataTypes.STRING,
@@ -35,7 +34,7 @@ const Programs = sequelize.define(
       type: DataTypes.INTEGER,
     },
     companies: {
-      type: DataTypes.STRING,
+      type: DataTypes.ARRAY(DataTypes.STRING),
     },
     trailer: {
       type: DataTypes.STRING,
@@ -44,7 +43,7 @@ const Programs = sequelize.define(
       type: DataTypes.BOOLEAN,
     },
     revenue: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.REAL,
     },
     budget: {
       type: DataTypes.INTEGER,
