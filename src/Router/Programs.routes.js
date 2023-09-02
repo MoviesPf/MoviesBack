@@ -11,8 +11,11 @@ const {
 } = require("../Handlers/Programs.handler");
 const { loadMoviesApi } = require("../utils/loadMovies");
 const { loadSeriesApi } = require("../utils/loadSeries");
+const { asociateProgramsAndGenres } = require("../utils/asociateProgramsAndGenres");
 
 const router = Router();
+
+router.get("/asociate", asociateProgramsAndGenres);
 
 router.get("/load/movies", loadMoviesApi);
 
