@@ -210,6 +210,27 @@ const getProgramsByPlatformController = async (platformName) => {
   return programs;
 };
 
+const getProgramsByGenreAndPlatformController = async (genreName, platformName) => {
+  const programs = await Programs.findAll({
+    include: [
+      {
+        model: Genres,
+        where: {
+          name: genreName,
+        },
+        through: { attributes: [] },
+      },
+      {
+        model: Platforms,
+        where: {
+          name: platformName,
+        },
+        through: { attributes: [] },
+      },
+    ],
+  });
+  return programs;
+};
 
 
 module.exports = {
@@ -222,5 +243,6 @@ module.exports = {
   updateProgramsController,
   deleteProgramsController,
   getProgramsByGenreController,
-  getProgramsByPlatformController
+  getProgramsByPlatformController,
+  getProgramsByGenreAndPlatformController
 };
