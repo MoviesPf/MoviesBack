@@ -6,15 +6,13 @@ const createInitialPlatforms = async () => {
     const programs = await Programs.findAll();
 
     for (const program of programs) {
-      const platforms = await getRandomPlatforms(2);
+      const existingPlatforms = await program.getPlatforms();
 
-      // Asocia las dos plataformas aleatorias a la película actual
-      await program.addPlatforms(platforms);
+      if (existingPlatforms.length === 0) {
+        const platforms = await getRandomPlatforms(2);
 
-      /*  console.log(`Plataformas asociadas a la película ${program.title}:`);
-      for (const platform of platforms) {
-        console.log(`- ID: ${platform.id}, Nombre: ${platform.name}`);
-      } */
+        await program.addPlatforms(platforms);
+      }
     }
   } catch (error) {
     throw new Error("Error during association of platforms with programs");

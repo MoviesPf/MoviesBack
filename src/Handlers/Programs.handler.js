@@ -8,7 +8,8 @@ const {
   getAllNameProgramsController,
   getNameProgramsController,
   getProgramsByGenreController,
-  getProgramsByPlatformController
+  getProgramsByPlatformController,
+  getProgramsByGenreAndPlatformController
 } = require("../Controllers/Programs.controller");
 const {
   // validationBody,
@@ -116,6 +117,22 @@ const getProgramsByPlatform = async (req, res, next) => {
   }
 }
 
+const getProgramsByGenreAndPlatform = async (req, res, next) => {
+  try {
+    const genreName = req.params.genreName;
+    const platformName = req.params.platformName;
+    const programsFound = await getProgramsByGenreAndPlatformController(genreName, platformName);
+    
+    if (programsFound.length <= 0) {
+      return res.status(404).json({ msg: "Parameters are incorrect, insufficient, or no match found. Try another name." });
+    }
+    
+    return res.status(200).json(programsFound);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllProgramsHandler,
   getActiveProgramsHandler,
@@ -125,4 +142,5 @@ module.exports = {
   deleteProgramsHandler,
   getProgramsByGenre,
   getProgramsByPlatform,
+  getProgramsByGenreAndPlatform
 };
