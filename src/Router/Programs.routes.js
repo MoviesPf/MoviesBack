@@ -6,6 +6,9 @@ const {
   createProgramsHandler,
   deleteProgramsHandler,
   updateProgramsHandler,
+  getProgramsByGenre,
+  getProgramsByPlatform,
+  getProgramsByGenreAndPlatform, // Agregamos el nuevo controlador
 } = require("../Handlers/Programs.handler");
 const { loadMoviesApi } = require("../utils/loadMovies");
 const { loadSeriesApi } = require("../utils/loadSeries");
@@ -36,5 +39,16 @@ router.patch("/:ProgramsId", updateProgramsHandler);
 
 // DELETE - BANEAR PROGRAMS
 router.delete("/:ProgramsId", deleteProgramsHandler);
+
+////////////// Filtros //////////////////
+
+// GET DE PROGRAMS POR GÉNERO
+router.get("/filter/genre/:genreName", getProgramsByGenre);
+
+// GET DE PROGRAMS POR PLATAFORMA
+router.get("/filter/platform/:platformName", getProgramsByPlatform);
+
+// GET DE PROGRAMS POR GÉNERO Y PLATAFORMA COMBINADOS
+router.get("/filter/genre/:genreName/platform/:platformName", getProgramsByGenreAndPlatform);
 
 module.exports = router;
