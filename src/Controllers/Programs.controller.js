@@ -1,5 +1,6 @@
 const { Op, where } = require('sequelize');
 const { Programs, Genres, Platforms } = require('../Models/Relations');
+const sequelize = require("../db")
 
 const getAllProgramsController = async () => {
   const data = await Programs.findAll({
@@ -176,6 +177,62 @@ const deleteProgramsController = async (id) => {
   return { message: 'data was updated correctly' };
 };
 
+
+const getProgramsByGenreController = async (genreName) => {
+
+  const programs = await Programs.findAll({
+    include: [
+      {                   // Incluye en la busqueda
+        model: Genres,    // los programas que en su relacion con Genres
+        where: {          // tengan el nombre pasado por parametro.
+          name: genreName,
+        },
+        through: { attributes: [] },
+      }
+    ]
+  });
+  return programs;
+};
+
+const getProgramsByPlatformController = async (platformName) => {
+
+  const programs = await Programs.findAll({
+    include: [
+      {                       // Incluye en la busqueda
+        model: Platforms,     // los programas que en su relacion con Platforms
+        where: {              // tengan el nombre pasado por parametro.
+          name: platformName,
+        },
+        through: { attributes: [] },
+      }
+    ]
+  });
+  return programs;
+};
+
+const getProgramsByGenreAndPlatformController = async (genreName, platformName) => {
+  const programs = await Programs.findAll({
+    include: [
+      {
+        model: Genres,
+        where: {
+          name: genreName,
+        },
+        through: { attributes: [] },
+      },
+      {
+        model: Platforms,
+        where: {
+          name: platformName,
+        },
+        through: { attributes: [] },
+      },
+    ],
+  });
+  return programs;
+};
+
+
 module.exports = {
   getAllProgramsController,
   getAllNameProgramsController,
@@ -184,5 +241,8 @@ module.exports = {
   getIdProgramsController,
   createProgramsController,
   updateProgramsController,
-  deleteProgramsController
+  deleteProgramsController,
+  getProgramsByGenreController,
+  getProgramsByPlatformController,
+  getProgramsByGenreAndPlatformController
 };
