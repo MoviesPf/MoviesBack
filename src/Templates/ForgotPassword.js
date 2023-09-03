@@ -1,4 +1,5 @@
 const forgotPassword = ({ nickname, name }) => {
+  
   const text = `
   <!DOCTYPE html>
   <html>

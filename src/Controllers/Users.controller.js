@@ -1,6 +1,7 @@
 const sendEmail = require('../Config/mailer');
 const Users = require('../Models/Users.model');
 const { forgotPassword } = require('../Templates/ForgotPassword');
+const welcome = require('../Templates/welcome');
 
 const createUser = async (name, nickname, avatar, email, password, status) => {
   const [userCreated, created] = await Users.findOrCreate({
@@ -15,6 +16,18 @@ const createUser = async (name, nickname, avatar, email, password, status) => {
   });
 
   if (created) {
+    
+    const template = welcome(userCreated);
+
+    const data = {
+      from: 'GreenScreen',
+      to: userCreated.email,
+      subject: `${userCreated.nickname}, we communicate from GreenScreen.`,
+      html: template
+    };
+  
+    sendEmail(data);
+    
     return userCreated;
   } else {
     throw Error('El mail o el nickname ya esta en uso');
@@ -72,6 +85,8 @@ const userEdit = async (id, body) => {
 
 const forgotPasswordController = async (email) => {
   const user = await Users.findOne({ where: { email } });
+
+  if(!user) throw Error('User not found')
 
   const template = forgotPassword(user);
 
