@@ -4,7 +4,7 @@ const {
   getUserReviews,
   deletReview,
   editReview
-} = require('../Controllers/reviews.controller.js');
+} = require('../Controllers/Reviews.controller.js');
 
 const getReviews = async (req, res) => {
   try {
