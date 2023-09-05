@@ -9,7 +9,9 @@ const {
   getNameProgramsController,
   getProgramsByGenreController,
   getProgramsByPlatformController,
-  getProgramsByGenreAndPlatformController
+  getProgramsByGenreAndPlatformController,
+  getAllMovies,
+  getAllSeries
 } = require("../Controllers/Programs.controller");
 const {
   // validationBody,
@@ -49,6 +51,24 @@ const getActiveProgramsHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+const getActiveMovies = async (req, res, next ) => {
+  try {
+    const data = await getAllMovies();
+    return res.status(200).json(data);
+  } catch (error) {
+    next(error)
+  }
+}
+
+const getActiveSeries = async (req, res, next ) => {
+  try {
+    const data = await getAllSeries();
+    return res.status(200).json(data);
+  } catch (error) {
+    next(error)
+  }
+}
 
 const getIdProgramsHandler = async (req, res, next) => {
   try {
@@ -142,5 +162,7 @@ module.exports = {
   deleteProgramsHandler,
   getProgramsByGenre,
   getProgramsByPlatform,
-  getProgramsByGenreAndPlatform
+  getProgramsByGenreAndPlatform,
+  getActiveMovies,
+  getActiveSeries
 };
