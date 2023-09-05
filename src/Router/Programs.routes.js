@@ -8,7 +8,9 @@ const {
   updateProgramsHandler,
   getProgramsByGenre,
   getProgramsByPlatform,
-  getProgramsByGenreAndPlatform, // Agregamos el nuevo controlador
+  getProgramsByGenreAndPlatform,
+  getActiveMovies,
+  getActiveSeries
 } = require("../Handlers/Programs.handler");
 const { loadMoviesApi } = require("../utils/loadMovies");
 const { loadSeriesApi } = require("../utils/loadSeries");
@@ -27,6 +29,10 @@ router.get("/all", getAllProgramsHandler);
 
 // GET DE PROGRAMS ACTIVAS
 router.get("/", getActiveProgramsHandler);
+
+router.get("/movies", getActiveMovies);
+
+router.get("/series", getActiveSeries);
 
 // GET DE LAS PROGRAMS POR ID
 router.get("/:ProgramsId", getIdProgramsHandler);

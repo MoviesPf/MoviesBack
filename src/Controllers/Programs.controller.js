@@ -30,6 +30,7 @@ const getAllProgramsController = async () => {
   };
 };
 
+
 const getAllNameProgramsController = async (title) => {
   const search = title
   const data = await Programs.findAll({
@@ -43,7 +44,7 @@ const getAllNameProgramsController = async (title) => {
       { model: Platforms, through: { attributes: [] } }
     ]
   });
-
+  
   return {
     search,
     data
@@ -60,11 +61,51 @@ const getActiveProgramsController = async () => {
       { model: Platforms, through: { attributes: [] } }
     ]
   });
-
+  
   const totalPrograms = data.length;
-
+  
   return {
     totalPrograms,
+    data
+  };
+};
+
+const getAllMovies = async () => {
+  const data = await Programs.findAll({
+    where: {
+      type: "movie",
+      banned: false
+    },
+    include: [
+      { model: Genres, through: { attributes: [] } },
+      { model: Platforms, through: { attributes: [] } }
+    ]
+  });
+
+  const totalMovies = data.length;
+  
+  return {
+    totalMovies,
+    data
+  };
+};
+
+const getAllSeries = async () => {
+  const data = await Programs.findAll({
+    where: {
+      type: "serie",
+      banned: false
+    },
+    include: [
+      { model: Genres, through: { attributes: [] } },
+      { model: Platforms, through: { attributes: [] } }
+    ]
+  });
+
+  const totalMovies = data.length;
+  
+  return {
+    totalMovies,
     data
   };
 };
@@ -244,5 +285,7 @@ module.exports = {
   deleteProgramsController,
   getProgramsByGenreController,
   getProgramsByPlatformController,
-  getProgramsByGenreAndPlatformController
+  getProgramsByGenreAndPlatformController,
+  getAllMovies,
+  getAllSeries
 };
