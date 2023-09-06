@@ -102,10 +102,10 @@ const getAllSeries = async () => {
     ]
   });
 
-  const totalMovies = data.length;
+  const totalSeries = data.length;
   
   return {
-    totalMovies,
+    totalSeries,
     data
   };
 };
