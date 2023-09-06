@@ -24,17 +24,17 @@ router.get("/load/movies", loadMoviesApi);
 
 router.get("/load/series", loadSeriesApi);
 
-// GET DE TODAS LAS PROGRAMS
+// GET DE TODOS LOS PROGRAMS
 router.get("/all", getAllProgramsHandler);
 
-// GET DE PROGRAMS ACTIVAS
+// GET DE PROGRAMS ACTIVOS
 router.get("/", getActiveProgramsHandler);
 
 router.get("/movies", getActiveMovies);
 
 router.get("/series", getActiveSeries);
 
-// GET DE LAS PROGRAMS POR ID
+// GET DE PROGRAM POR ID
 router.get("/:ProgramsId", getIdProgramsHandler);
 
 // POST - CREAR PROGRAMS
