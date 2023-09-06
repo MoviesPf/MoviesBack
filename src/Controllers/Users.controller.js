@@ -1,6 +1,8 @@
 const sendEmail = require('../Config/mailer');
 const Users = require('../Models/Users.model');
 const { forgotPassword } = require('../Templates/ForgotPassword');
+const banned = require('../Templates/banned');
+const unbanning = require('../Templates/unbanning');
 const welcome = require('../Templates/welcome');
 
 const createUser = async (name, nickname, avatar, email, password, status) => {
@@ -16,7 +18,6 @@ const createUser = async (name, nickname, avatar, email, password, status) => {
   });
 
   if (created) {
-    
     const template = welcome(userCreated);
 
     const data = {
@@ -25,9 +26,9 @@ const createUser = async (name, nickname, avatar, email, password, status) => {
       subject: `${userCreated.nickname}, we communicate from GreenScreen.`,
       html: template
     };
-  
+
     sendEmail(data);
-    
+
     return userCreated;
   } else {
     throw Error('El mail o el nickname ya esta en uso');
@@ -55,12 +56,36 @@ const findUserById = async (id) => {
   return { userById };
 };
 
-const banUserById = async (id) => {
+const banUserById = async (id, reason) => {
   const { userById } = await findUserById(id);
 
   userById.banned = !userById.banned;
 
   await userById.save();
+
+  if (userById.banned) {
+    const template = banned(userById.nickname, reason);
+
+    const data = {
+      from: 'GreenScreen',
+      to: userById.email,
+      subject: `${userById.nickname}, we communicate from GreenScreen.`,
+      html: template
+    };
+
+    sendEmail(data);
+  } else {
+    const template = unbanning(userById.nickname);
+
+    const data = {
+      from: 'GreenScreen',
+      to: userById.email,
+      subject: `${userById.nickname}, we communicate from GreenScreen.`,
+      html: template
+    };
+
+    sendEmail(data);
+  }
 
   return userById;
 };
@@ -86,7 +111,7 @@ const userEdit = async (id, body) => {
 const forgotPasswordController = async (email) => {
   const user = await Users.findOne({ where: { email } });
 
-  if(!user) throw Error('User not found')
+  if (!user) throw Error('User not found');
 
   const template = forgotPassword(user);
 
@@ -107,7 +132,7 @@ const forgotPasswordController = async (email) => {
 const changePasswordController = async (email, password) => {
   const user = await Users.findOne({ where: { email } });
 
-  if(!user) throw Error('User not found')
+  if (!user) throw Error('User not found');
 
   user.password = password;
 
