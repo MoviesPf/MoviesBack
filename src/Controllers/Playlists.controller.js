@@ -1,78 +1,130 @@
 const Playlists = require('../Models/Playlists.model');
-const Programs = require('../Models/Programs.model');
+const Users = require('../Models/Users.model');
 
-const getPlaylistsController = async () => {
+// const getPlaylistsController = async () => {
+//   const data = await Playlists.findAll({
+//     include: {
+//       model: Programs, through: { attributes: [] }
+//     }
+//   });
+
+//   return {
+//     data
+//   };
+// };
+
+// const getIdPlaylistsController = async (id) => {
+//   const data = await Playlists.findOne({
+//     Where: {
+//       id
+//     }
+//   });
+
+//   return {
+//     data
+//   };
+// };
+
+// const createPlaylistsController = async ({ name }) => {
+//   await Playlists.create({ name });
+
+//   return {
+//     message: 'The playlists was created correctly'
+//   };
+// };
+
+// const addPlaylistsController = async ({ id, programId }) => {
+//   const program = await Programs.findOne({
+//     where: { id: programId }
+//   });
+
+//   const playlists = await Playlists.findOne({
+//     where: {
+//       id
+//     }
+//   });
+
+//   await playlists.addProgram(program);
+
+//   return {
+//     message: 'Content has been successfully added'
+//   };
+// };
+
+// const removePlaylistsController = async ({ id, programId }) => {
+//   const program = await Programs.findOne({
+//     where: { id: programId }
+//   });
+
+//   const playlists = await Playlists.findOne({
+//     where: {
+//       id
+//     }
+//   });
+
+//   await playlists.removeProgram(program);
+
+//   return {
+//     message: 'Content has been successfully deleted'
+//   };
+// };
+
+const findUserPlaylist = async (UserId) => {
   const data = await Playlists.findAll({
-    include: {
-      model: Programs, through: { attributes: [] }
+    where: {
+      UserId: UserId,
     }
   });
 
   return {
     data
-  };
-};
+  }
+}
 
-const getIdPlaylistsController = async (id) => {
-  const data = await Playlists.findOne({
-    Where: {
-      id
-    }
-  });
-
+const findPlaylist = async (playlistId) => {
+  const data = await Playlists.findByPk(playlistId)
   return {
     data
-  };
-};
+  }
+}
 
-const createPlaylistsController = async ({ name }) => {
-  await Playlists.create({ name });
+const createPlaylist = async (body, UserId) => {
+  const playlist = await Playlists.create(body);
+  const user = await Users.findByPk(UserId);
 
-  return {
-    message: 'The playlists was created correctly'
-  };
-};
+  await user.addPlaylists(playlist);
 
-const addPlaylistsController = async ({ id, programId }) => {
-  const program = await Programs.findOne({
-    where: { id: programId }
-  });
+  return { message: 'Playlist creada correctamente'}
+}
 
-  const playlists = await Playlists.findOne({
-    where: {
-      id
-    }
-  });
+const editPlaylist = async (body, playlistId) => {
+  const playlist = await Playlists.findByPk(playlistId);
 
-  await playlists.addProgram(program);
+  playlist.name = body.name || playlist.name;
+  playlist.programsIds = body.programsIds || playlist.programsIds;
 
-  return {
-    message: 'Content has been successfully added'
-  };
-};
+  await playlist.save();
 
-const removePlaylistsController = async ({ id, programId }) => {
-  const program = await Programs.findOne({
-    where: { id: programId }
-  });
+  return { message: 'datos actualizados'};
+}
 
-  const playlists = await Playlists.findOne({
-    where: {
-      id
-    }
-  });
+const eliminatePlaylist = async (playlistId) => {
+  await Playlists.destroy({
+    where: {id: playlistId},
+  })
 
-  await playlists.removeProgram(program);
-
-  return {
-    message: 'Content has been successfully deleted'
-  };
+  return { message: 'playlist eliminada'};
 };
 
 module.exports = {
-  getPlaylistsController,
-  getIdPlaylistsController,
-  createPlaylistsController,
-  addPlaylistsController,
-  removePlaylistsController
+  // getPlaylistsController,
+  // getIdPlaylistsController,
+  // createPlaylistsController,
+  // addPlaylistsController,
+  // removePlaylistsController
+  findUserPlaylist,
+  findPlaylist,
+  createPlaylist,
+  editPlaylist,
+  eliminatePlaylist
 };
