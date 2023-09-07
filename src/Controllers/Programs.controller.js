@@ -167,27 +167,8 @@ const createProgramsController = async (body) => {
   return { message: 'the movie was created correctly' };
 };
 
-const updateProgramsController = async (
-  id,
-  {
-    title,
-    overview,
-    release_date,
-    backdrop,
-    poster,
-    runtime,
-    companies,
-    trailer,
-    adult,
-    revenue,
-    budget,
-    cast,
-    popularity,
-    type
-  }
-) => {
+const updateProgramsController = async (id,{title,overview,release_date,backdrop,poster,runtime,companies,trailer,adult,revenue,budget,cast,popularity,type}) => {
   const { data } = await getIdProgramsController(id);
-
   data.title = title || data.title;
   data.overview = overview || data.overview;
   data.release_date = release_date || data.release_date;
@@ -219,9 +200,11 @@ const deleteProgramsController = async (id) => {
 };
 
 
-const getProgramsByGenreController = async (genreName) => {
+const getProgramsByGenreController = async (genreName, type) => {
 
-  const programs = await Programs.findAll({
+  const data = type === "main"
+  
+  ? await Programs.findAll({
     include: [
       {                   // Incluye en la busqueda
         model: Genres,    // los programas que en su relacion con Genres
@@ -229,15 +212,45 @@ const getProgramsByGenreController = async (genreName) => {
           name: genreName,
         },
         through: { attributes: [] },
+      },
+      {
+        model: Platforms,
+        through: { attributes: [] },
+      }
+    ]
+  })
+
+  : await Programs.findAll({
+    where: {
+      type: type,
+    },
+    include: [
+      {
+        model: Genres,
+        where: {
+          name: genreName,
+        },
+        through: { attributes: [] },
+      },
+      {
+        model: Platforms,
+        through: { attributes: [] },
       }
     ]
   });
-  return programs;
+
+  const totalFiltered = data.length;
+  
+  return {
+    totalFiltered,
+    data
+  };
 };
 
-const getProgramsByPlatformController = async (platformName) => {
+const getProgramsByPlatformController = async (platformName, type) => {
 
-  const programs = await Programs.findAll({
+  const data = type === "main"
+  ? await Programs.findAll({
     include: [
       {                       // Incluye en la busqueda
         model: Platforms,     // los programas que en su relacion con Platforms
@@ -245,14 +258,43 @@ const getProgramsByPlatformController = async (platformName) => {
           name: platformName,
         },
         through: { attributes: [] },
+      },
+      {
+        model: Genres,
+        through: { attributes: []}
       }
     ]
-  });
-  return programs;
+  })
+  : await Programs.findAll({
+    where: {
+      type:type,
+    },
+    include: [
+      {                       // Incluye en la busqueda
+        model: Platforms,     // los programas que en su relacion con Platforms
+        where: {              // tengan el nombre pasado por parametro.
+          name: platformName,
+        },
+        through: { attributes: [] },
+      },
+      {
+        model: Genres,
+        through: { attributes: []}
+      }
+    ]
+  })
+  const totalFiltered = data.length;
+  
+  return {
+    totalFiltered,
+    data
+  };
 };
 
-const getProgramsByGenreAndPlatformController = async (genreName, platformName) => {
-  const programs = await Programs.findAll({
+const getProgramsByGenreAndPlatformController = async (genreName, platformName, type) => {
+
+  const data = type === "main"
+  ? await Programs.findAll({
     include: [
       {
         model: Genres,
@@ -269,8 +311,35 @@ const getProgramsByGenreAndPlatformController = async (genreName, platformName) 
         through: { attributes: [] },
       },
     ],
-  });
-  return programs;
+  })
+  : await Programs.findAll({
+    where: {
+      type:type,
+    },
+    include: [
+      {
+        model: Genres,
+        where: {
+          name: genreName,
+        },
+        through: { attributes: [] },
+      },
+      {
+        model: Platforms,
+        where: {
+          name: platformName,
+        },
+        through: { attributes: [] },
+      },
+    ],
+  })
+
+  const totalFiltered = data.length;
+  
+  return {
+    totalFiltered,
+    data
+  };
 };
 
 

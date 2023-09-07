@@ -25,10 +25,12 @@ const {
 const morgan = require('morgan');
 
 sequelize.models.User = Users;
+sequelize.models.Genre = Genres;
 sequelize.models.Review = Reviews;
 sequelize.models.Program = Programs;
 sequelize.models.Platform = Platforms;
-sequelize.models.Genre = Genres;
+sequelize.models.Playlist = Playlists;
+sequelize.models.Donation = Donations;
 
 const app = express();
 

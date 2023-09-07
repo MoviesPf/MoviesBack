@@ -9,21 +9,21 @@ const getAllPlatforms = async () => {
 const createPlatform = async (name, banned) => {
   await Platforms.create({ name, banned });
 
-  return { message: "Platform created successfully." };
+  return { message: "Plataforma creada correctamente." };
 };
 
 const deletePlatform = async (id) => {
   const platform = await Platforms.findByPk(id);
 
   if (!platform) {
-    throw new Error("Platform not found.");
+    throw new Error("Plataforma no encontrada");
   }
 
   platform.banned = !platform.banned;
 
-  await platform.save();
+  await platform.save(); // Guardar los cambios en la base de datos
 
-  return { message: "Platform disabled successfully." };
+  return { message: "Plataforma deshabilitada correctamente." };
 };
 
 module.exports = {
