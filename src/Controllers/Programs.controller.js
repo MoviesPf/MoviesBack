@@ -207,36 +207,36 @@ const getProgramsByGenreController = async (genreName, type) => {
   ? await Programs.findAll({
     include: [
       {                   // Incluye en la busqueda
-        model: Genres,    // los programas que en su relacion con Genres
-        where: {          // tengan el nombre pasado por parametro.
-          name: genreName,
-        },
+        model: Genres,
+        as: "Genres",
         through: { attributes: [] },
       },
       {
         model: Platforms,
         through: { attributes: [] },
       }
-    ]
+    ],
+    where: {
+      '$Genres.name$': genreName,
+    }
   })
 
   : await Programs.findAll({
-    where: {
-      type: type,
-    },
     include: [
-      {
+      {                   // Incluye en la busqueda
         model: Genres,
-        where: {
-          name: genreName,
-        },
+        as: "Genres",
         through: { attributes: [] },
       },
       {
         model: Platforms,
         through: { attributes: [] },
       }
-    ]
+    ],
+    where: {
+      type: type,
+      '$Genres.name$': genreName,
+    },
   });
 
   const totalFiltered = data.length;
@@ -253,35 +253,35 @@ const getProgramsByPlatformController = async (platformName, type) => {
   ? await Programs.findAll({
     include: [
       {                       // Incluye en la busqueda
-        model: Platforms,     // los programas que en su relacion con Platforms
-        where: {              // tengan el nombre pasado por parametro.
-          name: platformName,
-        },
+        model: Platforms,
+        as: "platforms",
         through: { attributes: [] },
       },
       {
         model: Genres,
-        through: { attributes: []}
+        through: { attributes: []},
       }
-    ]
+    ],
+    where: {
+      '$platforms.name$': platformName,
+    }
   })
   : await Programs.findAll({
-    where: {
-      type:type,
-    },
     include: [
       {                       // Incluye en la busqueda
-        model: Platforms,     // los programas que en su relacion con Platforms
-        where: {              // tengan el nombre pasado por parametro.
-          name: platformName,
-        },
+        model: Platforms,
+        as: "Platforms",
         through: { attributes: [] },
       },
       {
         model: Genres,
         through: { attributes: []}
       }
-    ]
+    ],
+    where: {
+      '$Platforms.name$': platformName,
+      type:type,
+    },
   })
   const totalFiltered = data.length;
   
@@ -298,40 +298,38 @@ const getProgramsByGenreAndPlatformController = async (genreName, platformName, 
     include: [
       {
         model: Genres,
-        where: {
-          name: genreName,
-        },
+        as: "Genres",
         through: { attributes: [] },
       },
       {
         model: Platforms,
-        where: {
-          name: platformName,
-        },
+        as: "Platforms",
         through: { attributes: [] },
       },
     ],
+    where: {
+      '$Platforms.name$': platformName,
+      '$Genres.name$': genreName,
+    },
   })
   : await Programs.findAll({
-    where: {
-      type:type,
-    },
     include: [
       {
         model: Genres,
-        where: {
-          name: genreName,
-        },
+        as: "Genres",
         through: { attributes: [] },
       },
       {
         model: Platforms,
-        where: {
-          name: platformName,
-        },
+        as: "Platforms",
         through: { attributes: [] },
       },
     ],
+    where: {
+      '$Platforms.name$': platformName,
+      '$Genres.name$': genreName,
+      type:type,
+    },
   })
 
   const totalFiltered = data.length;
