@@ -1,5 +1,7 @@
 const {
     getAllGenres,
+    getMoviesGenres,
+    getSeriesGenres,
     createGenre,
     deleteGenre,
   } = require("../Controllers/Genres.controller.js");
@@ -12,6 +14,24 @@ const {
       next(error);
     }
   };
+
+  const getMoviesGenresHandler = async (req, res, next) => {
+    try {
+      const moviesGenres = await getMoviesGenres();
+      return res.status(200).json(moviesGenres)
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  const getSeriesGenresHandler = async (req, res, next) => {
+    try {
+      const seriesGenres = await getSeriesGenres();
+      return res.status(200).json(seriesGenres)
+    } catch (error) {
+      next(error);
+    }
+  }
   
   const createGenreHandler = async (req, res, next) => {
     try {
@@ -35,6 +55,8 @@ const {
   
   module.exports = {
     getGenresHandler,
+    getMoviesGenresHandler,
+    getSeriesGenresHandler,
     createGenreHandler,
     deleteGenreHandler,
   };

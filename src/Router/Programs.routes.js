@@ -8,7 +8,9 @@ const {
   updateProgramsHandler,
   getProgramsByGenre,
   getProgramsByPlatform,
-  getProgramsByGenreAndPlatform, // Agregamos el nuevo controlador
+  getProgramsByGenreAndPlatform,
+  getActiveMovies,
+  getActiveSeries
 } = require("../Handlers/Programs.handler");
 const { loadMoviesApi } = require("../utils/loadMovies");
 const { loadSeriesApi } = require("../utils/loadSeries");
@@ -22,13 +24,17 @@ router.get("/load/movies", loadMoviesApi);
 
 router.get("/load/series", loadSeriesApi);
 
-// GET DE TODAS LAS PROGRAMS
+// GET DE TODOS LOS PROGRAMS
 router.get("/all", getAllProgramsHandler);
 
-// GET DE PROGRAMS ACTIVAS
+// GET DE PROGRAMS ACTIVOS
 router.get("/", getActiveProgramsHandler);
 
-// GET DE LAS PROGRAMS POR ID
+router.get("/movies", getActiveMovies);
+
+router.get("/series", getActiveSeries);
+
+// GET DE PROGRAM POR ID
 router.get("/:ProgramsId", getIdProgramsHandler);
 
 // POST - CREAR PROGRAMS
@@ -43,12 +49,12 @@ router.delete("/:ProgramsId", deleteProgramsHandler);
 ////////////// Filtros //////////////////
 
 // GET DE PROGRAMS POR GÉNERO
-router.get("/filter/genre/:genreName", getProgramsByGenre);
+router.get("/filter/genre/:genreName/:type", getProgramsByGenre);
 
 // GET DE PROGRAMS POR PLATAFORMA
-router.get("/filter/platform/:platformName", getProgramsByPlatform);
+router.get("/filter/platform/:platformName/:type", getProgramsByPlatform);
 
 // GET DE PROGRAMS POR GÉNERO Y PLATAFORMA COMBINADOS
-router.get("/filter/genre/:genreName/platform/:platformName", getProgramsByGenreAndPlatform);
+router.get("/filter/genre/:genreName/platform/:platformName/:type", getProgramsByGenreAndPlatform);
 
 module.exports = router;

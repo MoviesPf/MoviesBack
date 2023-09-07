@@ -13,14 +13,15 @@ const sendEmail = asyncHandler(async (data) => {
       }
     },
     );
-    
+     
     const info = await transporter.sendMail({
       to: data.to,
       subject: data.subject,
       html: data.html
     },
     )
-    console.log('hola entraste')
+    
+    console.log('Send Email')
 
   } catch (error) {
     throw Error(error.message)

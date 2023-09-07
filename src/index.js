@@ -23,10 +23,12 @@ const {
 } = require("./Models/Relations.js");
 
 sequelize.models.User = Users;
+sequelize.models.Genre = Genres;
 sequelize.models.Review = Reviews;
 sequelize.models.Program = Programs;
 sequelize.models.Platform = Platforms;
-sequelize.models.Genre = Genres;
+sequelize.models.Playlist = Playlists;
+sequelize.models.Donation = Donations;
 
 const app = express();
 
@@ -48,7 +50,7 @@ sequelize.sync({ force: false }).then(async () => {
   // Llamada a la función para asociar platforms a programs
   await createInitialPlatforms();
 
-  app.listen(port, () => 
+  app.listen(3001, () => 
     console.log('Server is running on port', port));
 });
 
