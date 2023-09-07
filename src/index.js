@@ -2,20 +2,37 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-const pool = require("./db");
+const pool = require('./db');
 const router = require("./Router/index.js");
 const port = process.env.PORT || 3001;
+
+const sequelize = require("./db");
+
+const createInitialPlatforms = require("./utils/createInitialPlatforms.js");
+
+const initializeInitialData = require("./utils/initializeInitialData.js");
 
 // Se importan los modelos para que se creen las tablas
 const {
   Users,
   Reviews,
-  Movies,
+  Programs,
   Platforms,
   Genres,
+  Playlists,
+  Donations,
 } = require("./Models/Relations.js");
 
+sequelize.models.User = Users;
+sequelize.models.Review = Reviews;
+sequelize.models.Program = Programs;
+sequelize.models.Platform = Platforms;
+sequelize.models.Genre = Genres;
+
 const app = express();
+
+//node mailer
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 // MIDDLEWARES
 app.use(express.json());
@@ -23,8 +40,18 @@ app.use(cors());
 
 app.use("/", router);
 
-app.listen(port, () => console.log("Server is running on port", port))
+sequelize.sync({ force: false }).then(async () => {
+  console.log("db conectada");
 
+  // Inicializa los datos iniciales
+  await initializeInitialData();
+
+  // Llamada a la función para asociar platforms a programs
+  await createInitialPlatforms();
+
+  app.listen(port, () => 
+    console.log('Server is running on port', port));
+});
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;
