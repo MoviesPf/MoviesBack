@@ -9,7 +9,7 @@ const createInitialPlatforms = async () => {
       const existingPlatforms = await program.getPlatforms();
 
       if (existingPlatforms.length === 0) {
-        const platforms = await getRandomPlatforms(2);
+        const platforms = await getRandomPlatforms(6);
 
         await program.addPlatforms(platforms);
       }

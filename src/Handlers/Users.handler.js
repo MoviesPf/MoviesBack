@@ -49,8 +49,9 @@ const getUserById = async (req, res, next) => {
 
 const banDesbanUser = async (req, res, next) => {
   const { id } = req.params;
+  const { reason } = req.body;
   try {
-    const bannedUser = await banUserById(id);
+    const bannedUser = await banUserById(id, reason);
     res.status(200).json(bannedUser);
   } catch (error) {
     next(error);
