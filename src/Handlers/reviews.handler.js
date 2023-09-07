@@ -17,13 +17,13 @@ const getReviews = async (req, res) => {
 
 const getReviewByUser = async (req, res) => {
   try {
-    if (!req.body) {
+    if (!req.params.id) {
       return res
         .status(400)
         .json({ error: 'Datos del body incorrectos o unsuficientes' });
     }
 
-    const { userId } = req.body;
+    const { userId } = req.params.id;
     const userReviews = await getUserReviews(userId);
     res.status(201).json(getUserReviews);
   } catch (error) {
@@ -39,8 +39,8 @@ const createNewReview = async (req, res) => {
         .json({ error: 'Datos del body incorrectos o unsuficientes.' });
     }
 
-    const { userId, reviewData } = req.body;
-    const newReview = await createReview(userId, reviewData);
+    const { userId, reviewData, programId } = req.body;
+    const newReview = await createReview(programId,userId, reviewData);
     res.status(201).json(newReview);
   } catch (error) {
     res.status(500).json({ msg: 'Error al crear la review.', error });

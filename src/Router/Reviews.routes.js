@@ -11,7 +11,7 @@ const router = Router();
 
 router.get("/", getReviews);
 
-router.get("/", getReviewByUser);
+router.get("/:id", getReviewByUser);
 
 router.post("/", createNewReview);
 

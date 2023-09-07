@@ -1,5 +1,6 @@
 const Reviews = require("../Models/Reviews.model");
 const Users = require("../Models/Users.model");
+const Programs = require("../Models/Programs.model");
 
 const getAllReviews = async () => {
 // La funcion devuelve todas las reviews en la db.
@@ -17,14 +18,20 @@ const getUserReviews = async (userID) =>{
 };
 
 
-const createReview = async (userID, reviewData) => {
+const createReview = async (programID,userID, reviewData) => {
 // La funcion crea una nueva review y le asigna un usuario relacionado.
     
   const user = await Users.findByPk(userID);
   if (!user){
       throw new Error('El ID brindado no coincide con ningun usuario');
   }
-  const newReview = await Reviews.create({...reviewData, UserId: user.id});
+  const program = await Programs.findByPk(userID);
+  if (!program){
+      throw new Error('El ID brindado no coincide con ningun programa');
+  }
+
+  const newReview = await Reviews.create({...reviewData, UserId: user.id, ProgramId: user.id});
+
   if (!newReview){
     throw new Error({msg:'Hubo un problema al crear la review',error} );
   }
