@@ -49,12 +49,12 @@ router.delete("/:ProgramsId", deleteProgramsHandler);
 ////////////// Filtros //////////////////
 
 // GET DE PROGRAMS POR GÉNERO
-router.get("/filter/genre/:genreName", getProgramsByGenre);
+router.get("/filter/genre/:genreName/:type", getProgramsByGenre);
 
 // GET DE PROGRAMS POR PLATAFORMA
-router.get("/filter/platform/:platformName", getProgramsByPlatform);
+router.get("/filter/platform/:platformName/:type", getProgramsByPlatform);
 
 // GET DE PROGRAMS POR GÉNERO Y PLATAFORMA COMBINADOS
-router.get("/filter/genre/:genreName/platform/:platformName", getProgramsByGenreAndPlatform);
+router.get("/filter/genre/:genreName/platform/:platformName/:type", getProgramsByGenreAndPlatform);
 
 module.exports = router;
