@@ -125,7 +125,7 @@ const forgotPasswordController = async (email) => {
   sendEmail(data);
 
   return {
-    data: 'Send email'
+    message: 'password has been changed successfully'
   };
 };
 
@@ -138,7 +138,21 @@ const changePasswordController = async (email, password) => {
 
   await user.save();
 
-  return { data: 'Change password successfully' };
+  return { message: 'Change password successfully' };
+};
+
+const loginUserController = async (email, password) => {
+  const user = await Users.findOne({ where: { email } });
+
+  if (!user) throw Error('incorrect email or password');
+
+  if (user.password === password) {
+    console.log('ok');
+    return {
+      message: 'successful login',
+      data: user
+    };
+  } else throw Error('incorrect password');
 };
 
 module.exports = {
@@ -148,5 +162,6 @@ module.exports = {
   banUserById,
   userEdit,
   forgotPasswordController,
-  changePasswordController
+  changePasswordController,
+  loginUserController
 };

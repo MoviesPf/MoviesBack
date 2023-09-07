@@ -5,7 +5,8 @@ const {
   banUserById,
   userEdit,
   forgotPasswordController,
-  changePasswordController
+  changePasswordController,
+  loginUserController
 } = require('../Controllers/Users.controller.js');
 
 const postUser = async (req, res, next) => {
@@ -37,7 +38,7 @@ const getUsers = async (req, res, next) => {
   }
 };
 
-const getUserById = async (req, res, next) => { 
+const getUserById = async (req, res, next) => {
   const { id } = req.params;
   try {
     const userById = await findUserById(id);
@@ -78,7 +79,7 @@ const forgotPasswordHandler = async (req, res, next) => {
 
     const data = await forgotPasswordController(email);
 
-    return res.status(200).json(data)
+    return res.status(200).json(data);
   } catch (error) {
     next(error);
   }
@@ -87,10 +88,21 @@ const forgotPasswordHandler = async (req, res, next) => {
 const changePasswordHandler = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    console.log(email);
 
     const data = await changePasswordController(email, password);
 
-    return res.status(200).json(data)
+    return res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const loginUserHandler = async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    const data = await loginUserController(email, password);
+    return res.status(200).json(data);
   } catch (error) {
     next(error);
   }
@@ -103,5 +115,6 @@ module.exports = {
   banDesbanUser,
   editUser,
   forgotPasswordHandler,
-  changePasswordHandler
+  changePasswordHandler,
+  loginUserHandler
 };
