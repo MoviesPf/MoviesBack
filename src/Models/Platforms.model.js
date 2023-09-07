@@ -1,22 +1,22 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../db");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db');
 
 const Platforms = sequelize.define(
-  "Platforms",
+  'Platforms',
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
-      primaryKey: true,
+      primaryKey: true
     },
     name: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: true
     },
     banned: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
+      defaultValue: false
+    }
   },
   { timestamps: false }
 );
