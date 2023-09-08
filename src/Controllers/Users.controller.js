@@ -6,10 +6,9 @@ const unbanning = require('../Templates/unbanning');
 const welcome = require('../Templates/welcome');
 
 const createUser = async (name, nickname, avatar, email, password, source) => {
-  console.log(source);
   const userFound = await Users.findOne({ where: { email } });
 
-  if (source === 'gmail' || userFound) {
+  if (source === 'gmail' && userFound) {
     const data = await loginUserController(email, password, source);
     return data;
   }
@@ -18,7 +17,8 @@ const createUser = async (name, nickname, avatar, email, password, source) => {
     name,
     nickname,
     avatar,
-    password
+    password,
+    email
   });
 
   if (!user) throw Error('error');
@@ -34,7 +34,9 @@ const createUser = async (name, nickname, avatar, email, password, source) => {
 
   sendEmail(data);
 
-  return user;
+  console.log(user);
+
+  return { data: user };
 };
 
 const getAllUsers = async () => {
