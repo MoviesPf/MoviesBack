@@ -13,7 +13,7 @@ const createOrder = async (req, res) => {
           title: popcorn.title,
           currency_id: "ARS",
           unit_price: Number(popcorn.price),
-          quantity: Number(popcorn.quantity),
+          quantity: parseInt(popcorn.quantity, 10) ?? 0,
         }],
       back_urls: {
         success: "http://localhost:3001/donations/success",
@@ -33,7 +33,6 @@ const createOrder = async (req, res) => {
 
 const getSuccess = async (req, res) => {
   try {
-    // Devuelve un JSON con el mensaje de éxito.
     res.status(200).json({ message: "Su donación se ha realizado con éxito" });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -42,7 +41,6 @@ const getSuccess = async (req, res) => {
 
 const getFailure = async (req, res) => {
   try {
-    // Devuelve un JSON con el mensaje de éxito.
     res.status(200).json({ message: "Oh, subo un error al realizar su donación" });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -52,7 +50,6 @@ const getFailure = async (req, res) => {
 
 const getPending = async (req, res) => {
   try {
-    // Devuelve un JSON con el mensaje de éxito.
     res.status(200).json({ message: "Su donación esta en pendiente" });
   } catch (error) {
     res.status(500).json({ error: error.message });
