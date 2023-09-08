@@ -254,7 +254,7 @@ const getProgramsByPlatformController = async (platformName, type) => {
     include: [
       {                       // Incluye en la busqueda
         model: Platforms,
-        as: "platforms",
+        as: "Platforms",
         through: { attributes: [] },
       },
       {
@@ -263,7 +263,7 @@ const getProgramsByPlatformController = async (platformName, type) => {
       }
     ],
     where: {
-      '$platforms.name$': platformName,
+      '$Platforms.name$': platformName,
     }
   })
   : await Programs.findAll({
