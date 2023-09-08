@@ -11,8 +11,11 @@ const {
 
 const postUser = async (req, res, next) => {
   try {
-    const { name, nickname, avatar, email, password, status } = req.body;
-    if (!name || !nickname || !avatar || !email || !password || !status)
+    const { name, nickname, avatar, email, password, source } = req.body;
+
+    console.log(source);
+
+    if (!name || !nickname || !avatar || !email )
       return res.status(400).send('Faltan datos');
 
     const user = await createUser(
@@ -21,7 +24,7 @@ const postUser = async (req, res, next) => {
       avatar,
       email,
       password,
-      status
+      source
     );
     res.status(200).json(user);
   } catch (error) {

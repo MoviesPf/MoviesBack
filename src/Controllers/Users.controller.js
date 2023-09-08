@@ -5,34 +5,36 @@ const banned = require('../Templates/banned');
 const unbanning = require('../Templates/unbanning');
 const welcome = require('../Templates/welcome');
 
-const createUser = async (name, nickname, avatar, email, password, status) => {
-  const [userCreated, created] = await Users.findOrCreate({
-    where: { email, nickname },
-    defaults: {
-      name,
-      nickname,
-      avatar,
-      password,
-      status
-    }
+const createUser = async (name, nickname, avatar, email, password, source) => {
+  console.log(source);
+  const userFound = await Users.findOne({ where: { email } });
+
+  if (source === 'gmail' || userFound) {
+    const data = await loginUserController(email, password, source);
+    return data;
+  }
+
+  const user = await Users.create({
+    name,
+    nickname,
+    avatar,
+    password
   });
 
-  if (created) {
-    const template = welcome(userCreated);
+  if (!user) throw Error('error');
 
-    const data = {
-      from: 'GreenScreen',
-      to: userCreated.email,
-      subject: `${userCreated.nickname}, we communicate from GreenScreen.`,
-      html: template
-    };
+  const template = welcome(user);
 
-    sendEmail(data);
+  const data = {
+    from: 'GreenScreen',
+    to: user.email,
+    subject: `${user.nickname}, we communicate from GreenScreen.`,
+    html: template
+  };
 
-    return userCreated;
-  } else {
-    throw Error('El mail o el nickname ya esta en uso');
-  }
+  sendEmail(data);
+
+  return user;
 };
 
 const getAllUsers = async () => {
@@ -141,10 +143,19 @@ const changePasswordController = async (email, password) => {
   return { message: 'Change password successfully' };
 };
 
-const loginUserController = async (email, password) => {
+const loginUserController = async (email, password, source) => {
   const user = await Users.findOne({ where: { email } });
 
+  console.log(source);
+
   if (!user) throw Error('incorrect email or password');
+
+  if (source === 'gmail') {
+    return {
+      message: 'successful login',
+      data: user
+    };
+  }
 
   if (user.password === password) {
     console.log('ok');
