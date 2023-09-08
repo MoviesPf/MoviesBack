@@ -89,13 +89,25 @@ const findPlaylist = async (playlistId) => {
 }
 
 const createPlaylist = async (body, UserId) => {
-  const playlist = await Playlists.create(body);
+  const [playlistCreated, created] = await Playlists.findOrCreate({
+    where: {
+      name: body.name, 
+      UserId:UserId
+    },
+    defaults: {
+      programsIds: body.programsIds
+    }
+  });
+
   const user = await Users.findByPk(UserId);
 
-  await user.addPlaylists(playlist);
-
-  return { message: 'Playlist creada correctamente'}
-}
+  if (created) {
+    await user.addPlaylists(playlistCreated);
+    return { message: 'Playlist creada correctamente'}
+  } else {
+    throw Error("Ya existe una Playlist con ese nombre")
+  }
+};
 
 const editPlaylist = async (body, playlistId) => {
   const playlist = await Playlists.findByPk(playlistId);
