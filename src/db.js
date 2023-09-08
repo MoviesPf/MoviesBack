@@ -31,5 +31,5 @@ module.exports = sequelize;
 //     native: false
 //   }
 // );
-// 
-module.exports = sequelize;
+// // 
+// module.exports = sequelize;
