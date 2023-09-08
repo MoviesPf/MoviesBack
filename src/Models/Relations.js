@@ -10,29 +10,23 @@ const Donations = require("./Donations.model");
 Users.hasMany(Reviews); // Uno a muchos
 Reviews.belongsTo(Users); // FK
 
+Users.hasMany(Playlists) // Uno a muchos
+Playlists.belongsTo(Users) // FK
+
 Users.hasMany(Donations); // Uno a muchos
 Donations.belongsTo(Users); // FK
 
 // Relaciones de Programs
-
 Programs.hasMany(Reviews) // Uno a muchos
 Reviews.belongsTo(Programs) // FK
 
 // Relaciones de Genres -- Muchos a muchos
-
 Programs.belongsToMany(Genres, { through: "ProgramsGenres" });
 Genres.belongsToMany(Programs, { through: "ProgramsGenres" });
 
 // Relaciones de Platforms -- Muchos a muchos
 Programs.belongsToMany(Platforms, { through: "ProgramsPlatform" });
 Platforms.belongsToMany(Programs, { through: "ProgramsPlatform" });
-
-// Relaciones de Playlists 
-Playlists.belongsToMany(Programs, { through: 'ProgramsPlaylist'}) // muchos a muchos
-Programs.belongsToMany(Playlists, { through: 'ProgramsPlaylist'}) // muchos a muchos
-
-Users.hasMany(Playlists) // Uno a muchos
-Playlists.hasMany(Users) // FK
 
 module.exports = {
   Users,

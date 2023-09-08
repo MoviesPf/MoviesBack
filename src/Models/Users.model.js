@@ -29,6 +29,10 @@ const Users = sequelize.define(
     status: {
       type: DataTypes.STRING,
     },
+    donator: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     admin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
