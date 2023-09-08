@@ -12,7 +12,7 @@ async function loadGenresApi() {
       );
 
       const seriesData = await axios(
-        `https://api.themoviedb.org/3/genre/tv/list?api_key=${APY_KEY}`
+        `https://api.themoviedb.org/3/genre/tv/list?api_key=a2198fd820d7e6e6b52e89a4a20dda`
       )
 
       const seriesGenres = seriesData.data.genres 
