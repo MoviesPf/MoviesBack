@@ -1,13 +1,13 @@
-const { Op, where } = require('sequelize');
-const { Programs, Genres, Platforms } = require('../Models/Relations');
-const sequelize = require("../db")
+const { Op, where } = require("sequelize");
+const { Programs, Genres, Platforms, Reviews } = require("../Models/Relations");
+const sequelize = require("../db");
 
 const getAllProgramsController = async () => {
   const data = await Programs.findAll({
     include: [
       { model: Genres, through: { attributes: [] } },
-      { model: Platforms, through: { attributes: [] } }
-    ]
+      { model: Platforms, through: { attributes: [] } },
+    ],
   });
 
   const totalPrograms = data.length;
@@ -26,47 +26,46 @@ const getAllProgramsController = async () => {
     adultPrograms,
     activePrograms,
     bannedPrograms,
-    data
+    data,
   };
 };
 
-
 const getAllNameProgramsController = async (title) => {
-  const search = title
+  const search = title;
   const data = await Programs.findAll({
     where: {
       title: {
-        [Op.iLike]: `%${title}%`
-      }
+        [Op.iLike]: `%${title}%`,
+      },
     },
     include: [
       { model: Genres, through: { attributes: [] } },
-      { model: Platforms, through: { attributes: [] } }
-    ]
+      { model: Platforms, through: { attributes: [] } },
+    ],
   });
-  
+
   return {
     search,
-    data
+    data,
   };
 };
 
 const getActiveProgramsController = async () => {
   const data = await Programs.findAll({
     where: {
-      banned: false
+      banned: false,
     },
     include: [
       { model: Genres, through: { attributes: [] } },
-      { model: Platforms, through: { attributes: [] } }
-    ]
+      { model: Platforms, through: { attributes: [] } },
+    ],
   });
-  
+
   const totalPrograms = data.length;
-  
+
   return {
     totalPrograms,
-    data
+    data,
   };
 };
 
@@ -74,19 +73,19 @@ const getAllMovies = async () => {
   const data = await Programs.findAll({
     where: {
       type: "movie",
-      banned: false
+      banned: false,
     },
     include: [
       { model: Genres, through: { attributes: [] } },
-      { model: Platforms, through: { attributes: [] } }
-    ]
+      { model: Platforms, through: { attributes: [] } },
+    ],
   });
 
   const totalMovies = data.length;
-  
+
   return {
     totalMovies,
-    data
+    data,
   };
 };
 
@@ -94,69 +93,70 @@ const getAllSeries = async () => {
   const data = await Programs.findAll({
     where: {
       type: "serie",
-      banned: false
+      banned: false,
     },
     include: [
       { model: Genres, through: { attributes: [] } },
-      { model: Platforms, through: { attributes: [] } }
-    ]
+      { model: Platforms, through: { attributes: [] } },
+    ],
   });
 
   const totalSeries = data.length;
-  
+
   return {
     totalSeries,
-    data
+    data,
   };
 };
 
 const getNameProgramsController = async (title) => {
-  const search = title
+  const search = title;
   const data = await Programs.findAll({
     where: {
       title: {
-        [Op.iLike]: `%${title}%`
+        [Op.iLike]: `%${title}%`,
       },
-      banned: false
+      banned: false,
     },
     include: [
       { model: Genres, through: { attributes: [] } },
-      { model: Platforms, through: { attributes: [] } }
-    ]
+      { model: Platforms, through: { attributes: [] } },
+    ],
   });
 
   return {
     search,
-    data
+    data,
   };
 };
 
 const getIdProgramsController = async (id) => {
   const data = await Programs.findOne({
     where: {
-      id
+      id,
     },
     include: [
       { model: Genres, through: { attributes: [] } },
-      { model: Platforms, through: { attributes: [] } }
-    ]
+      { model: Platforms, through: { attributes: [] } },
+      { model: Reviews },
+    ],
   });
 
   return {
-    data
+    data,
   };
 };
 
 const createProgramsController = async (body) => {
   const platform = await Platforms.findAll({
     where: {
-      name: body.platforms
-    }
+      name: body.platforms,
+    },
   });
   const genre = await Genres.findAll({
     where: {
-      name: body.genres
-    }
+      name: body.genres,
+    },
   });
 
   const program = await Programs.create(body);
@@ -164,10 +164,28 @@ const createProgramsController = async (body) => {
   await program.setPlatforms(platform);
   await program.setGenres(genre);
 
-  return { message: 'the movie was created correctly' };
+  return { message: "the movie was created correctly" };
 };
 
-const updateProgramsController = async (id,{title,overview,release_date,backdrop,poster,runtime,companies,trailer,adult,revenue,budget,cast,popularity,type}) => {
+const updateProgramsController = async (
+  id,
+  {
+    title,
+    overview,
+    release_date,
+    backdrop,
+    poster,
+    runtime,
+    companies,
+    trailer,
+    adult,
+    revenue,
+    budget,
+    cast,
+    popularity,
+    type,
+  }
+) => {
   const { data } = await getIdProgramsController(id);
   data.title = title || data.title;
   data.overview = overview || data.overview;
@@ -186,7 +204,7 @@ const updateProgramsController = async (id,{title,overview,release_date,backdrop
 
   await data.save();
 
-  return { message: 'data was updated correctly' };
+  return { message: "data was updated correctly" };
 };
 
 const deleteProgramsController = async (id) => {
@@ -196,150 +214,154 @@ const deleteProgramsController = async (id) => {
 
   await data.save();
 
-  return { message: 'data was updated correctly' };
+  return { message: "data was updated correctly" };
 };
 
-
 const getProgramsByGenreController = async (genreName, type) => {
-
-  const data = type === "main"
-  
-  ? await Programs.findAll({
-    include: [
-      {                   // Incluye en la busqueda
-        model: Genres,
-        as: "Genres",
-        through: { attributes: [] },
-      },
-      {
-        model: Platforms,
-        through: { attributes: [] },
-      }
-    ],
-    where: {
-      '$Genres.name$': genreName,
-    }
-  })
-
-  : await Programs.findAll({
-    include: [
-      {                   // Incluye en la busqueda
-        model: Genres,
-        as: "Genres",
-        through: { attributes: [] },
-      },
-      {
-        model: Platforms,
-        through: { attributes: [] },
-      }
-    ],
-    where: {
-      type: type,
-      '$Genres.name$': genreName,
-    },
-  });
+  const data =
+    type === "main"
+      ? await Programs.findAll({
+          include: [
+            {
+              // Incluye en la busqueda
+              model: Genres,
+              as: "Genres",
+              through: { attributes: [] },
+            },
+            {
+              model: Platforms,
+              through: { attributes: [] },
+            },
+          ],
+          where: {
+            "$Genres.name$": genreName,
+          },
+        })
+      : await Programs.findAll({
+          include: [
+            {
+              // Incluye en la busqueda
+              model: Genres,
+              as: "Genres",
+              through: { attributes: [] },
+            },
+            {
+              model: Platforms,
+              through: { attributes: [] },
+            },
+          ],
+          where: {
+            type: type,
+            "$Genres.name$": genreName,
+          },
+        });
 
   const totalFiltered = data.length;
-  
+
   return {
     totalFiltered,
-    data
+    data,
   };
 };
 
 const getProgramsByPlatformController = async (platformName, type) => {
-
-  const data = type === "main"
-  ? await Programs.findAll({
-    include: [
-      {                       // Incluye en la busqueda
-        model: Platforms,
-        as: "platforms",
-        through: { attributes: [] },
-      },
-      {
-        model: Genres,
-        through: { attributes: []},
-      }
-    ],
-    where: {
-      '$platforms.name$': platformName,
-    }
-  })
-  : await Programs.findAll({
-    include: [
-      {                       // Incluye en la busqueda
-        model: Platforms,
-        as: "Platforms",
-        through: { attributes: [] },
-      },
-      {
-        model: Genres,
-        through: { attributes: []}
-      }
-    ],
-    where: {
-      '$Platforms.name$': platformName,
-      type:type,
-    },
-  })
+  const data =
+    type === "main"
+      ? await Programs.findAll({
+          include: [
+            {
+              // Incluye en la busqueda
+              model: Platforms,
+              as: "platforms",
+              through: { attributes: [] },
+            },
+            {
+              model: Genres,
+              through: { attributes: [] },
+            },
+          ],
+          where: {
+            "$platforms.name$": platformName,
+          },
+        })
+      : await Programs.findAll({
+          include: [
+            {
+              // Incluye en la busqueda
+              model: Platforms,
+              as: "Platforms",
+              through: { attributes: [] },
+            },
+            {
+              model: Genres,
+              through: { attributes: [] },
+            },
+          ],
+          where: {
+            "$Platforms.name$": platformName,
+            type: type,
+          },
+        });
   const totalFiltered = data.length;
-  
+
   return {
     totalFiltered,
-    data
+    data,
   };
 };
 
-const getProgramsByGenreAndPlatformController = async (genreName, platformName, type) => {
-
-  const data = type === "main"
-  ? await Programs.findAll({
-    include: [
-      {
-        model: Genres,
-        as: "Genres",
-        through: { attributes: [] },
-      },
-      {
-        model: Platforms,
-        as: "Platforms",
-        through: { attributes: [] },
-      },
-    ],
-    where: {
-      '$Platforms.name$': platformName,
-      '$Genres.name$': genreName,
-    },
-  })
-  : await Programs.findAll({
-    include: [
-      {
-        model: Genres,
-        as: "Genres",
-        through: { attributes: [] },
-      },
-      {
-        model: Platforms,
-        as: "Platforms",
-        through: { attributes: [] },
-      },
-    ],
-    where: {
-      '$Platforms.name$': platformName,
-      '$Genres.name$': genreName,
-      type:type,
-    },
-  })
+const getProgramsByGenreAndPlatformController = async (
+  genreName,
+  platformName,
+  type
+) => {
+  const data =
+    type === "main"
+      ? await Programs.findAll({
+          include: [
+            {
+              model: Genres,
+              as: "Genres",
+              through: { attributes: [] },
+            },
+            {
+              model: Platforms,
+              as: "Platforms",
+              through: { attributes: [] },
+            },
+          ],
+          where: {
+            "$Platforms.name$": platformName,
+            "$Genres.name$": genreName,
+          },
+        })
+      : await Programs.findAll({
+          include: [
+            {
+              model: Genres,
+              as: "Genres",
+              through: { attributes: [] },
+            },
+            {
+              model: Platforms,
+              as: "Platforms",
+              through: { attributes: [] },
+            },
+          ],
+          where: {
+            "$Platforms.name$": platformName,
+            "$Genres.name$": genreName,
+            type: type,
+          },
+        });
 
   const totalFiltered = data.length;
-  
+
   return {
     totalFiltered,
-    data
+    data,
   };
 };
-
 
 module.exports = {
   getAllProgramsController,
@@ -354,5 +376,5 @@ module.exports = {
   getProgramsByPlatformController,
   getProgramsByGenreAndPlatformController,
   getAllMovies,
-  getAllSeries
+  getAllSeries,
 };
