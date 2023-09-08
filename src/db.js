@@ -1,4 +1,7 @@
 require('dotenv').config();
+const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_DATABASE } =
+  process.env;
+
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(process.env.POSTGRES_URL + "?sslmode=require", {
