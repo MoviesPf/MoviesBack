@@ -8,7 +8,7 @@ const sequelize = new Sequelize(process.env.POSTGRES_URL + "?sslmode=require", {
   dialect: 'postgres', 
   logging: false, 
 });
-
+console.log(process.env.POSTGRES_URL + "?sslmode=require");
 // Manejador de eventos para verificar si la conexión se ha establecido correctamente.
 sequelize
   .authenticate()
