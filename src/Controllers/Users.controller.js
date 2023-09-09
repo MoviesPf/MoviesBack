@@ -46,7 +46,7 @@ const createUser = async (name, nickname, avatar, email, password, source) => {
   })
   await Playlist.findOrCreate({
     where:{
-      name: "Wached",
+      name: "Watched",
       UserId: user.id,
       programsIds:""
     }

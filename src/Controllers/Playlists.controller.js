@@ -1,18 +1,57 @@
 const Playlists = require('../Models/Playlists.model');
 const Users = require('../Models/Users.model');
+const Programs = require('../Models/Programs.model');
 
 const findAllPlaylist = async () => {
-  const data = await Playlists.findAll()
+  const allPlaylists = await Playlists.findAll();
+  const finalPlaylists = [];
 
+    for (i = 0; i < allPlaylists.length; i++) {
+    const onePlay = allPlaylists[i];
+    const onePlayIds = onePlay.programsIds.length ? onePlay.programsIds.split("-") : [];
+    const onePlayPrograms = [];
+    
+    for (j = 0; j < onePlayIds.length; j ++) {{
+      const program = await Programs.findByPk(Number(onePlayIds[j]))
+      const copy = {
+        id: program.id,
+        title: program.title,
+        poster: program.poster
+      }
+      onePlayPrograms.push(copy);
+    }}
+
+    finalPlaylists.push({
+      id: onePlay.id,
+      name: onePlay.name,
+      UserId: onePlay.UserId,
+      programs: onePlayPrograms
+    })
+  }
   return {
-    data
+    finalPlaylists
   }
 }
 
 const findPlaylist = async (Id) => {
-  const data = await Playlists.findByPk(Id)
+  const data = await Playlists.findByPk(Id);
+  let programs = [];
+  const programsIds = data.programsIds.length ? data.programsIds.split("-") : [];
+
+  for (i = 0; i < programsIds.length; i ++) {{
+    const program = await Programs.findByPk(Number(programsIds[i]))
+    const copy = {
+      id: program.id,
+      title: program.title,
+      poster: program.poster
+    }
+    programs.push(copy);
+  }}
   return {
-    data
+    id: data.id,
+    name: data.name,
+    userId: data.UserId,
+    programs: programs
   }
 }
 
@@ -38,16 +77,41 @@ const eliminatePlaylist = async (Id) => {
 };
 
 const findUserPlaylist = async (UserId) => {
-  const data = await Playlists.findAll({
+  const allPlaylists = await Playlists.findAll({
     where: {
       UserId: UserId,
     }
   });
 
-  const totalPlaylist = data.length
+  const finalPlaylists = [];
+
+  for (i = 0; i < allPlaylists.length; i++) {
+    const onePlay = allPlaylists[i];
+    const onePlayIds = onePlay.programsIds.length ? onePlay.programsIds.split("-") : [];
+    const onePlayPrograms = [];
+    
+    for (j = 0; j < onePlayIds.length; j ++) {{
+      const program = await Programs.findByPk(Number(onePlayIds[j]))
+      const copy = {
+        id: program.id,
+        title: program.title,
+        poster: program.poster
+      }
+      onePlayPrograms.push(copy);
+    }}
+
+    finalPlaylists.push({
+      id: onePlay.id,
+      name: onePlay.name,
+      UserId: onePlay.UserId,
+      programs: onePlayPrograms
+    })
+  }
+
+  const totalPlaylist = allPlaylists.length
   return {
     totalPlaylist,
-    data
+    finalPlaylists
   }
 }
 
@@ -73,6 +137,10 @@ const createPlaylist = async (body, UserId) => {
 };
 
 const postOrEliminateProgram = async (UserId, PlaylistName, ProgramId) => {
+  const program = await Programs.findByPk(Number(ProgramId))
+  
+  if (!program) throw Error("El program no existe")
+
   const playlist = await Playlists.findOne({
     where: {
       name: PlaylistName,
@@ -81,8 +149,7 @@ const postOrEliminateProgram = async (UserId, PlaylistName, ProgramId) => {
   })
 
   const ids = playlist.programsIds.length ? playlist.programsIds.split("-") : []
-
-  if (!ids.includes(ProgramId)) {
+    if (!ids.includes(ProgramId)) {
     ids.push(ProgramId)
     playlist.programsIds = ids.join("-")
     playlist.save();
@@ -93,7 +160,8 @@ const postOrEliminateProgram = async (UserId, PlaylistName, ProgramId) => {
     playlist.save();
     return "programa eliminado correctamente";
   };
-};
+
+}
 
 module.exports = {
   findAllPlaylist,

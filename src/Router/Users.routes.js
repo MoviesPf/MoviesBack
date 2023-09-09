@@ -25,9 +25,9 @@ router.post("/login", loginUserHandler);
 
 router.get("/:id", getUserById);
 
-router.delete("/:id", banDesbanUser);
+// router.delete("/:id", banDesbanUser);
 
-router.delete("eliminate/:id",eliminarUsuario);
+router.delete("/:id",eliminarUsuario);
 
 router.patch("/:id", editUser);
 
