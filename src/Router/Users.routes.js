@@ -7,7 +7,8 @@ const {
     editUser,
     forgotPasswordHandler,
     changePasswordHandler,
-    loginUserHandler
+    loginUserHandler,
+    eliminarUsuario
 } = require("../Handlers/Users.handler.js");
 
 const router = Router();
@@ -25,6 +26,8 @@ router.post("/login", loginUserHandler);
 router.get("/:id", getUserById);
 
 router.delete("/:id", banDesbanUser);
+
+router.delete("eliminate/:id",eliminarUsuario);
 
 router.patch("/:id", editUser);
 

@@ -6,7 +6,8 @@ const {
   userEdit,
   forgotPasswordController,
   changePasswordController,
-  loginUserController
+  loginUserController,
+  deleteUser
 } = require('../Controllers/Users.controller.js');
 
 const postUser = async (req, res, next) => {
@@ -111,6 +112,16 @@ const loginUserHandler = async (req, res, next) => {
   }
 };
 
+const eliminarUsuario = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const data = await deleteUser(id);
+    return res.status(200).send(data);
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   postUser,
   getUsers,
@@ -119,5 +130,6 @@ module.exports = {
   editUser,
   forgotPasswordHandler,
   changePasswordHandler,
-  loginUserHandler
+  loginUserHandler,
+  eliminarUsuario
 };
