@@ -6,7 +6,7 @@ const banned = require('../Templates/banned');
 const unbanning = require('../Templates/unbanning');
 const welcome = require('../Templates/welcome');
 
-const createUser = async (name, nickname, avatar, email, password, source) => {
+const createUser = async (name, nickname, avatar, email, password, source, status) => {
   const userFound = await Users.findOne({ where: { email } });
 
   if (source === 'gmail' && userFound) {
@@ -19,7 +19,8 @@ const createUser = async (name, nickname, avatar, email, password, source) => {
     nickname,
     avatar,
     password,
-    email
+    email,
+    status
   });
 
   if (!user) throw Error('error');

@@ -12,7 +12,7 @@ const {
 
 const postUser = async (req, res, next) => {
   try {
-    const { name, nickname, avatar, email, password, source } = req.body;
+    const { name, nickname, avatar, email, password, source, status } = req.body;
 
     console.log(source);
 
@@ -25,7 +25,8 @@ const postUser = async (req, res, next) => {
       avatar,
       email,
       password,
-      source
+      source,
+      status
     );
     res.status(200).json(user);
   } catch (error) {

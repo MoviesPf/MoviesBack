@@ -100,7 +100,7 @@ const findUserPlaylist = async (UserId) => {
       onePlayPrograms.push(copy);
     }}
 
-    finalPlaylists.push({
+    finalPlaylists.unshift({
       id: onePlay.id,
       name: onePlay.name,
       UserId: onePlay.UserId,
