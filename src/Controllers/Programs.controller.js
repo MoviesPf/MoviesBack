@@ -1,5 +1,11 @@
 const { Op, where } = require("sequelize");
-const { Programs, Genres, Platforms, Reviews } = require("../Models/Relations");
+const {
+  Programs,
+  Genres,
+  Platforms,
+  Reviews,
+  Users,
+} = require("../Models/Relations");
 const sequelize = require("../db");
 
 const getAllProgramsController = async () => {
@@ -138,7 +144,14 @@ const getIdProgramsController = async (id) => {
     include: [
       { model: Genres, through: { attributes: [] } },
       { model: Platforms, through: { attributes: [] } },
-      { model: Reviews },
+      {
+        model: Reviews,
+        include: [
+          {
+            model: Users,
+          },
+        ],
+      },
     ],
   });
 
