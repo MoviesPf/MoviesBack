@@ -1,16 +1,12 @@
 const { Router } = require('express');
-const {
-  getDonationsHandler,
-  getIdDonationsHandler,
-  createDonationsHandler
-} = require('../Handlers/Donations.handler');
+const { createOrder } = require('../Handlers/Donations.handler');
 
 const router = Router();
 
-router.get('/', getDonationsHandler);
-
-router.get('/:id', getIdDonationsHandler);
-
-router.post('/create', createDonationsHandler);
+router.post('/create-order', createOrder);
+router.post('/webhook', (req, res) => {
+  console.log(req.body);
+  res.status(200).send('Webhook received');
+});
 
 module.exports = router;
