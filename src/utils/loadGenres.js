@@ -13,16 +13,16 @@ async function loadGenresApi() {
 
       const seriesData = await axios(
         `https://api.themoviedb.org/3/genre/tv/list?api_key=95e749339979dd55fd29df3fa91c46c3`
-      )
+      );
 
-      const seriesGenres = seriesData.data.genres 
+      const seriesGenres = seriesData.data.genres;
 
       const genresS = seriesGenres.map((genre) => {
         return {
           id: genre.id,
           name: genre.name,
-        }
-      })
+        };
+      });
 
       const mappedData = data.genres.map((genre) => {
         return {
@@ -32,16 +32,15 @@ async function loadGenresApi() {
       });
 
       await Genres.bulkCreate(mappedData);
-      
-      for (i=0; i<genresS.length; i++){
-        let actualGenre = genresS[i]
-        await Genres.findOrCreate({
-          where: {id: actualGenre.id, name: actualGenre.name}
-        })
-      }
-      
-      console.log("Genres loaded");
 
+      for (i = 0; i < genresS.length; i++) {
+        let actualGenre = genresS[i];
+        await Genres.findOrCreate({
+          where: { id: actualGenre.id, name: actualGenre.name },
+        });
+      }
+
+      console.log("Genres loaded");
     }
   } catch (error) {
     console.log("Error: ", error);

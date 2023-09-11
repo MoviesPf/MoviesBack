@@ -8,7 +8,11 @@ const getRandomPlatforms = async (count) => {
     const randomIndex = Math.floor(Math.random() * allPlatforms.length);
     const platform = allPlatforms[randomIndex];
 
-    if (!randomPlatforms.includes(platform)) {
+    if (
+      !randomPlatforms.some(
+        (existingPlatform) => existingPlatform.id === platform.id
+      )
+    ) {
       randomPlatforms.push(platform);
     }
   }
