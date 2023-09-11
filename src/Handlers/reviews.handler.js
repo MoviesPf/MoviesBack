@@ -39,8 +39,8 @@ const createNewReview = async (req, res) => {
         .json({ error: 'Datos del body incorrectos o unsuficientes.' });
     }
 
-    const { userId, reviewData } = req.body;
-    const newReview = await createReview(userId, reviewData);
+    const { userId, reviewData, ProgramsId } = req.body;
+    const newReview = await createReview(userId, reviewData, ProgramsId);
     res.status(201).json(newReview);
   } catch (error) {
     res.status(500).json({ msg: 'Error al crear la review.', error });
@@ -58,11 +58,9 @@ const deleteReviewById = async (req, res) => {
 
     const deletCount = await deletReview(id);
     if (deletCount > 0) {
-      res
-        .status(200)
-        .json({
-          msg: `La review con el id ${id}, fue eliminada satisfactoriamente.`
-        });
+      res.status(200).json({
+        msg: `La review con el id ${id}, fue eliminada satisfactoriamente.`
+      });
     }
   } catch (error) {
     res
@@ -81,12 +79,10 @@ const editReviewComment = async (req, res) => {
 
     const { reviewId, commentData } = req.body;
     const editedReview = await editReview(reviewId, commentData);
-    res
-      .status(201)
-      .json({
-        msg: `Los comentarios fueron editados satisfactoriamente.`,
-        editedReview
-      });
+    res.status(201).json({
+      msg: `Los comentarios fueron editados satisfactoriamente.`,
+      editedReview
+    });
   } catch (error) {
     res.status(500).json({ msg: 'Error al editar los comentarios.', error });
   }

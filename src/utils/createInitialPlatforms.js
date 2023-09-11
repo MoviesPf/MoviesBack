@@ -15,7 +15,10 @@ const createInitialPlatforms = async () => {
       }
     }
   } catch (error) {
-    throw new Error("Error during association of platforms with programs");
+    console.error(
+      "Error during association of platforms with programs:",
+      error
+    );
   }
 };
 
