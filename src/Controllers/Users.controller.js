@@ -1,11 +1,12 @@
 const sendEmail = require('../Config/mailer');
 const Users = require('../Models/Users.model');
+const Playlist = require('../Models/Playlists.model');
 const { forgotPassword } = require('../Templates/ForgotPassword');
 const banned = require('../Templates/banned');
 const unbanning = require('../Templates/unbanning');
 const welcome = require('../Templates/welcome');
 
-const createUser = async (name, nickname, avatar, email, password, source) => {
+const createUser = async (name, nickname, avatar, email, password, source, status) => {
   const userFound = await Users.findOne({ where: { email } });
 
   if (source === 'gmail' && userFound) {
@@ -18,7 +19,8 @@ const createUser = async (name, nickname, avatar, email, password, source) => {
     nickname,
     avatar,
     password,
-    email
+    email,
+    status
   });
 
   if (!user) throw Error('error');
@@ -35,6 +37,28 @@ const createUser = async (name, nickname, avatar, email, password, source) => {
   sendEmail(data);
 
   console.log(user);
+
+  await Playlist.findOrCreate({
+    where:{
+      name: "Favorites",
+      UserId: user.id,
+      programsIds:""
+    }
+  })
+  await Playlist.findOrCreate({
+    where:{
+      name: "Watched",
+      UserId: user.id,
+      programsIds:""
+    }
+  })
+  await Playlist.findOrCreate({
+    where:{
+      name: "WatchList",
+      UserId: user.id,
+      programsIds:""
+    }
+  })
 
   return { data: user };
 };
@@ -168,6 +192,15 @@ const loginUserController = async (email, password, source) => {
   } else throw Error('incorrect password');
 };
 
+const deleteUser = async (id) => {
+  await Users.destroy({
+    where: {
+      id: id
+    }
+  })
+  return "eliminado"
+}
+
 module.exports = {
   createUser,
   getAllUsers,
@@ -176,5 +209,6 @@ module.exports = {
   userEdit,
   forgotPasswordController,
   changePasswordController,
-  loginUserController
+  loginUserController,
+  deleteUser
 };
