@@ -17,15 +17,13 @@ const getReviews = async (req, res) => {
 
 const getReviewByUser = async (req, res) => {
   try {
-    if (!req.body) {
-      return res
-        .status(400)
-        .json({ error: "Datos del body incorrectos o unsuficientes" });
+    if (!req.params) {
+      return res.status(400).json({ error: "Datos del body incorrectos o unsuficientes" });
     }
 
-    const { userId } = req.body;
-    const userReviews = await getUserReviews(userId);
-    res.status(201).json(getUserReviews);
+    const { id } = req.params;
+    const userReviews = await getUserReviews(id);
+    res.status(201).json(userReviews);
   } catch (error) {
     res.status(500).json({ msg: "Error al buscar las reviews.", error });
   }
