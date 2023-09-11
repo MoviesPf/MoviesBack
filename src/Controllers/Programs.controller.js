@@ -75,8 +75,6 @@ const getAllMovies = async (page) => {
     ]
   });
 
-  const totalMovies = data.length;
-
   return {
     data: data.rows
   };
