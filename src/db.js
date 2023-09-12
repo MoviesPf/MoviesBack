@@ -1,4 +1,3 @@
-// require('dotenv').config();
 // const { Sequelize } = require('sequelize');
 
 // const sequelize = new Sequelize(process.env.POSTGRES_URL + "?sslmode=require", {
@@ -31,5 +30,5 @@ const sequelize = new Sequelize(
     native: false
   }
 );
-
+// 
 module.exports = sequelize;

@@ -13,7 +13,7 @@ const Playlists = sequelize.define(
       type: DataTypes.STRING
     },
     programsIds: {
-      type: DataTypes.ARRAY(DataTypes.INTEGER)
+      type: DataTypes.TEXT
     }
   },
   { timestamps: false }
