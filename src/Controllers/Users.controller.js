@@ -210,7 +210,12 @@ module.exports = {
   forgotPasswordController,
   changePasswordController,
 <<<<<<< HEAD
+<<<<<<< HEAD
   loginUserController
+=======
+  loginUserController,
+  deleteUser
+>>>>>>> 99a9563f7e08327b625e4bc70e74f4bbcd3a6bbd
 };
 =======
   loginUserController,
