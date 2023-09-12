@@ -1,12 +1,8 @@
-require('dotenv').config();
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_DATABASE } =
-  process.env;
-
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize(process.env.POSTGRES_URL + "?sslmode=require", {
-  dialect: 'postgres', 
-  logging: false, 
+const sequelize = new Sequelize(process.env.POSTGRES_URL + '?sslmode=require', {
+  dialect: 'postgres',
+  logging: false
 });
 console.log(process.env.POSTGRES_URL + "?sslmode=require");
 // Manejador de eventos para verificar si la conexión se ha establecido correctamente.
@@ -22,17 +18,16 @@ sequelize
 module.exports = sequelize;
 
 // require('dotenv').config();
-// const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_DATABASE } =
+// const { POSTGRES_URL } =
 //   process.env;
 
 // const { Sequelize } = require('sequelize');
 
-// const sequelize = new Sequelize(
-//   `postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DATABASE}`,
+// const sequelize = new Sequelize( POSTGRES_URL,
 //   {
 //     logging: false,
 //     native: false
 //   }
 // );
-// // 
+// //
 // module.exports = sequelize;
