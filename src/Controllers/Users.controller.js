@@ -5,6 +5,7 @@ const { forgotPassword } = require('../Templates/ForgotPassword');
 const banned = require('../Templates/banned');
 const unbanning = require('../Templates/unbanning');
 const welcome = require('../Templates/welcome');
+const { cloudinary } = require('../Config/Cloudinary');
 
 const createUser = async (name, nickname, avatar, email, password, source, status) => {
   const userFound = await Users.findOne({ where: { email } });
@@ -201,6 +202,73 @@ const deleteUser = async (id) => {
   return "eliminado"
 }
 
+//CONTROLLERS DE CLOUDINARY
+// Controlador para subir una imagen
+const uploadImageController = async (userId, image, imageType) => {
+  try {
+    const user = await Users.findByPk(userId);
+    if (!user) {
+      return { error: 'Usuario no encontrado' };
+    }
+    const folder = imageType === 'avatar' ? 'avatar' : 'background';
+    // Subir la imagen a Cloudinary
+    const result = await cloudinary.uploader.upload(image, { folder });
+    // Actualizar la URL de avatar o background en la base de datos
+    user[imageType] = result.secure_url;
+    await user.save();
+    return { message: 'Imagen subida exitosamente', imageUrl: result.secure_url };
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Controlador para modificar una imagen
+const modifyImageController = async (userId, image, imageType) => {
+  try {
+    const user = await Users.findByPk(userId);
+    if (!user) {
+      return { error: 'Usuario no encontrado' };
+    }
+    const folder = imageType === 'avatar' ? 'avatar' : 'background';
+    // Eliminar la imagen anterior de Cloudinary si existe
+    if (user[imageType]) {
+      const publicId = user[imageType].split('/').pop().split('.')[0];
+      await cloudinary.uploader.destroy(`${folder}/${publicId}`);
+    }
+    // Subir la nueva imagen a Cloudinary
+    const result = await cloudinary.uploader.upload(image, { folder });
+    // Actualizar la URL de avatar o background en la base de datos
+    user[imageType] = result.secure_url;
+    await user.save();
+    return { message: 'Imagen modificada exitosamente', imageUrl: result.secure_url };
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Controlador para eliminar una imagen
+const deleteImageController = async (userId, imageType) => {
+  try {
+    const user = await Users.findByPk(userId);
+    if (!user) {
+      return { error: 'Usuario no encontrado' };
+    }
+    const folder = imageType === 'avatar' ? 'avatar' : 'background';
+
+    // Eliminar la imagen de Cloudinary si existe
+    if (user[imageType]) {
+      const publicId = user[imageType].split('/').pop().split('.')[0];
+      await cloudinary.uploader.destroy(`${folder}/${publicId}`);
+    }
+    // Establecer la URL de avatar o background en blanco en la base de datos
+    user[imageType] = '';
+    await user.save();
+    return { message: 'Imagen eliminada' };
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createUser,
   getAllUsers,
@@ -209,16 +277,9 @@ module.exports = {
   userEdit,
   forgotPasswordController,
   changePasswordController,
-<<<<<<< HEAD
-<<<<<<< HEAD
-  loginUserController
-=======
   loginUserController,
-  deleteUser
->>>>>>> 99a9563f7e08327b625e4bc70e74f4bbcd3a6bbd
+  deleteUser,
+  uploadImageController,
+  modifyImageController,
+  deleteImageController,
 };
-=======
-  loginUserController,
-  deleteUser
-};
->>>>>>> 663309f14acb0b68cbd15e38df14ac6d2bca762a

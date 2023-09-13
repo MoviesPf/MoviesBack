@@ -7,7 +7,10 @@ const {
   forgotPasswordController,
   changePasswordController,
   loginUserController,
-  deleteUser
+  deleteUser,
+  uploadImageController,
+  modifyImageController,
+  deleteImageController,
 } = require('../Controllers/Users.controller.js');
 
 const postUser = async (req, res, next) => {
@@ -123,6 +126,39 @@ const eliminarUsuario = async (req, res, next) => {
   }
 }
 
+// Manejador para subir una imagen
+const uploadImageHandler = async (req, res, next) => {
+  try {
+    const { userId, image, imageType } = req.body;
+    const result = await uploadImageController(userId, image, imageType);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Manejador para modificar una imagen
+const modifyImageHandler = async (req, res, next) => {
+  try {
+    const { userId, image, imageType } = req.body;
+    const result = await modifyImageController(userId, image, imageType);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Manejador para eliminar una imagen
+const deleteImageHandler = async (req, res, next) => {
+  try {
+    const { userId, imageType } = req.body;
+    const result = await deleteImageController(userId, imageType);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   postUser,
   getUsers,
@@ -132,5 +168,8 @@ module.exports = {
   forgotPasswordHandler,
   changePasswordHandler,
   loginUserHandler,
-  eliminarUsuario
+  eliminarUsuario,
+  uploadImageHandler,
+  modifyImageHandler,
+  deleteImageHandler,
 };
