@@ -18,7 +18,7 @@
 // module.exports = sequelize;
 
 require('dotenv').config();
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_DATABASE } =
+const { POSTGRES_URL } =
   process.env;
 
 const { Sequelize } = require('sequelize');
