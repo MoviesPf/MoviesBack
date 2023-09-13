@@ -1,19 +1,22 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
-const Playlist = sequelize.define(
-  'Playlist',
+const Donations = sequelize.define(
+  'Donations',
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    name: {
-      type: DataTypes.STRING
+    date: {
+      type: DataTypes.DATEONLY
+    },
+    amount: {
+      type: DataTypes.INTEGER
     }
   },
   { timestamps: false }
 );
 
-module.exports = Playlist;
+module.exports = Donations;

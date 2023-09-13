@@ -11,7 +11,6 @@ const Programs = sequelize.define(
     },
     title: {
       type: DataTypes.STRING,
-      unique: true,
     },
     overview: {
       type: DataTypes.TEXT,
@@ -28,8 +27,14 @@ const Programs = sequelize.define(
     runtime: {
       type: DataTypes.INTEGER,
     },
+    episodes: {
+      type: DataTypes.INTEGER,
+    },
+    seasons: {
+      type: DataTypes.INTEGER,
+    },
     companies: {
-      type: DataTypes.STRING,
+      type: DataTypes.ARRAY(DataTypes.STRING),
     },
     trailer: {
       type: DataTypes.STRING,
@@ -38,13 +43,13 @@ const Programs = sequelize.define(
       type: DataTypes.BOOLEAN,
     },
     revenue: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.REAL,
     },
     budget: {
       type: DataTypes.INTEGER,
     },
     cast: {
-      type: DataTypes.STRING,
+      type: DataTypes.ARRAY(DataTypes.STRING),
     },
     popularity: {
       type: DataTypes.INTEGER,
@@ -54,7 +59,7 @@ const Programs = sequelize.define(
       defaultValue: false,
     },
     type: {
-      type: DataTypes.STRING
+      type: DataTypes.ENUM("movie","serie")
     }
   },
   { timestamps: false }

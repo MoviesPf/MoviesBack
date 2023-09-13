@@ -8,23 +8,27 @@ const {
   getAllNameProgramsController,
   getNameProgramsController,
   getProgramsByGenreController,
-  getProgramsByPlatformController
-} = require("../Controllers/Programs.controller");
+  getProgramsByPlatformController,
+  getProgramsByGenreAndPlatformController,
+  getAllMovies,
+  getAllSeries
+} = require('../Controllers/Programs.controller');
 const {
   // validationBody,
   // validationId,
-} = require("../Validations/Programs.validations");
+} = require('../Validations/Programs.validations');
 
 const getAllProgramsHandler = async (req, res, next) => {
   try {
-    const { title } = req.query;
+    const { title, page = 1 } = req.query;
 
     if (title) {
-      const data = await getAllNameProgramsController(title);
+      const data = await getAllNameProgramsController(title, page);
       return res.status(200).json(data);
     }
 
-    const data = await getAllProgramsController();
+    const data = await getAllProgramsController(page);
+    console.log(data);
 
     return res.status(200).json(data);
   } catch (error) {
@@ -34,15 +38,35 @@ const getAllProgramsHandler = async (req, res, next) => {
 
 const getActiveProgramsHandler = async (req, res, next) => {
   try {
-    const { title } = req.query;
+    const { title, page = 1 } = req.query;
 
     if (title) {
-      const data = await getNameProgramsController(title);
+      const data = await getNameProgramsController(title, page);
       return res.status(200).json(data);
     }
 
-    const data = await getActiveProgramsController();
+    const data = await getActiveProgramsController(page);
 
+    return res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getActiveMovies = async (req, res, next) => {
+  try {
+    const { page = 1 } = req.query;
+    const data = await getAllMovies(page);
+    return res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getActiveSeries = async (req, res, next) => {
+  try {
+    const { page = 1 } = req.query;
+    const data = await getAllSeries(page);
     return res.status(200).json(data);
   } catch (error) {
     next(error);
@@ -95,26 +119,69 @@ const deleteProgramsHandler = async (req, res, next) => {
   }
 };
 
-const getProgramsByGenre = async (req, res, next) => { 
+const getProgramsByGenre = async (req, res, next) => {
   try {
-    const programsFound = await getProgramsByGenreController(req.params.genreName);
-    if (programsFound.length <= 0) {return res.status(404).json({msg: "Parameters are incorrect, insufficient, or no match found. try another name."});}
+    const programsFound = await getProgramsByGenreController(
+      req.params.genreName,
+      req.params.type
+    );
+    if (programsFound.length <= 0) {
+      return res
+        .status(404)
+        .json({
+          msg: 'Parameters are incorrect, insufficient, or no match found. try another name.'
+        });
+    }
     return res.status(200).json(programsFound);
   } catch (error) {
     next(error);
   }
-}
+};
 
-const getProgramsByPlatform = async (req, res, next) => { 
+const getProgramsByPlatform = async (req, res, next) => {
   try {
-    const programsFound = await getProgramsByPlatformController(req.params.platformName);
-    console.log(programsFound)
-    if (programsFound.length <= 0) {return res.status(404).json({msg: "Parameters are incorrect, insufficient, or no match found. try another name."});}
+    const programsFound = await getProgramsByPlatformController(
+      req.params.platformName,
+      req.params.type
+    );
+    console.log(programsFound);
+    if (programsFound.length <= 0) {
+      return res
+        .status(404)
+        .json({
+          msg: 'Parameters are incorrect, insufficient, or no match found. try another name.'
+        });
+    }
     return res.status(200).json(programsFound);
   } catch (error) {
     next(error);
   }
-}
+};
+
+const getProgramsByGenreAndPlatform = async (req, res, next) => {
+  try {
+    const genreName = req.params.genreName;
+    const platformName = req.params.platformName;
+    const type = req.params.type;
+    const programsFound = await getProgramsByGenreAndPlatformController(
+      genreName,
+      platformName,
+      type
+    );
+
+    if (programsFound.length <= 0) {
+      return res
+        .status(404)
+        .json({
+          msg: 'Parameters are incorrect, insufficient, or no match found. Try another name.'
+        });
+    }
+
+    return res.status(200).json(programsFound);
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getAllProgramsHandler,
@@ -125,4 +192,7 @@ module.exports = {
   deleteProgramsHandler,
   getProgramsByGenre,
   getProgramsByPlatform,
+  getProgramsByGenreAndPlatform,
+  getActiveMovies,
+  getActiveSeries
 };
