@@ -11,12 +11,12 @@ const {
   getProgramsByPlatformController,
   getProgramsByGenreAndPlatformController,
   getAllMovies,
-  getAllSeries
-} = require('../Controllers/Programs.controller');
-const {
-  // validationBody,
-  // validationId,
-} = require('../Validations/Programs.validations');
+  getAllSeries,
+} = require('../Controllers/Programs.controller.js');
+// const {
+//   // validationBody,
+//   // validationId,
+// } = require('../Validations/Programs.validations');
 
 const getAllProgramsHandler = async (req, res, next) => {
   try {
