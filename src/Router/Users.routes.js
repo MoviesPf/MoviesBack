@@ -1,34 +1,40 @@
-const { Router } = require("express");
+const { Router } = require('express');
 const {
-    postUser,
-    getUsers,
-    getUserById, 
-    banDesbanUser, 
-    editUser,
-    forgotPasswordHandler,
-    changePasswordHandler,
-    loginUserHandler,
-    eliminarUsuario
-} = require("../Handlers/Users.handler.js");
+  postUser,
+  getUsers,
+  getUserById,
+  banDesbanUser,
+  editUser,
+  forgotPasswordHandler,
+  changePasswordHandler,
+  loginUserHandler,
+  eliminarUsuario,
+  getAllUsersAdminHandler
+} = require('../Handlers/Users.handler.js');
 
 const router = Router();
 
-router.patch("/forgot-password", forgotPasswordHandler)
+router.get('/all', getAllUsersAdminHandler);
 
-router.patch("/change-password", changePasswordHandler)
+router.patch('/forgot-password', forgotPasswordHandler);
 
-router.post("/", postUser);
+router.patch('/change-password', changePasswordHandler);
 
-router.get("/", getUsers);
+router.post('/', postUser);
 
-router.post("/login", loginUserHandler);
+router.get('/', getUsers);
 
-router.get("/:id", getUserById);
+router.post('/login', loginUserHandler);
 
-// router.delete("/:id", banDesbanUser);
+router.get('/:id', getUserById);
 
-router.delete("/:id",eliminarUsuario);
+router.delete('/ban/:id', banDesbanUser);
 
-router.patch("/:id", editUser);
+router.delete('/delete/:id', eliminarUsuario);
+
+router.patch('/:id', editUser);
+
+//admin
+router.get('/all', getAllUsersAdminHandler);
 
 module.exports = router;

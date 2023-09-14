@@ -7,7 +7,8 @@ const {
   forgotPasswordController,
   changePasswordController,
   loginUserController,
-  deleteUser
+  deleteUser,
+  getAllUsersForAdmin
 } = require('../Controllers/Users.controller.js');
 
 const postUser = async (req, res, next) => {
@@ -123,6 +124,15 @@ const eliminarUsuario = async (req, res, next) => {
   }
 }
 
+const getAllUsersAdminHandler = async (req, res, next) => {
+  try {
+    const data = await getAllUsersForAdmin();
+    return res.status(200).json(data);
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   postUser,
   getUsers,
@@ -132,5 +142,6 @@ module.exports = {
   forgotPasswordHandler,
   changePasswordHandler,
   loginUserHandler,
-  eliminarUsuario
+  eliminarUsuario,
+  getAllUsersAdminHandler
 };
