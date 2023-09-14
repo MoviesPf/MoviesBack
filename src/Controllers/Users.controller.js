@@ -60,7 +60,19 @@ const createUser = async (name, nickname, avatar, email, password, source, statu
     }
   })
 
-  return { data: user };
+  usuarioRetornado = {
+    id: user.id,
+    name: user.name,
+    nickname: user.nickname,
+    avatar: user.avatar,
+    email: user.email,
+    status: user.status,
+    donator: user.donator,
+    admin: user.admin,
+    banned: user.banned
+  }
+
+  return { data: usuarioRetornado};
 };
 
 const getAllUsers = async () => {
@@ -174,12 +186,24 @@ const loginUserController = async (email, password, source) => {
 
   console.log(source);
 
+  usuarioRetornado = {
+    id: user.id,
+    name: user.name,
+    nickname: user.nickname,
+    avatar: user.avatar,
+    email: user.email,
+    status: user.status,
+    donator: user.donator,
+    admin: user.admin,
+    banned: user.banned
+  }
+
   if (!user) throw Error('incorrect email or password');
 
   if (source === 'gmail') {
     return {
       message: 'successful login',
-      data: user
+      data: usuarioRetornado
     };
   }
 
@@ -187,7 +211,7 @@ const loginUserController = async (email, password, source) => {
     console.log('ok');
     return {
       message: 'successful login',
-      data: user
+      data: usuarioRetornado
     };
   } else throw Error('incorrect password');
 };
