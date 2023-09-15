@@ -9,7 +9,9 @@ const {
   changePasswordHandler,
   loginUserHandler,
   eliminarUsuario,
-  getAllUsersAdminHandler
+  getAllUsersAdminHandler,
+  uploadAvatarImageHandler,
+  uploadBackgroundImageHandler
 } = require('../Handlers/Users.handler.js');
 
 const router = Router();
@@ -36,5 +38,11 @@ router.patch('/:id', editUser);
 
 //admin
 router.get('/all', getAllUsersAdminHandler);
+
+//Cloudinary
+
+router.post('/avatar/upload-image', uploadAvatarImageHandler);
+
+router.post('/background/upload-image', uploadBackgroundImageHandler);
 
 module.exports = router;
