@@ -5,8 +5,18 @@ const { forgotPassword } = require('../Templates/ForgotPassword');
 const banned = require('../Templates/banned');
 const unbanning = require('../Templates/unbanning');
 const welcome = require('../Templates/welcome');
+const { Model, where } = require('sequelize');
+const Reviews = require('../Models/Reviews.model');
 
-const createUser = async (name, nickname, avatar, email, password, source, status) => {
+const createUser = async (
+  name,
+  nickname,
+  avatar,
+  email,
+  password,
+  source,
+  status
+) => {
   const userFound = await Users.findOne({ where: { email } });
 
   if (source === 'gmail' && userFound) {
@@ -39,26 +49,26 @@ const createUser = async (name, nickname, avatar, email, password, source, statu
   console.log(user);
 
   await Playlist.findOrCreate({
-    where:{
-      name: "Favorites",
+    where: {
+      name: 'Favorites',
       UserId: user.id,
-      programsIds:""
+      programsIds: ''
     }
-  })
+  });
   await Playlist.findOrCreate({
-    where:{
-      name: "Watched",
+    where: {
+      name: 'Watched',
       UserId: user.id,
-      programsIds:""
+      programsIds: ''
     }
-  })
+  });
   await Playlist.findOrCreate({
-    where:{
-      name: "WatchList",
+    where: {
+      name: 'WatchList',
       UserId: user.id,
-      programsIds:""
+      programsIds: ''
     }
-  })
+  });
 
   usuarioRetornado = {
     id: user.id,
@@ -92,12 +102,16 @@ const getAllUsers = async () => {
 };
 
 const findUserById = async (id) => {
-  const userById = await Users.findByPk(id);
-  return { userById };
+  const userById = await Users.findOne({
+    where: { id },
+    include: [{ model: Reviews }]
+  });
+  return userById;
 };
 
-const banUserById = async (id, reason) => {
-  const { userById } = await findUserById(id);
+const banUserById = async (id, reason = 'undefined') => {
+  const userById = await Users.findOne({ where: { id } });
+  console.log(userById);
 
   userById.banned = !userById.banned;
 
@@ -221,9 +235,39 @@ const deleteUser = async (id) => {
     where: {
       id: id
     }
-  })
-  return "eliminado"
-}
+  });
+  return 'eliminado';
+};
+
+//admin
+
+const getAllUsersForAdmin = async () => {
+  const data = await Users.findAll({
+    include: [{ model: Reviews }]
+  });
+  const total = data.length;
+  let totalBanned = 0;
+  let totalDonators = 0;
+  let totalReviews = 0;
+
+  for (const user of data) {
+    totalReviews += user.Reviews.length;
+    if (user.banned) {
+      totalBanned++;
+    }
+    if (user.donator) {
+      totalDonators++;
+    }
+  }
+
+  return {
+    total,
+    totalBanned,
+    totalDonators,
+    totalReviews,
+    data
+  };
+};
 
 module.exports = {
   createUser,
@@ -234,5 +278,6 @@ module.exports = {
   forgotPasswordController,
   changePasswordController,
   loginUserController,
-  deleteUser
+  deleteUser,
+  getAllUsersForAdmin
 };
