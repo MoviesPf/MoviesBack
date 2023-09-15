@@ -13,11 +13,12 @@ const {
 
 const postUser = async (req, res, next) => {
   try {
-    const { name, nickname, avatar, email, password, source, status } = req.body;
+    const { name, nickname, avatar, email, password, source, status } =
+      req.body;
 
     console.log(source);
 
-    if (!name || !nickname || !avatar || !email )
+    if (!name || !nickname || !avatar || !email)
       return res.status(400).send('Faltan datos');
 
     const user = await createUser(
@@ -56,9 +57,8 @@ const getUserById = async (req, res, next) => {
 
 const banDesbanUser = async (req, res, next) => {
   const { id } = req.params;
-  const { reason } = req.body;
   try {
-    const bannedUser = await banUserById(id, reason);
+    const bannedUser = await banUserById(id);
     res.status(200).json(bannedUser);
   } catch (error) {
     next(error);
@@ -120,18 +120,18 @@ const eliminarUsuario = async (req, res, next) => {
     const data = await deleteUser(id);
     return res.status(200).send(data);
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 const getAllUsersAdminHandler = async (req, res, next) => {
   try {
     const data = await getAllUsersForAdmin();
     return res.status(200).json(data);
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 module.exports = {
   postUser,
