@@ -5,7 +5,7 @@ const { forgotPassword } = require('../Templates/ForgotPassword');
 const banned = require('../Templates/banned');
 const unbanning = require('../Templates/unbanning');
 const welcome = require('../Templates/welcome');
-const { Model } = require('sequelize');
+const { Model, where } = require('sequelize');
 const Reviews = require('../Models/Reviews.model');
 
 const createUser = async (
@@ -90,8 +90,11 @@ const getAllUsers = async () => {
 };
 
 const findUserById = async (id) => {
-  const userById = await Users.findByPk(id);
-  return { userById };
+  const userById = await Users.findOne({
+    where: { id },
+    include: [{ model: Reviews }]
+  });
+  return userById;
 };
 
 const banUserById = async (id, reason) => {
