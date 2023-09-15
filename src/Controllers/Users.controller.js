@@ -97,7 +97,7 @@ const findUserById = async (id) => {
   return userById;
 };
 
-const banUserById = async (id, reason) => {
+const banUserById = async (id, reason = 'undefined') => {
   const { userById } = await findUserById(id);
 
   userById.banned = !userById.banned;
