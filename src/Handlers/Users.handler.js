@@ -8,7 +8,12 @@ const {
   changePasswordController,
   loginUserController,
   deleteUser,
-  getAllUsersForAdmin
+  getAllUsersForAdmin,
+  uploadImageController,
+  modifyImageController,
+  deleteImageController,
+  uploadAvatarImageController,
+  uploadBackgroundImageController,
 } = require('../Controllers/Users.controller.js');
 
 const postUser = async (req, res, next) => {
@@ -133,6 +138,54 @@ const getAllUsersAdminHandler = async (req, res, next) => {
   }
 };
 
+// const uploadImageHandler = async (req, res, next) => {
+//   try {
+//     const { userId, image, imageType } = req.body;
+//     const result = await uploadImageController(userId, image, imageType);
+//     res.status(200).json(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+const uploadAvatarImageHandler = async (req, res, next) => {
+  try {
+    const { userId, image } = req.body;
+    const result = await uploadAvatarImageController(userId, image);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+const uploadBackgroundImageHandler = async (req, res, next) => {
+  try {
+    const { userId, image } = req.body;
+    const result = await uploadBackgroundImageController(userId, image);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const modifyImageHandler = async (req, res, next) => {
+  try {
+    const { userId, image, imageType } = req.body;
+    const result = await modifyImageController(userId, image, imageType);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteImageHandler = async (req, res, next) => {
+  try {
+    const { userId, imageType } = req.body;
+    const result = await deleteImageController(userId, imageType);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   postUser,
   getUsers,
@@ -143,5 +196,10 @@ module.exports = {
   changePasswordHandler,
   loginUserHandler,
   eliminarUsuario,
-  getAllUsersAdminHandler
+  getAllUsersAdminHandler,
+  // uploadImageHandler,
+  uploadAvatarImageHandler,
+  uploadBackgroundImageHandler,
+  modifyImageHandler,
+  deleteImageHandler,
 };

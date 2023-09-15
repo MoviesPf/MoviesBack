@@ -9,7 +9,12 @@ const {
   changePasswordHandler,
   loginUserHandler,
   eliminarUsuario,
-  getAllUsersAdminHandler
+  getAllUsersAdminHandler,
+    // uploadImageHandler,
+    modifyImageHandler,
+    deleteImageHandler,
+    uploadAvatarImageHandler,
+    uploadBackgroundImageHandler
 } = require('../Handlers/Users.handler.js');
 
 const router = Router();
@@ -36,5 +41,12 @@ router.patch('/:id', editUser);
 
 //admin
 router.get('/all', getAllUsersAdminHandler);
+
+router.post('/avatar/upload-image', uploadAvatarImageHandler);
+router.post('/background/upload-image', uploadBackgroundImageHandler);
+
+router.post('/modify-image', modifyImageHandler);
+
+router.post('/delete-image', deleteImageHandler);
 
 module.exports = router;
