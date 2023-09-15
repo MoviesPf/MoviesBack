@@ -208,7 +208,7 @@ const loginUserController = async (email, password, source) => {
   }
 
   if (user.password === password) {
-    console.log('ok');
+    console.log('logueado');
     return {
       message: 'successful login',
       data: usuarioRetornado
