@@ -20,7 +20,7 @@ const getAllProgramsController = async (page) => {
   const total = await Programs.count();
 
   return {
-    total,
+    total: total / 25,
     data: data.rows
   };
 };
@@ -65,7 +65,7 @@ const getActiveProgramsController = async (page) => {
   });
 
   return {
-    total,
+    total: total / 25,
     data: data.rows
   };
 };
@@ -92,7 +92,7 @@ const getAllMovies = async (page) => {
   });
 
   return {
-    total,
+    total: total / 25,
     data: data.rows
   };
 };
@@ -119,7 +119,7 @@ const getAllSeries = async (page) => {
   });
 
   return {
-    total,
+    total: total / 25,
     data: data.rows
   };
 };
