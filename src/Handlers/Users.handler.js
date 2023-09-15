@@ -9,8 +9,6 @@ const {
   loginUserController,
   deleteUser,
   getAllUsersForAdmin,
-  modifyImageController,
-  deleteImageController,
   uploadAvatarImageController,
   uploadBackgroundImageController,
 } = require('../Controllers/Users.controller.js');
@@ -156,26 +154,6 @@ const uploadBackgroundImageHandler = async (req, res, next) => {
   }
 };
 
-const modifyImageHandler = async (req, res, next) => {
-  try {
-    const { userId, image, imageType } = req.body;
-    const result = await modifyImageController(userId, image, imageType);
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const deleteImageHandler = async (req, res, next) => {
-  try {
-    const { userId, imageType } = req.body;
-    const result = await deleteImageController(userId, imageType);
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
 module.exports = {
   postUser,
   getUsers,
@@ -188,7 +166,5 @@ module.exports = {
   eliminarUsuario,
   getAllUsersAdminHandler,
   uploadAvatarImageHandler,
-  uploadBackgroundImageHandler,
-  modifyImageHandler,
-  deleteImageHandler,
+  uploadBackgroundImageHandler
 };

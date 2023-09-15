@@ -10,11 +10,8 @@ const {
   loginUserHandler,
   eliminarUsuario,
   getAllUsersAdminHandler,
-    // uploadImageHandler,
-    modifyImageHandler,
-    deleteImageHandler,
-    uploadAvatarImageHandler,
-    uploadBackgroundImageHandler
+  uploadAvatarImageHandler,
+  uploadBackgroundImageHandler
 } = require('../Handlers/Users.handler.js');
 
 const router = Router();
@@ -47,9 +44,5 @@ router.get('/all', getAllUsersAdminHandler);
 router.post('/avatar/upload-image', uploadAvatarImageHandler);
 
 router.post('/background/upload-image', uploadBackgroundImageHandler);
-
-router.post('/modify-image', modifyImageHandler);
-
-router.post('/delete-image', deleteImageHandler);
 
 module.exports = router;

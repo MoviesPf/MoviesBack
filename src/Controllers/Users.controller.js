@@ -310,53 +310,6 @@ const uploadBackgroundImageController = async (userId, image) => {
   }
 };
 
-// Controlador para modificar una imagen
-const modifyImageController = async (userId, image, imageType) => {
-  try {
-    const user = await Users.findByPk(userId);
-    if (!user) {
-      return { error: 'Usuario no encontrado' };
-    }
-    const folder = imageType === 'avatar' ? 'avatar' : 'background';
-    // Eliminar la imagen anterior de Cloudinary si existe
-    if (user[imageType]) {
-      const publicId = user[imageType].split('/').pop().split('.')[0];
-      await cloudinary.uploader.destroy(`${folder}/${publicId}`);
-    }
-    // Subir la nueva imagen a Cloudinary
-    const result = await cloudinary.uploader.upload(image, { folder });
-    // Actualizar la URL de avatar o background en la base de datos
-    user[imageType] = result.url;
-    await user.save();
-    return { message: 'Imagen modificada exitosamente', imageUrl: result.url };
-  } catch (error) {
-    throw error;
-  }
-};
-
-// Controlador para eliminar una imagen
-const deleteImageController = async (userId, imageType) => {
-  try {
-    const user = await Users.findByPk(userId);
-    if (!user) {
-      return { error: 'Usuario no encontrado' };
-    }
-    const folder = imageType === 'avatar' ? 'avatar' : 'background';
-
-    // Eliminar la imagen de Cloudinary si existe
-    if (user[imageType]) {
-      const publicId = user[imageType].split('/').pop().split('.')[0];
-      await cloudinary.uploader.destroy(`${folder}/${publicId}`);
-    }
-    // Establecer la URL de avatar o background en blanco en la base de datos
-    user[imageType] = '';
-    await user.save();
-    return { message: 'Imagen eliminada' };
-  } catch (error) {
-    throw error;
-  }
-};
-
 module.exports = {
   createUser,
   getAllUsers,
@@ -369,7 +322,5 @@ module.exports = {
   deleteUser,
   getAllUsersForAdmin,
   uploadAvatarImageController,
-  uploadBackgroundImageController,
-  modifyImageController,
-  deleteImageController,
+  uploadBackgroundImageController
 };
