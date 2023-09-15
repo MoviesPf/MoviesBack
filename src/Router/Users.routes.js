@@ -9,9 +9,11 @@ const {
     changePasswordHandler,
     loginUserHandler,
     eliminarUsuario,
-    uploadImageHandler,
+    // uploadImageHandler,
     modifyImageHandler,
-    deleteImageHandler
+    deleteImageHandler,
+    uploadAvatarImageHandler,
+    uploadBackgroundImageHandler
 } = require("../Handlers/Users.handler.js");
 
 const router = Router();
@@ -34,7 +36,8 @@ router.delete("/:id",eliminarUsuario);
 
 router.patch("/:id", editUser);
 
-router.post('/upload-image', uploadImageHandler);
+router.post('/avatar/upload-image', uploadAvatarImageHandler);
+router.post('/background/upload-image', uploadBackgroundImageHandler);
 
 router.post('/modify-image', modifyImageHandler);
 

@@ -11,6 +11,8 @@ const {
   uploadImageController,
   modifyImageController,
   deleteImageController,
+  uploadAvatarImageController,
+  uploadBackgroundImageController,
 } = require('../Controllers/Users.controller.js');
 
 const postUser = async (req, res, next) => {
@@ -126,18 +128,34 @@ const eliminarUsuario = async (req, res, next) => {
   }
 }
 
-// Manejador para subir una imagen
-const uploadImageHandler = async (req, res, next) => {
+// const uploadImageHandler = async (req, res, next) => {
+//   try {
+//     const { userId, image, imageType } = req.body;
+//     const result = await uploadImageController(userId, image, imageType);
+//     res.status(200).json(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+const uploadAvatarImageHandler = async (req, res, next) => {
   try {
-    const { userId, image, imageType } = req.body;
-    const result = await uploadImageController(userId, image, imageType);
+    const { userId, image } = req.body;
+    const result = await uploadAvatarImageController(userId, image);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+const uploadBackgroundImageHandler = async (req, res, next) => {
+  try {
+    const { userId, image } = req.body;
+    const result = await uploadBackgroundImageController(userId, image);
     res.status(200).json(result);
   } catch (error) {
     next(error);
   }
 };
 
-// Manejador para modificar una imagen
 const modifyImageHandler = async (req, res, next) => {
   try {
     const { userId, image, imageType } = req.body;
@@ -148,7 +166,6 @@ const modifyImageHandler = async (req, res, next) => {
   }
 };
 
-// Manejador para eliminar una imagen
 const deleteImageHandler = async (req, res, next) => {
   try {
     const { userId, imageType } = req.body;
@@ -169,7 +186,9 @@ module.exports = {
   changePasswordHandler,
   loginUserHandler,
   eliminarUsuario,
-  uploadImageHandler,
+  // uploadImageHandler,
+  uploadAvatarImageHandler,
+  uploadBackgroundImageHandler,
   modifyImageHandler,
   deleteImageHandler,
 };
