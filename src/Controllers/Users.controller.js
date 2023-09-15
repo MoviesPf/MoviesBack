@@ -269,27 +269,6 @@ const getAllUsersForAdmin = async () => {
   };
 };
 
-//CONTROLLERS DE CLOUDINARY
-// const uploadImageController = async (userId, image, imageType) => {
-//   try {
-//     const user = await Users.findByPk(userId);
-//     if (!user) {
-//       return { error: 'Usuario no encontrado' };
-//     }
-//     const result = await cloudinary.uploader.upload(image);
-
-//     if (!result.secure_url) {
-//       return { error: 'Error al subir la imagen a Cloudinary' };
-//     }
-
-//     user[imageType] = result.secure_url;
-//     await user.save();
-
-//     return { message: 'Imagen subida exitosamente', imageUrl: result.secure_url };
-//   } catch (error) {
-//     return { error: 'Error interno del servidor' };
-//   }
-// };
 const uploadAvatarImageController = async (userId, image) => {
   try {
     const user = await Users.findByPk(userId);

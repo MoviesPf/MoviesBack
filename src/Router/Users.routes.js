@@ -42,7 +42,10 @@ router.patch('/:id', editUser);
 //admin
 router.get('/all', getAllUsersAdminHandler);
 
+//Cloudinary
+
 router.post('/avatar/upload-image', uploadAvatarImageHandler);
+
 router.post('/background/upload-image', uploadBackgroundImageHandler);
 
 router.post('/modify-image', modifyImageHandler);

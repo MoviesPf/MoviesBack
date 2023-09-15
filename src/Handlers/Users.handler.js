@@ -9,7 +9,6 @@ const {
   loginUserController,
   deleteUser,
   getAllUsersForAdmin,
-  uploadImageController,
   modifyImageController,
   deleteImageController,
   uploadAvatarImageController,
@@ -138,15 +137,6 @@ const getAllUsersAdminHandler = async (req, res, next) => {
   }
 };
 
-// const uploadImageHandler = async (req, res, next) => {
-//   try {
-//     const { userId, image, imageType } = req.body;
-//     const result = await uploadImageController(userId, image, imageType);
-//     res.status(200).json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 const uploadAvatarImageHandler = async (req, res, next) => {
   try {
     const { userId, image } = req.body;
@@ -197,7 +187,6 @@ module.exports = {
   loginUserHandler,
   eliminarUsuario,
   getAllUsersAdminHandler,
-  // uploadImageHandler,
   uploadAvatarImageHandler,
   uploadBackgroundImageHandler,
   modifyImageHandler,
