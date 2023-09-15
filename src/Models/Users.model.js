@@ -17,7 +17,10 @@ const Users = sequelize.define(
       unique: true,
     },
     avatar: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING, // almacena la URL del avatar en Cloudinary
+    },
+    background: {
+      type: DataTypes.STRING, // almacena la URL del fondo en Cloudinary
     },
     email: {
       type: DataTypes.STRING,

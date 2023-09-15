@@ -5,8 +5,8 @@ const { forgotPassword } = require('../Templates/ForgotPassword');
 const banned = require('../Templates/banned');
 const unbanning = require('../Templates/unbanning');
 const welcome = require('../Templates/welcome');
-const { Model, where } = require('sequelize');
 const Reviews = require('../Models/Reviews.model');
+const { cloudinary } = require('../Config/Cloudinary');
 
 const createUser = async (
   name,
@@ -70,7 +70,19 @@ const createUser = async (
     }
   });
 
-  return { data: user };
+  usuarioRetornado = {
+    id: user.id,
+    name: user.name,
+    nickname: user.nickname,
+    avatar: user.avatar,
+    email: user.email,
+    status: user.status,
+    donator: user.donator,
+    admin: user.admin,
+    banned: user.banned
+  }
+
+  return { data: usuarioRetornado};
 };
 
 const getAllUsers = async () => {
@@ -188,20 +200,32 @@ const loginUserController = async (email, password, source) => {
 
   console.log(source);
 
+  usuarioRetornado = {
+    id: user.id,
+    name: user.name,
+    nickname: user.nickname,
+    avatar: user.avatar,
+    email: user.email,
+    status: user.status,
+    donator: user.donator,
+    admin: user.admin,
+    banned: user.banned
+  }
+
   if (!user) throw Error('incorrect email or password');
 
   if (source === 'gmail') {
     return {
       message: 'successful login',
-      data: user
+      data: usuarioRetornado
     };
   }
 
   if (user.password === password) {
-    console.log('ok');
+    console.log('logueado');
     return {
       message: 'successful login',
-      data: user
+      data: usuarioRetornado
     };
   } else throw Error('incorrect password');
 };
@@ -245,6 +269,47 @@ const getAllUsersForAdmin = async () => {
   };
 };
 
+const uploadAvatarImageController = async (userId, image) => {
+  try {
+    const user = await Users.findByPk(userId);
+    if (!user) {
+      return { error: 'Usuario no encontrado' };
+    }
+    const result = await cloudinary.uploader.upload(image);
+
+    if (!result.url) {
+      return { error: 'Error al subir la imagen a Cloudinary' };
+    }
+
+    user.avatar = result.url;
+    await user.save();
+
+    return { message: 'Imagen de avatar subida exitosamente', imageUrl: user.avatar }
+  } catch (error) {
+    console.log(error)
+  }
+};
+const uploadBackgroundImageController = async (userId, image) => {
+  try {
+    const user = await Users.findByPk(userId);
+    if (!user) {
+      return { error: 'Usuario no encontrado' };
+    }
+    const result = await cloudinary.uploader.upload(image);
+
+    if (!result.url) {
+      return { error: 'Error al subir la imagen a Cloudinary' };
+    }
+
+    user.background = result.url;
+    await user.save();
+
+    return { message: 'Imagen de fondo subida exitosamente', imageUrl: user.background };
+  } catch (error) {
+    return { error: 'Error interno del servidor' };
+  }
+};
+
 module.exports = {
   createUser,
   getAllUsers,
@@ -255,5 +320,7 @@ module.exports = {
   changePasswordController,
   loginUserController,
   deleteUser,
-  getAllUsersForAdmin
+  getAllUsersForAdmin,
+  uploadAvatarImageController,
+  uploadBackgroundImageController
 };
