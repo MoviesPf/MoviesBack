@@ -297,20 +297,18 @@ const uploadBackgroundImageController = async (userId, image) => {
     }
     const result = await cloudinary.uploader.upload(image);
 
-    if (!result.secure_url) {
+    if (!result.url) {
       return { error: 'Error al subir la imagen a Cloudinary' };
     }
 
-    user.background = result.secure_url;
+    user.background = result.url;
     await user.save();
 
-    return { message: 'Imagen de fondo subida exitosamente', imageUrl: result.secure_url };
+    return { message: 'Imagen de fondo subida exitosamente', imageUrl: user.background };
   } catch (error) {
     return { error: 'Error interno del servidor' };
   }
 };
-
-
 
 // Controlador para modificar una imagen
 const modifyImageController = async (userId, image, imageType) => {
@@ -328,9 +326,9 @@ const modifyImageController = async (userId, image, imageType) => {
     // Subir la nueva imagen a Cloudinary
     const result = await cloudinary.uploader.upload(image, { folder });
     // Actualizar la URL de avatar o background en la base de datos
-    user[imageType] = result.secure_url;
+    user[imageType] = result.url;
     await user.save();
-    return { message: 'Imagen modificada exitosamente', imageUrl: result.secure_url };
+    return { message: 'Imagen modificada exitosamente', imageUrl: result.url };
   } catch (error) {
     throw error;
   }
@@ -370,7 +368,6 @@ module.exports = {
   loginUserController,
   deleteUser,
   getAllUsersForAdmin,
-  // uploadImageController,
   uploadAvatarImageController,
   uploadBackgroundImageController,
   modifyImageController,
