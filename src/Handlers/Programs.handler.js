@@ -28,8 +28,6 @@ const getAllProgramsHandler = async (req, res, next) => {
     }
 
     const data = await getAllProgramsController(page);
-    console.log(data);
-
     return res.status(200).json(data);
   } catch (error) {
     next(error);
@@ -111,7 +109,6 @@ const updateProgramsHandler = async (req, res, next) => {
 const deleteProgramsHandler = async (req, res, next) => {
   try {
     const { ProgramsId } = req.params;
-    validationId(ProgramsId);
     const data = await deleteProgramsController(ProgramsId);
     return res.status(200).json(data);
   } catch (error) {
