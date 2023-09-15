@@ -98,7 +98,8 @@ const findUserById = async (id) => {
 };
 
 const banUserById = async (id, reason = 'undefined') => {
-  const { userById } = await findUserById(id);
+  const userById = await Users.findOne({ where: { id } });
+  console.log(userById);
 
   userById.banned = !userById.banned;
 
