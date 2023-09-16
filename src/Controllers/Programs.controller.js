@@ -261,7 +261,27 @@ const deleteProgramsController = async (id) => {
   return { message: 'data was updated correctly' };
 };
 
-const programsFilters = async (filters, page) => {
+const programsFilters = async (filters, page, type) => {
+  const whereGenres = {};
+  const wherePlatforms = {};
+  const options = {
+    banned: false
+  };
+
+  if (!filters.type);
+  else if (filters.type) {
+    options.type = filters.type;
+  }
+
+  if (!filters.genres);
+  else if (filters.genres && filters.genres.length > 0) {
+    whereGenres.name = filters.genres;
+  }
+  if (!filters.platforms);
+  else if (filters.platforms && filters.platforms.length > 0) {
+    wherePlatforms.name = filters.platforms;
+  }
+
   const data = await Programs.findAndCountAll({
     limit: 25,
     offset: (Number(page) - 1) * 25,
@@ -270,26 +290,68 @@ const programsFilters = async (filters, page) => {
         // Incluye en la busqueda
         model: Genres,
         through: { attributes: [] },
-        where: {
-          name: filters.genres
-        }
+        where: whereGenres
       },
       {
         model: Platforms,
         through: { attributes: [] },
-        where: {
-          name: filters.platforms
-        }
+        where: wherePlatforms
       }
     ],
-    where: {
-      banned: false
-    }
+    where: options
   });
 
+  let total = 0;
+
+  if (!filters.genres && !filters.platforms) {
+    total = await Programs.count({
+      where: options
+    });
+  } else if (!filters.genres && filters.platforms) {
+    total = await Programs.count({
+      where: options,
+      include: [
+        {
+          model: Platforms,
+          through: { attributes: [] },
+          where: wherePlatforms
+        }
+      ]
+    });
+  } else if (filters.genres && !filters.platforms) {
+    total = await Programs.count({
+      where: options,
+      include: [
+        {
+          // Incluye en la busqueda
+          model: Genres,
+          through: { attributes: [] },
+          where: whereGenres
+        }
+      ]
+    });
+  } else if (filters.genres && filters.platforms) {
+    total = await Programs.count({
+      where: options,
+      include: [
+        {
+          // Incluye en la busqueda
+          model: Genres,
+          through: { attributes: [] },
+          where: whereGenres
+        },
+        {
+          model: Platforms,
+          through: { attributes: [] },
+          where: wherePlatforms
+        }
+      ]
+    });
+  }
+
   return {
-    total: data.count,
-    totalPages: Math.ceil(data.count / 25),
+    total,
+    totalPages: Math.ceil(total / 25),
     data: data.rows
   };
 };
