@@ -9,7 +9,6 @@ const {
 const sequelize = require('../db');
 
 const getAllProgramsController = async (page) => {
-  console.log(page);
   const data = await Programs.findAndCountAll({
     limit: 25,
     offset: (Number(page) - 1) * 25,
@@ -18,8 +17,10 @@ const getAllProgramsController = async (page) => {
       { model: Platforms, through: { attributes: [] } }
     ]
   });
+  const total = await Programs.count();
 
   return {
+    total: Math.ceil(total / 25),
     data: data.rows
   };
 };
@@ -48,15 +49,23 @@ const getActiveProgramsController = async (page) => {
   const data = await Programs.findAndCountAll({
     limit: 25,
     offset: (Number(page) - 1) * 25,
+    where: {
+      banned: false
+    },
     include: [
       { model: Genres, through: { attributes: [] } },
       { model: Platforms, through: { attributes: [] } }
     ]
-  }
-  );
+  });
+
+  const total = await Programs.count({
+    where: {
+      banned: false
+    }
+  });
 
   return {
-    total: data.count,
+    total: Math.ceil(total / 25),
     data: data.rows
   };
 };
@@ -75,7 +84,15 @@ const getAllMovies = async (page) => {
     ]
   });
 
+  const total = await Programs.count({
+    where: {
+      type: 'movie',
+      banned: false
+    }
+  });
+
   return {
+    total: Math.ceil(total / 25),
     data: data.rows
   };
 };
@@ -94,7 +111,15 @@ const getAllSeries = async (page) => {
     ]
   });
 
+  const total = await Programs.count({
+    where: {
+      type: 'serie',
+      banned: false
+    }
+  });
+
   return {
+    total: Math.ceil(total / 25),
     data: data.rows
   };
 };

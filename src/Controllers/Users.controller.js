@@ -5,8 +5,18 @@ const { forgotPassword } = require('../Templates/ForgotPassword');
 const banned = require('../Templates/banned');
 const unbanning = require('../Templates/unbanning');
 const welcome = require('../Templates/welcome');
+const Reviews = require('../Models/Reviews.model');
+const { cloudinary } = require('../Config/Cloudinary');
 
-const createUser = async (name, nickname, avatar, email, password, source, status) => {
+const createUser = async (
+  name,
+  nickname,
+  avatar,
+  email,
+  password,
+  source,
+  status
+) => {
   const userFound = await Users.findOne({ where: { email } });
 
   if (source === 'gmail' && userFound) {
@@ -39,28 +49,40 @@ const createUser = async (name, nickname, avatar, email, password, source, statu
   console.log(user);
 
   await Playlist.findOrCreate({
-    where:{
-      name: "Favorites",
+    where: {
+      name: 'Favorites',
       UserId: user.id,
-      programsIds:""
+      programsIds: ''
     }
-  })
+  });
   await Playlist.findOrCreate({
-    where:{
-      name: "Watched",
+    where: {
+      name: 'Watched',
       UserId: user.id,
-      programsIds:""
+      programsIds: ''
     }
-  })
+  });
   await Playlist.findOrCreate({
-    where:{
-      name: "WatchList",
+    where: {
+      name: 'WatchList',
       UserId: user.id,
-      programsIds:""
+      programsIds: ''
     }
-  })
+  });
 
-  return { data: user };
+  usuarioRetornado = {
+    id: user.id,
+    name: user.name,
+    nickname: user.nickname,
+    avatar: user.avatar,
+    email: user.email,
+    status: user.status,
+    donator: user.donator,
+    admin: user.admin,
+    banned: user.banned
+  }
+
+  return { data: usuarioRetornado};
 };
 
 const getAllUsers = async () => {
@@ -80,12 +102,16 @@ const getAllUsers = async () => {
 };
 
 const findUserById = async (id) => {
-  const userById = await Users.findByPk(id);
-  return { userById };
+  const userById = await Users.findOne({
+    where: { id },
+    include: [{ model: Reviews }]
+  });
+  return userById;
 };
 
-const banUserById = async (id, reason) => {
-  const { userById } = await findUserById(id);
+const banUserById = async (id, reason = 'undefined') => {
+  const userById = await Users.findOne({ where: { id } });
+  console.log(userById);
 
   userById.banned = !userById.banned;
 
@@ -174,20 +200,32 @@ const loginUserController = async (email, password, source) => {
 
   console.log(source);
 
+  usuarioRetornado = {
+    id: user.id,
+    name: user.name,
+    nickname: user.nickname,
+    avatar: user.avatar,
+    email: user.email,
+    status: user.status,
+    donator: user.donator,
+    admin: user.admin,
+    banned: user.banned
+  }
+
   if (!user) throw Error('incorrect email or password');
 
   if (source === 'gmail') {
     return {
       message: 'successful login',
-      data: user
+      data: usuarioRetornado
     };
   }
 
   if (user.password === password) {
-    console.log('ok');
+    console.log('logueado');
     return {
       message: 'successful login',
-      data: user
+      data: usuarioRetornado
     };
   } else throw Error('incorrect password');
 };
@@ -197,9 +235,80 @@ const deleteUser = async (id) => {
     where: {
       id: id
     }
-  })
-  return "eliminado"
-}
+  });
+  return 'eliminado';
+};
+
+//admin
+
+const getAllUsersForAdmin = async () => {
+  const data = await Users.findAll({
+    include: [{ model: Reviews }]
+  });
+  const total = data.length;
+  let totalBanned = 0;
+  let totalDonators = 0;
+  let totalReviews = 0;
+
+  for (const user of data) {
+    totalReviews += user.Reviews.length;
+    if (user.banned) {
+      totalBanned++;
+    }
+    if (user.donator) {
+      totalDonators++;
+    }
+  }
+
+  return {
+    total,
+    totalBanned,
+    totalDonators,
+    totalReviews,
+    data
+  };
+};
+
+const uploadAvatarImageController = async (userId, image) => {
+  try {
+    const user = await Users.findByPk(userId);
+    if (!user) {
+      return { error: 'Usuario no encontrado' };
+    }
+    const result = await cloudinary.uploader.upload(image);
+
+    if (!result.url) {
+      return { error: 'Error al subir la imagen a Cloudinary' };
+    }
+
+    user.avatar = result.url;
+    await user.save();
+
+    return { message: 'Imagen de avatar subida exitosamente', imageUrl: user.avatar }
+  } catch (error) {
+    console.log(error)
+  }
+};
+const uploadBackgroundImageController = async (userId, image) => {
+  try {
+    const user = await Users.findByPk(userId);
+    if (!user) {
+      return { error: 'Usuario no encontrado' };
+    }
+    const result = await cloudinary.uploader.upload(image);
+
+    if (!result.url) {
+      return { error: 'Error al subir la imagen a Cloudinary' };
+    }
+
+    user.background = result.url;
+    await user.save();
+
+    return { message: 'Imagen de fondo subida exitosamente', imageUrl: user.background };
+  } catch (error) {
+    return { error: 'Error interno del servidor' };
+  }
+};
 
 module.exports = {
   createUser,
@@ -210,5 +319,8 @@ module.exports = {
   forgotPasswordController,
   changePasswordController,
   loginUserController,
-  deleteUser
+  deleteUser,
+  getAllUsersForAdmin,
+  uploadAvatarImageController,
+  uploadBackgroundImageController
 };
