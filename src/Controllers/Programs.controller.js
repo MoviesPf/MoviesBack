@@ -261,10 +261,12 @@ const deleteProgramsController = async (id) => {
   return { message: 'data was updated correctly' };
 };
 
-const getProgramsByGenreController = async (genreName, type) => {
+const getProgramsByGenreController = async (genreName, type, page) => {
   const data =
     type === 'main'
-      ? await Programs.findAll({
+      ? await Programs.findAndCountAll({
+          limit: 25,
+          offset: (Number(page) - 1) * 25,
           include: [
             {
               // Incluye en la busqueda
@@ -281,7 +283,9 @@ const getProgramsByGenreController = async (genreName, type) => {
             '$Genres.name$': genreName
           }
         })
-      : await Programs.findAll({
+      : await Programs.findAndCountAll({
+          limit: 25,
+          offset: (Number(page) - 1) * 25,
           include: [
             {
               // Incluye en la busqueda
@@ -300,18 +304,25 @@ const getProgramsByGenreController = async (genreName, type) => {
           }
         });
 
-  const totalFiltered = data.length;
+  const totalFiltered = await Programs.count({
+    where: {
+      type: type,
+      '$Genres.name$': genreName
+    }
+  });
 
   return {
     totalFiltered,
-    data
+    data: data.rows
   };
 };
 
-const getProgramsByPlatformController = async (platformName, type) => {
+const getProgramsByPlatformController = async (platformName, type, page) => {
   const data =
     type === 'main'
-      ? await Programs.findAll({
+      ? await Programs.findAndCountAll({
+          limit: 25,
+          offset: (Number(page) - 1) * 25,
           include: [
             {
               // Incluye en la busqueda
@@ -328,7 +339,9 @@ const getProgramsByPlatformController = async (platformName, type) => {
             '$platforms.name$': platformName
           }
         })
-      : await Programs.findAll({
+      : await Programs.findAndCountAll({
+          limit: 25,
+          offset: (Number(page) - 1) * 25,
           include: [
             {
               // Incluye en la busqueda
@@ -346,22 +359,30 @@ const getProgramsByPlatformController = async (platformName, type) => {
             type: type
           }
         });
-  const totalFiltered = data.length;
+  const totalFiltered = await Programs.count({
+    where: {
+      '$Platforms.name$': platformName,
+      type: type
+    }
+  });
 
   return {
     totalFiltered,
-    data
+    data: data.rows
   };
 };
 
 const getProgramsByGenreAndPlatformController = async (
   genreName,
   platformName,
-  type
+  type,
+  page
 ) => {
   const data =
     type === 'main'
-      ? await Programs.findAll({
+      ? await Programs.findAndCountAll({
+          limit: 25,
+          offset: (Number(page) - 1) * 25,
           include: [
             {
               model: Genres,
@@ -379,7 +400,9 @@ const getProgramsByGenreAndPlatformController = async (
             '$Genres.name$': genreName
           }
         })
-      : await Programs.findAll({
+      : await Programs.findAndCountAll({
+          limit: 25,
+          offset: (Number(page) - 1) * 25,
           include: [
             {
               model: Genres,
@@ -399,11 +422,17 @@ const getProgramsByGenreAndPlatformController = async (
           }
         });
 
-  const totalFiltered = data.length;
+  const totalFiltered = await Programs.count({
+    where: {
+      '$Platforms.name$': platformName,
+      '$Genres.name$': genreName,
+      type: type
+    }
+  });
 
   return {
     totalFiltered,
-    data
+    data: data.rows
   };
 };
 
