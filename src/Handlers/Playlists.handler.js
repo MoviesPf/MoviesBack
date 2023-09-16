@@ -1,74 +1,91 @@
 const {
-  getPlaylistsController,
-  getIdPlaylistsController,
-  createPlaylistsController,
-  addPlaylistsController,
-  removePlaylistsController
+  findAllPlaylist,
+  findPlaylist,
+  editPlaylist,
+  eliminatePlaylist,
+  findUserPlaylist,
+  createPlaylist,
+  postOrEliminateProgram
 } = require('../Controllers/Playlists.controller');
 
-const getPlaylistsHandler = async (req, res, next) => {
+const getAllPlaylists = async (req, res, next) => {
   try {
-    const data = await getPlaylistsController();
-
-    return res.status(200).json(data);
+    const allPlaylist = await findAllPlaylist();
+    res.status(200).json(allPlaylist);
   } catch (error) {
     next(error);
-  }
+  };
 };
 
-const getIdPlaylistsHandler = async (req, res, next) => {
+const getPlaylistById = async (req, res, next) => {
+  const { Id } = req.params;
   try {
-    const { id } = req.params;
-
-    const data = await getIdPlaylistsController(id);
-
-    return res.status(200).json(data);
+    const playlist = await findPlaylist(Id);
+    res.status(200).json(playlist);
   } catch (error) {
-    next(error);
-  }
+    next(error)
+  };
 };
 
-const createPlaylistsHandler = async (req, res, next) => {
+const patchPlaylist = async (req, res, next) => {
+  const { Id } = req.params;
+  const body = req.body;
   try {
-    const body = req.body;
-    console.log(body);
-
-    const data = await createPlaylistsController(body);
-
-    return res.status(200).json(data);
+    const data = await editPlaylist(body, Id )
+    res.status(200).json(data)
   } catch (error) {
     next(error);
-  }
+  };
 };
 
-const addPlaylistsHandler = async (req, res, next) => {
+const deletePlaylist = async (req, res, next) => {
+  const { Id } = req.params;
   try {
-    const body = req.body;
-
-    const data = await addPlaylistsController(body);
-
-    return res.status(200).json(data);
+    const data = await eliminatePlaylist(Id)
+    res.status(200).json(data)
   } catch (error) {
-    next(error);
-  }
+    next(error)
+  };
 };
 
-const removePlaylistsHandler = async (req, res, next) => {
+const getAllUserPlaylist = async (req, res, next) => {
+  const { UserId } = req.params;
   try {
-    const body = req.body;
-
-    const data = await removePlaylistsController(body);
-
-    return res.status(200).json(data);
+    const allUserPlaylist = await findUserPlaylist(UserId);
+    res.status(200).json(allUserPlaylist);
   } catch (error) {
     next(error);
-  }
+  };
+};
+
+
+const createPlaylistForUser = async (req, res, next) => {
+  const { UserId } = req.params;
+  const body = req.body;
+  try {
+    const data = await createPlaylist(body, UserId )
+    res.status(200).json(data)
+  } catch (error) {
+    next(error);
+  };
+};
+
+const handlePostProgram = async (req, res, next) => {
+  const { UserId, PlaylistName, ProgramId } = req.params;
+  try {
+    const data = await postOrEliminateProgram(UserId, PlaylistName, ProgramId)
+    res.status(200).json(data)
+  } catch (error) {
+    next(error)
+  };
 };
 
 module.exports = {
-  getPlaylistsHandler,
-  getIdPlaylistsHandler,
-  createPlaylistsHandler,
-  addPlaylistsHandler,
-  removePlaylistsHandler
+  getAllPlaylists,
+  getPlaylistById,
+  patchPlaylist,
+  deletePlaylist,
+  getAllUserPlaylist,
+  createPlaylistForUser,
+  handlePostProgram
 };

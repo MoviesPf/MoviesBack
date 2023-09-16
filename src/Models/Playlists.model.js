@@ -11,6 +11,9 @@ const Playlists = sequelize.define(
     },
     name: {
       type: DataTypes.STRING
+    },
+    programsIds: {
+      type: DataTypes.TEXT
     }
   },
   { timestamps: false }

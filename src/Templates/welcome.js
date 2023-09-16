@@ -1,5 +1,4 @@
 const welcome = ({ name }) => {
-
   const text = `
   <!DOCTYPE html>
 <html lang="en">

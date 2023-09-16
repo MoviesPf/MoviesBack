@@ -58,8 +58,11 @@ async function asociateProgramsAndGenres(req, res, next) {
 
             const actualProgram = await Programs.findByPk(clearedMoviesId[i])
             const dbGenres = await Genres.findAll({ where: { id: genres}})
+            const genreOpcional = await Genres.findByPk(10770)
 
-            await actualProgram.addGenres(dbGenres)
+            dbGenres.length > 0 ? await actualProgram.addGenres(dbGenres) : await actualProgram.addGenres(genreOpcional)
+
+            console.log(dbGenres)
         }
 
         for( i = 0 ; i < clearedSeriesId.length ; i++){
@@ -70,8 +73,9 @@ async function asociateProgramsAndGenres(req, res, next) {
 
             const actualProgram = await Programs.findByPk(clearedSeriesId[i])
             const dbGenres = await Genres.findAll({ where: { id: genres}})
+            const genreOpcional = await Genres.findAll({where: {id:[10770,10764]}})
 
-            await actualProgram.addGenres(dbGenres)
+            dbGenres.length > 0 ? await actualProgram.addGenres(dbGenres) : await actualProgram.addGenres(genreOpcional)
         }
 
         res.status(200).json("generos asociados correctamente")

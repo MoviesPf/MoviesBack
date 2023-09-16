@@ -9,13 +9,16 @@ const createInitialPlatforms = async () => {
       const existingPlatforms = await program.getPlatforms();
 
       if (existingPlatforms.length === 0) {
-        const platforms = await getRandomPlatforms(2);
+        const platforms = await getRandomPlatforms(6);
 
         await program.addPlatforms(platforms);
       }
     }
   } catch (error) {
-    throw new Error("Error during association of platforms with programs");
+    console.error(
+      "Error during association of platforms with programs:",
+      error
+    );
   }
 };
 

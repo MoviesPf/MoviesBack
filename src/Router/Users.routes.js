@@ -1,28 +1,48 @@
-const { Router } = require("express");
+const { Router } = require('express');
 const {
-    postUser,
-    getUsers,
-    getUserById, 
-    banDesbanUser, 
-    editUser,
-    forgotPasswordHandler,
-    changePasswordHandler
-} = require("../Handlers/Users.handler.js");
+  postUser,
+  getUsers,
+  getUserById,
+  banDesbanUser,
+  editUser,
+  forgotPasswordHandler,
+  changePasswordHandler,
+  loginUserHandler,
+  eliminarUsuario,
+  getAllUsersAdminHandler,
+  uploadAvatarImageHandler,
+  uploadBackgroundImageHandler
+} = require('../Handlers/Users.handler.js');
 
 const router = Router();
 
-router.patch("/forgot-password", forgotPasswordHandler)
+router.get('/all', getAllUsersAdminHandler);
 
-router.patch("/change-password", changePasswordHandler)
+router.patch('/forgot-password', forgotPasswordHandler);
 
-router.post("/", postUser);
+router.patch('/change-password', changePasswordHandler);
 
-router.get("/", getUsers);
+router.post('/', postUser);
 
-router.get("/:id", getUserById);
+router.get('/', getUsers);
 
-router.delete("/:id", banDesbanUser);
+router.post('/login', loginUserHandler);
 
-router.patch("/:id", editUser);
+router.get('/:id', getUserById)
+
+router.delete('/ban/:id', banDesbanUser)
+
+router.delete('/delete/:id', eliminarUsuario);
+
+router.patch('/:id', editUser);
+
+//admin
+router.get('/all', getAllUsersAdminHandler);
+
+//Cloudinary
+
+router.post('/avatar/upload-image', uploadAvatarImageHandler);
+
+router.post('/background/upload-image', uploadBackgroundImageHandler);
 
 module.exports = router;
