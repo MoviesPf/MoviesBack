@@ -3,30 +3,41 @@ const { Programs, Genres, Platforms } = require('../Models/Relations');
 const sequelize = require("../db")
 
 const getAllProgramsController = async () => {
-  const data = await Programs.findAll({
+  const data = await Programs.findAndCountAll({
+    limit: 25,
+    offset: (Number(page) - 1) * 25,
     include: [
       { model: Genres, through: { attributes: [] } },
       { model: Platforms, through: { attributes: [] } }
     ]
   });
+  const total = await Programs.count();
 
-  const totalPrograms = data.length;
-  let adultPrograms = 0;
-  let activePrograms = 0;
-  let bannedPrograms = 0;
+  const totalMovies = await Programs.count({
+    where: {
+      type: 'movie'
+    }
+  });
 
-  for (const value of data) {
-    if (value.adult) adultPrograms++;
-    if (value.banned) activePrograms++;
-    else bannedPrograms++;
-  }
+  const totalSeries = await Programs.count({
+    where: {
+      type: 'serie'
+    }
+  });
+
+  const bannedPrograms = await Programs.count({
+    where: {
+      banned: true
+    }
+  });
 
   return {
-    totalPrograms,
-    adultPrograms,
-    activePrograms,
+    total: Math.ceil(total / 25),
+    totalPrograms: total,
+    totalMovies,
+    totalSeries,
     bannedPrograms,
-    data
+    data: data.rows
   };
 };
 
