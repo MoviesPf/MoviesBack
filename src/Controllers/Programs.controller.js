@@ -87,7 +87,7 @@ const getActiveProgramsController = async (page) => {
   });
 
   return {
-    total: total / 25,
+    total: Math.ceil(total / 25),
     data: data.rows
   };
 };
@@ -114,7 +114,7 @@ const getAllMovies = async (page) => {
   });
 
   return {
-    total: total / 25,
+    total: Math.ceil(total / 25),
     data: data.rows
   };
 };
@@ -141,7 +141,7 @@ const getAllSeries = async (page) => {
   });
 
   return {
-    total: total / 25,
+    total: Math.ceil(total / 25),
     data: data.rows
   };
 };
