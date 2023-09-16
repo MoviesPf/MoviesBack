@@ -8,7 +8,7 @@ const {
 } = require('../Models/Relations');
 const sequelize = require('../db');
 
-const getAllProgramsController = async (page) => {
+const getAllProgramsController = async () => {
   const data = await Programs.findAndCountAll({
     limit: 25,
     offset: (Number(page) - 1) * 25,
@@ -19,8 +19,30 @@ const getAllProgramsController = async (page) => {
   });
   const total = await Programs.count();
 
+  const totalMovies = await Programs.count({
+    where: {
+      type: 'movie'
+    }
+  });
+
+  const totalSeries = await Programs.count({
+    where: {
+      type: 'serie'
+    }
+  });
+
+  const bannedPrograms = await Programs.count({
+    where: {
+      banned: true
+    }
+  });
+
   return {
     total: Math.ceil(total / 25),
+    totalPrograms: total,
+    totalMovies,
+    totalSeries,
+    bannedPrograms,
     data: data.rows
   };
 };
