@@ -8,7 +8,7 @@ const {
 } = require('../Models/Relations');
 const sequelize = require('../db');
 
-const getAllProgramsController = async () => {
+const getAllProgramsController = async (page) => {
   const data = await Programs.findAndCountAll({
     limit: 25,
     offset: (Number(page) - 1) * 25,
