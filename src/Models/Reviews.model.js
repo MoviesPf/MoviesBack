@@ -24,7 +24,11 @@ const Reviews = sequelize.define(
     banned: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
-    }
+    },
+    spoiler: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   { timestamps: false }
 );
