@@ -74,6 +74,7 @@ const createUser = async (
     id: user.id,
     name: user.name,
     nickname: user.nickname,
+    background: user.background,
     avatar: user.avatar,
     email: user.email,
     status: user.status,
@@ -144,40 +145,24 @@ const banUserById = async (id, reason = 'undefined') => {
   return userById;
 };
 
-const userEdit = async (id, body) => {
-  const { name, nickname, avatar, password, status } = body;
-
-  const { userById } = await findUserById(id);
-
-  userById.name = name || userById.name;
-  userById.nickname = nickname || userById.nickname;
-  userById.avatar = avatar || userById.avatar;
-  userById.password = password || userById.password;
-  userById.status = status || userById.status;
-
-  await userById.save();
-
-  return 'se actualizaron los datos correctamente';
-};
-
 // CONFIGURACION DE NODEMAILER --------------------------------------------------------
 
 const forgotPasswordController = async (email) => {
   const user = await Users.findOne({ where: { email } });
 
   if (!user) throw Error('User not found');
-
+  
   const template = forgotPassword(user);
-
+  
   const data = {
     from: 'GreenScreen',
     to: user.email,
     subject: `${user.nickname}, we tell you about the GreenScreen Support.`,
     html: template
   };
-
+  
   sendEmail(data);
-
+  
   return {
     message: 'password has been changed successfully'
   };
@@ -185,25 +170,26 @@ const forgotPasswordController = async (email) => {
 
 const changePasswordController = async (email, password) => {
   const user = await Users.findOne({ where: { email } });
-
+  
   if (!user) throw Error('User not found');
-
+  
   user.password = password;
-
+  
   await user.save();
-
+  
   return { message: 'Change password successfully' };
 };
 
 const loginUserController = async (email, password, source) => {
   const user = await Users.findOne({ where: { email } });
-
+  
   console.log(source);
-
+  
   usuarioRetornado = {
     id: user.id,
     name: user.name,
     nickname: user.nickname,
+    background: user.background,
     avatar: user.avatar,
     email: user.email,
     status: user.status,
@@ -211,16 +197,16 @@ const loginUserController = async (email, password, source) => {
     admin: user.admin,
     banned: user.banned
   }
-
+  
   if (!user) throw Error('incorrect email or password');
-
+  
   if (source === 'gmail') {
     return {
       message: 'successful login',
       data: usuarioRetornado
     };
   }
-
+  
   if (user.password === password) {
     console.log('logueado');
     return {
@@ -249,7 +235,7 @@ const getAllUsersForAdmin = async () => {
   let totalBanned = 0;
   let totalDonators = 0;
   let totalReviews = 0;
-
+  
   for (const user of data) {
     totalReviews += user.Reviews.length;
     if (user.banned) {
@@ -259,7 +245,7 @@ const getAllUsersForAdmin = async () => {
       totalDonators++;
     }
   }
-
+  
   return {
     total,
     totalBanned,
@@ -269,44 +255,30 @@ const getAllUsersForAdmin = async () => {
   };
 };
 
-const uploadAvatarImageController = async (userId, image) => {
+const userEdit = async (id, name, nickname, status, backgroundImage, avatarImage) => {
   try {
-    const user = await Users.findByPk(userId);
+    const user = await Users.findByPk(id);
+    
     if (!user) {
       return { error: 'Usuario no encontrado' };
     }
-    const result = await cloudinary.uploader.upload(image);
-
-    if (!result.url) {
-      return { error: 'Error al subir la imagen a Cloudinary' };
-    }
-
-    user.avatar = result.url;
+    
+    const avatar = await cloudinary.uploader.upload(avatarImage);
+    const background = backgroundImage !== "default" ? await cloudinary.uploader.upload(backgroundImage) : {url: "default"};
+    
+    user.name = name || user.name;
+    user.nickname = nickname || user.nickname;
+    user.status = status || user.status;
+    user.avatar = avatar.url || user.avatar;
+    user.background = background.url || user.background;
+    
     await user.save();
-
-    return { message: 'Imagen de avatar subida exitosamente', imageUrl: user.avatar }
+    
+    console.log({"usuario guardado": user});
+    
+    return {"update": user}
   } catch (error) {
-    console.log(error)
-  }
-};
-const uploadBackgroundImageController = async (userId, image) => {
-  try {
-    const user = await Users.findByPk(userId);
-    if (!user) {
-      return { error: 'Usuario no encontrado' };
-    }
-    const result = await cloudinary.uploader.upload(image);
-
-    if (!result.url) {
-      return { error: 'Error al subir la imagen a Cloudinary' };
-    }
-
-    user.background = result.url;
-    await user.save();
-
-    return { message: 'Imagen de fondo subida exitosamente', imageUrl: user.background };
-  } catch (error) {
-    return { error: 'Error interno del servidor' };
+    return { error: 'Error interno del servidor', message: error };
   }
 };
 

@@ -8,9 +8,7 @@ const {
   changePasswordController,
   loginUserController,
   deleteUser,
-  getAllUsersForAdmin,
-  uploadAvatarImageController,
-  uploadBackgroundImageController,
+  getAllUsersForAdmin
 } = require('../Controllers/Users.controller.js');
 
 const postUser = async (req, res, next) => {
@@ -67,24 +65,11 @@ const banDesbanUser = async (req, res, next) => {
   }
 };
 
-const editUser = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const body = req.body;
-    if (!body) {
-      return res.status(400).json({ error: 'Datos insuficientes' });
-    }
-    const editedUser = await userEdit(id, body);
-    return res.status(200).json(editedUser);
-  } catch (error) {
-    next(error);
-  }
-};
 
 const forgotPasswordHandler = async (req, res, next) => {
   try {
     const { email } = req.body;
-
+    
     const data = await forgotPasswordController(email);
 
     return res.status(200).json(data);
@@ -97,9 +82,9 @@ const changePasswordHandler = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     console.log(email);
-
+    
     const data = await changePasswordController(email, password);
-
+    
     return res.status(200).json(data);
   } catch (error) {
     next(error);
@@ -135,20 +120,15 @@ const getAllUsersAdminHandler = async (req, res, next) => {
   }
 };
 
-const uploadAvatarImageHandler = async (req, res, next) => {
+const editUser = async (req, res, next) => {
   try {
-    const { userId, image } = req.body;
-    const result = await uploadAvatarImageController(userId, image);
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-const uploadBackgroundImageHandler = async (req, res, next) => {
-  try {
-    const { userId, image } = req.body;
-    const result = await uploadBackgroundImageController(userId, image);
-    res.status(200).json(result);
+    const { id, name, nickname, status, backgroundImage, avatarImage } = req.body;
+    console.log({id, name, nickname, status, backgroundImage, avatarImage});
+    if (!id) {
+      return res.status(400).json({ error: 'Datos insuficientes' });
+    }
+    const editedUser = await userEdit(id, name, nickname, status, backgroundImage, avatarImage);
+    return res.status(200).json(editedUser);
   } catch (error) {
     next(error);
   }
