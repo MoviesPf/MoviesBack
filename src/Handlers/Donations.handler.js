@@ -1,5 +1,7 @@
 const mercadopago = require('mercadopago');
 const Donations = require('../Models/Donations.model');
+const Users = require("../Models/Users.model");
+
 const createOrder = async (req, res) => {
   try {
     mercadopago.configure({
@@ -11,6 +13,9 @@ const createOrder = async (req, res) => {
     const failureMessage =
       '¡Oh! ha ocurrido un error al realizar su donación, vuelve a intentarlo';
     const popcorn = req.body;
+
+    const user = await Users.findByPk(popcorn.userId)
+    console.log(user)
     const result = await mercadopago.preferences.create({
       items: [
         {
@@ -36,15 +41,21 @@ const createOrder = async (req, res) => {
 
     // si fue exitosa la donacion se guarda en la base de datos
     if (result && result.response && result.response.id) {
+      user.donator = true;
+      user.save();
+
       console.log('Antes de la creación del registro en la base de datos');
       const newDonation = await Donations.create({
         date: new Date(),
-        amount: parseInt(popcorn.price, 10)
+        amount: parseInt(popcorn.price, 10),
+        UserId: user.id,
       });
       console.log('Después de la creación del registro en la base de datos');
       console.log(
         'Datos de donación guardados en la base de datos:',
-        newDonation.toJSON()
+        newDonation.toJSON(),
+        "user id", 
+        user.id,
       );
     }
     res.status(200).json({ response: result });
