@@ -11,7 +11,8 @@ const {
   getProgramsByGenreAndPlatform,
   getActiveMovies,
   getActiveSeries,
-  programsFiltersHandler
+  programsFiltersHandler,
+  uploadPosterImageHandler
 } = require("../Handlers/Programs.handler");
 const { loadMoviesApi } = require("../utils/loadMovies");
 const { loadSeriesApi } = require("../utils/loadSeries");
@@ -51,5 +52,9 @@ router.delete("/:ProgramsId", deleteProgramsHandler);
 ////////////// Filtros //////////////////
 
 router.post("/filters", programsFiltersHandler);
+
+router.post('/poster/upload-image', uploadPosterImageHandler);
+
+router.post('/backdrop/upload-image', uploadPosterImageHandler);
 
 module.exports = router;

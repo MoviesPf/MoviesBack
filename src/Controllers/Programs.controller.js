@@ -7,6 +7,7 @@ const {
   Users
 } = require('../Models/Relations');
 const sequelize = require('../db');
+const { cloudinary } = require('../Config/Cloudinary');
 
 const getAllProgramsController = async (page) => {
   const data = await Programs.findAndCountAll({
@@ -356,6 +357,48 @@ const programsFilters = async (filters, page, type) => {
   };
 };
 
+const uploadPosterImageController = async (programId, image) => {
+  try {
+    const program = await Programs.findByPk(programId);
+    if (!program) {
+      return { error: 'Programa no encontrado' };
+    }
+    const result = await cloudinary.uploader.upload(image);
+
+    if (!result.url) {
+      return { error: 'Error al subir la imagen a Cloudinary' };
+    }
+
+    program.poster = result.url;
+    await program.save();
+
+    return { message: 'Imagen de poster subida exitosamente', imageUrl: program.poster }
+  } catch (error) {
+    console.log(error)
+  }
+};
+
+const uploadBackdropImageController = async (programId, image) => {
+  try {
+    const program = await Programs.findByPk(programId);
+    if (!program) {
+      return { error: 'Programa no encontrado' };
+    }
+    const result = await cloudinary.uploader.upload(image);
+
+    if (!result.url) {
+      return { error: 'Error al subir la imagen a Cloudinary' };
+    }
+
+    program.backdrop = result.url;
+    await program.save();
+
+    return { message: 'Imagen de fondo subida exitosamente', imageUrl: program.backdrop };
+  } catch (error) {
+    return { error: 'Error interno del servidor' };
+  }
+};
+
 module.exports = {
   getAllProgramsController,
   getAllNameProgramsController,
@@ -367,5 +410,8 @@ module.exports = {
   deleteProgramsController,
   getAllMovies,
   getAllSeries,
-  programsFilters
+  programsFilters,
+  uploadPosterImageController,
+  uploadBackdropImageController,
+
 };

@@ -9,7 +9,9 @@ const {
   getNameProgramsController,
   getAllMovies,
   getAllSeries,
-  programsFilters
+  programsFilters,
+  uploadPosterImageController,
+  uploadBackdropImageController
 } = require('../Controllers/Programs.controller.js');
 // const {
 //   // validationBody,
@@ -121,7 +123,25 @@ const programsFiltersHandler = async (req, res, next) => {
     const { page = 1 } = req.query;
 
     const data = await programsFilters(body, page);
-    return res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const uploadPosterImageHandler = async (req, res, next) => {
+  try {
+    const { programId, image } = req.body;
+    const result = await uploadPosterImageController(programId, image);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+const uploadBackdropImageHandler = async (req, res, next) => {
+  try {
+    const { programId, image } = req.body;
+    const result = await uploadBackdropImageController(programId, image);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -136,5 +156,7 @@ module.exports = {
   deleteProgramsHandler,
   getActiveMovies,
   getActiveSeries,
-  programsFiltersHandler
+  programsFiltersHandler,
+  uploadPosterImageHandler,
+  uploadBackdropImageHandler
 };
