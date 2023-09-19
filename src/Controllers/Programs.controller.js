@@ -38,7 +38,7 @@ const getAllProgramsController = async (page) => {
   });
 
   return {
-    total: Math.ceil(total / 25),
+    total: Math.floor(total / 25),
     totalPrograms: total,
     totalMovies,
     totalSeries,
@@ -87,7 +87,7 @@ const getActiveProgramsController = async (page) => {
   });
 
   return {
-    total: Math.ceil(total / 25),
+    total: Math.floor(total / 25),
     data: data.rows
   };
 };
@@ -114,7 +114,7 @@ const getAllMovies = async (page) => {
   });
 
   return {
-    total: Math.ceil(total / 25),
+    total: Math.floor(total / 25),
     data: data.rows
   };
 };
@@ -141,7 +141,7 @@ const getAllSeries = async (page) => {
   });
 
   return {
-    total: Math.ceil(total / 25),
+    total: Math.floor(total / 25),
     data: data.rows
   };
 };
@@ -360,7 +360,7 @@ const programsFilters = async (filters, page, type) => {
 
   return {
     total,
-    totalPages: Math.ceil(total / 25),
+    totalPages: Math.floor(total / 25),
     data: data.rows
   };
 };
@@ -376,6 +376,5 @@ module.exports = {
   deleteProgramsController,
   getAllMovies,
   getAllSeries,
-  programsFilters,
-  getProgramsByGenreController
+  programsFilters
 };

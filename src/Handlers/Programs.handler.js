@@ -138,5 +138,4 @@ module.exports = {
   getActiveMovies,
   getActiveSeries,
   programsFiltersHandler,
-  getProgramsByGenre
 };
