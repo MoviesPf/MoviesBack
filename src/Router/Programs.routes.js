@@ -52,6 +52,4 @@ router.delete("/:ProgramsId", deleteProgramsHandler);
 
 router.post("/filters", programsFiltersHandler);
 
-router.get("/filter/genre/:genreName/:type", getProgramsByGenre);
-
 module.exports = router;
