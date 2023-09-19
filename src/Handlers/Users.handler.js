@@ -144,7 +144,5 @@ module.exports = {
   changePasswordHandler,
   loginUserHandler,
   eliminarUsuario,
-  getAllUsersAdminHandler,
-  uploadAvatarImageHandler,
-  uploadBackgroundImageHandler
+  getAllUsersAdminHandler
 };

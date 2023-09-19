@@ -293,6 +293,4 @@ module.exports = {
   loginUserController,
   deleteUser,
   getAllUsersForAdmin,
-  uploadAvatarImageController,
-  uploadBackgroundImageController
 };
