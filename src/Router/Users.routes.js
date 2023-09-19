@@ -34,15 +34,9 @@ router.delete('/ban/:id', banDesbanUser)
 
 router.delete('/delete/:id', eliminarUsuario);
 
-router.patch('/:id', editUser);
+router.patch('/', editUser);
 
 //admin
 router.get('/all', getAllUsersAdminHandler);
-
-//Cloudinary
-
-router.post('/avatar/upload-image', uploadAvatarImageHandler);
-
-router.post('/background/upload-image', uploadBackgroundImageHandler);
 
 module.exports = router;
