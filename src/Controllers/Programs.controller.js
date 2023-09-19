@@ -8,6 +8,7 @@ const {
 } = require('../Models/Relations');
 const sequelize = require('../db');
 
+
 const getAllProgramsController = async (page) => {
   const data = await Programs.findAndCountAll({
     limit: 25,
@@ -24,19 +25,19 @@ const getAllProgramsController = async (page) => {
       type: 'movie'
     }
   });
-
+  
   const totalSeries = await Programs.count({
     where: {
       type: 'serie'
     }
   });
-
+  
   const bannedPrograms = await Programs.count({
     where: {
       banned: true
     }
   });
-
+  
   return {
     total: Math.ceil(total / 25),
     totalPrograms: total,
@@ -60,7 +61,7 @@ const getAllNameProgramsController = async (title) => {
       { model: Platforms, through: { attributes: [] } }
     ]
   });
-
+  
   return {
     search,
     data
@@ -79,13 +80,13 @@ const getActiveProgramsController = async (page) => {
       { model: Platforms, through: { attributes: [] } }
     ]
   });
-
+  
   const total = await Programs.count({
     where: {
       banned: false
     }
   });
-
+  
   return {
     total: Math.ceil(total / 25),
     data: data.rows
@@ -112,7 +113,7 @@ const getAllMovies = async (page) => {
       banned: false
     }
   });
-
+  
   return {
     total: Math.ceil(total / 25),
     data: data.rows
@@ -132,14 +133,14 @@ const getAllSeries = async (page) => {
       { model: Platforms, through: { attributes: [] } }
     ]
   });
-
+  
   const total = await Programs.count({
     where: {
       type: 'serie',
       banned: false
     }
   });
-
+  
   return {
     total: Math.ceil(total / 25),
     data: data.rows
@@ -160,7 +161,7 @@ const getNameProgramsController = async (title) => {
       { model: Platforms, through: { attributes: [] } }
     ]
   });
-
+  
   return {
     search,
     data
@@ -185,7 +186,7 @@ const getIdProgramsController = async (id) => {
       }
     ]
   });
-
+  
   return {
     data
   };
@@ -202,12 +203,12 @@ const createProgramsController = async (body) => {
       name: body.genres
     }
   });
-
+  
   const program = await Programs.create(body);
-
+  
   await program.setPlatforms(platform);
   await program.setGenres(genre);
-
+  
   return { message: 'the movie was created correctly' };
 };
 
@@ -229,50 +230,50 @@ const updateProgramsController = async (
     popularity,
     type
   }
-) => {
-  const { data } = await getIdProgramsController(id);
-  data.title = title || data.title;
-  data.overview = overview || data.overview;
-  data.release_date = release_date || data.release_date;
-  data.backdrop = backdrop || data.backdrop;
-  data.poster = poster || data.poster;
-  data.runtime = runtime || data.runtime;
-  data.companies = companies || data.companies;
-  data.trailer = trailer || data.trailer;
-  data.adult = adult || data.adult;
-  data.revenue = revenue || data.revenue;
-  data.budget = budget || data.budget;
-  data.cast = cast || data.cast;
-  data.popularity = popularity || data.popularity;
-  data.type = type || data.type;
+  ) => {
+    const { data } = await getIdProgramsController(id);
+    data.title = title || data.title;
+    data.overview = overview || data.overview;
+    data.release_date = release_date || data.release_date;
+    data.backdrop = backdrop || data.backdrop;
+    data.poster = poster || data.poster;
+    data.runtime = runtime || data.runtime;
+    data.companies = companies || data.companies;
+    data.trailer = trailer || data.trailer;
+    data.adult = adult || data.adult;
+    data.revenue = revenue || data.revenue;
+    data.budget = budget || data.budget;
+    data.cast = cast || data.cast;
+    data.popularity = popularity || data.popularity;
+    data.type = type || data.type;
 
-  await data.save();
+    await data.save();
 
-  return { message: 'data was updated correctly' };
-};
-
-const deleteProgramsController = async (id) => {
-  const { data } = await getIdProgramsController(id);
-
-  data.banned = !data.banned;
-
-  await data.save();
-
-  return { message: 'data was updated correctly' };
-};
-
-const programsFilters = async (filters, page, type) => {
-  const whereGenres = {};
-  const wherePlatforms = {};
-  const options = {
+    return { message: 'data was updated correctly' };
+  };
+  
+  const deleteProgramsController = async (id) => {
+    const { data } = await getIdProgramsController(id);
+    
+    data.banned = !data.banned;
+    
+    await data.save();
+    
+    return { message: 'data was updated correctly' };
+  };
+  
+  const programsFilters = async (filters, page, type) => {
+    const whereGenres = {};
+    const wherePlatforms = {};
+    const options = {
     banned: false
   };
-
+  
   if (!filters.type);
   else if (filters.type) {
     options.type = filters.type;
   }
-
+  
   if (!filters.genres);
   else if (filters.genres && filters.genres.length > 0) {
     whereGenres.name = filters.genres;
@@ -281,7 +282,7 @@ const programsFilters = async (filters, page, type) => {
   else if (filters.platforms && filters.platforms.length > 0) {
     wherePlatforms.name = filters.platforms;
   }
-
+  
   const data = await Programs.findAndCountAll({
     limit: 25,
     offset: (Number(page) - 1) * 25,
@@ -300,9 +301,9 @@ const programsFilters = async (filters, page, type) => {
     ],
     where: options
   });
-
+  
   let total = 0;
-
+  
   if (!filters.genres && !filters.platforms) {
     total = await Programs.count({
       where: options
@@ -348,11 +349,51 @@ const programsFilters = async (filters, page, type) => {
       ]
     });
   }
-
+  
   return {
     total,
     totalPages: Math.ceil(total / 25),
     data: data.rows
+  };
+};
+
+const getProgramsByGenreController = async (genreName, type) => {
+  console.log(genreName, type)
+  const data =
+    type === 'main'
+      ? await Programs.findAll({
+          include: [
+            {
+              // Incluye en la busqueda
+              model: Genres,
+              as: 'Genres',
+              through: { attributes: [] }
+            }
+          ],
+          where: {
+            '$Genres.name$': genreName
+          }
+        })
+      : await Programs.findAll({
+          include: [
+            {
+              // Incluye en la busqueda
+              model: Genres,
+              as: 'Genres',
+              through: { attributes: [] }
+            }
+          ],
+          where: {
+            type: type,
+            '$Genres.name$': genreName
+          }
+        });
+
+        const totalFiltered = data.length;
+
+  return {
+    totalFiltered,
+    data
   };
 };
 
@@ -367,5 +408,6 @@ module.exports = {
   deleteProgramsController,
   getAllMovies,
   getAllSeries,
-  programsFilters
+  programsFilters,
+  getProgramsByGenreController
 };
