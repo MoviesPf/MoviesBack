@@ -20,7 +20,7 @@ const createUser = async (
   const userFound = await Users.findOne({ where: { email } });
 
   if (source === 'gmail' && userFound) {
-    const data = await loginUserController(email, password, source);
+    const data = await loginUserController(source, email, password);
     return data;
   }
 
@@ -180,12 +180,12 @@ const changePasswordController = async (email, password) => {
   return { message: 'Change password successfully' };
 };
 
-const loginUserController = async (email, password, source) => {
+const loginUserController = async (source, email, password) => {
   const user = await Users.findOne({ where: { email } });
 
   if (user.banned) {
     return {
-      data,
+      data: user,
       message:
         'We regret to inform you that your account has been suspended for violating the rules of our site, check your email or contact us.'
     };
