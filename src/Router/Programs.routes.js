@@ -6,9 +6,7 @@ const {
   createProgramsHandler,
   deleteProgramsHandler,
   updateProgramsHandler,
-  getProgramsByGenre,
-  getProgramsByPlatform,
-  getProgramsByGenreAndPlatform,
+  getProgramsSimilares,
   getActiveMovies,
   getActiveSeries,
   programsFiltersHandler
@@ -49,6 +47,8 @@ router.patch("/:ProgramsId", updateProgramsHandler);
 router.delete("/:ProgramsId", deleteProgramsHandler);
 
 ////////////// Filtros //////////////////
+
+router.get("/filter/genre/:genreName/:type", getProgramsSimilares);
 
 router.post("/filters", programsFiltersHandler);
 
