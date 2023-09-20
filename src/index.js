@@ -36,14 +36,17 @@ app.use(cors());
 app.use('/', router);
 
 sequelize.sync({ force: false }).then(async () => {
-  console.log('db conectada');
-
+  
   // Inicializa los datos iniciales
+  
+  console.log('iniciando data');
   await initializeInitialData();
-
+  
   // Llamada a la función para asociar platforms a programs
+  console.log('creando platforms iniciales');
   await createInitialPlatforms();
-
+  
+  console.log('db conectada');
   app.listen(3001, () => console.log('Server is running on port', port));
 });
 

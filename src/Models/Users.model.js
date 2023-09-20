@@ -21,6 +21,7 @@ const Users = sequelize.define(
     },
     background: {
       type: DataTypes.STRING, // almacena la URL del fondo en Cloudinary
+      defaultValue: "default",
     },
     email: {
       type: DataTypes.STRING,
