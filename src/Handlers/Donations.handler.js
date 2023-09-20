@@ -9,9 +9,9 @@ const createOrder = async (req, res) => {
         'TEST-8904276648822814-090619-7c57530ea001e5648d390ac642516a24-1472539992'
     });
     const successMessage =
-      '¡Muchas Gracias! Su donación se ha realizado con éxito';
+      'Thank you very much! Your donation has been successfully completed';
     const failureMessage =
-      '¡Oh! ha ocurrido un error al realizar su donación, vuelve a intentarlo';
+      'Oh! an error occurred while making your donation, please try again.';
     const popcorn = req.body;
 
     const user = await Users.findByPk(popcorn.userId)

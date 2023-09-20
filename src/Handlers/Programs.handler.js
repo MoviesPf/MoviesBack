@@ -128,25 +128,6 @@ const programsFiltersHandler = async (req, res, next) => {
   }
 };
 
-const getProgramsByGenre = async (req, res, next) => {
-  try {
-    const programsFound = await getProgramsByGenreController(
-      req.params.genreName,
-      req.params.type
-    );
-    if (programsFound.length <= 0) {
-      return res
-        .status(404)
-        .json({
-          msg: 'Parameters are incorrect, insufficient, or no match found. try another name.'
-        });
-    }
-    return res.status(200).json(programsFound);
-  } catch (error) {
-    next(error);
-  }
-};
-
 module.exports = {
   getAllProgramsHandler,
   getActiveProgramsHandler,
@@ -157,5 +138,4 @@ module.exports = {
   getActiveMovies,
   getActiveSeries,
   programsFiltersHandler,
-  getProgramsByGenre
 };
