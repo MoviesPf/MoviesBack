@@ -248,7 +248,7 @@ const updateProgramsController = async (
 
   await data.save();
 
-  return { message: 'data was updated correctly' };
+  return {data,  message: 'data was updated correctly' };
 };
 
 const deleteProgramsController = async (id) => {
@@ -365,6 +365,47 @@ const programsFilters = async (filters, page, type) => {
   };
 };
 
+const getSimilarPrograms = async (genreName, type) => {
+  console.log(genreName, type)
+  const data =
+    type === 'main'
+      ? await Programs.findAll({
+          include: [
+            {
+              // Incluye en la busqueda
+              model: Genres,
+              as: 'Genres',
+              through: { attributes: [] }
+            }
+          ],
+          where: {
+            '$Genres.name$': genreName
+          }
+        })
+      : await Programs.findAll({
+          include: [
+            {
+              // Incluye en la busqueda
+              model: Genres,
+              as: 'Genres',
+              through: { attributes: [] }
+            }
+          ],
+          where: {
+            type: type,
+            '$Genres.name$': genreName
+          }
+        });
+
+        const totalFiltered = data.length;
+
+  return {
+    totalFiltered,
+    data
+  };
+};
+
+
 module.exports = {
   getAllProgramsController,
   getAllNameProgramsController,
@@ -376,5 +417,6 @@ module.exports = {
   deleteProgramsController,
   getAllMovies,
   getAllSeries,
-  programsFilters
+  programsFilters,
+  getSimilarPrograms
 };
