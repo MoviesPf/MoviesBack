@@ -1,19 +1,21 @@
 require('dotenv').config();
-const { POSTGRES_URL } =
-  process.env;
+const { POSTGRES_URL } = process.env;
 
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize("postgres://movies_z8oh_user:NqPBd8oTK0MRLK1J8BrSWNbXsB5m1YC3@dpg-ck11bm7hdsdc73dodup0-a.oregon-postgres.render.com/movies_z8oh", {
-  dialect: 'postgres', 
-  dialectOptions: {
-    ssl: {
-      require: true, // Requerir SSL
-      rejectUnauthorized: false, // No rechazar conexiones no autorizadas
+const sequelize = new Sequelize(
+  'postgres://movies_zihy_user:r1AWZKY3dspCZS0haZbWeAFxHHkMMaYC@dpg-cjtllf7hdsdc73cha4s0-a.oregon-postgres.render.com:5432/movies_zihy',
+  {
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true, // Requerir SSL
+        rejectUnauthorized: false // No rechazar conexiones no autorizadas
+      }
     },
-  },
-  logging: false, 
-});
+    logging: false
+  }
+);
 
 // Manejador de eventos para verificar si la conexión se ha establecido correctamente.
 sequelize
@@ -26,7 +28,6 @@ sequelize
   });
 
 module.exports = sequelize;
-
 
 // require('dotenv').config();
 // const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_DATABASE } =
@@ -41,5 +42,5 @@ module.exports = sequelize;
 //     native: false
 //   }
 // );
-// // 
+// //
 // module.exports = sequelize;

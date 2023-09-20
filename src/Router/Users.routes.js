@@ -9,7 +9,7 @@ const {
   changePasswordHandler,
   loginUserHandler,
   eliminarUsuario,
-  getAllUsersAdminHandler
+  getAllUsersAdminHandler,
 } = require('../Handlers/Users.handler.js');
 
 const router = Router();
@@ -32,7 +32,7 @@ router.delete('/ban/:id', banDesbanUser)
 
 router.delete('/delete/:id', eliminarUsuario);
 
-router.patch('/:id', editUser);
+router.patch('/', editUser);
 
 //admin
 router.get('/all', getAllUsersAdminHandler);

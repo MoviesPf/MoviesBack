@@ -5,8 +5,8 @@ const { forgotPassword } = require('../Templates/ForgotPassword');
 const banned = require('../Templates/banned');
 const unbanning = require('../Templates/unbanning');
 const welcome = require('../Templates/welcome');
-const { Model, where } = require('sequelize');
 const Reviews = require('../Models/Reviews.model');
+const { cloudinary } = require('../Config/Cloudinary');
 
 const createUser = async (
   name,
@@ -20,7 +20,7 @@ const createUser = async (
   const userFound = await Users.findOne({ where: { email } });
 
   if (source === 'gmail' && userFound) {
-    const data = await loginUserController(email, password, source);
+    const data = await loginUserController(source, email, password);
     return data;
   }
 
@@ -70,7 +70,20 @@ const createUser = async (
     }
   });
 
-  return { data: user };
+  usuarioRetornado = {
+    id: user.id,
+    name: user.name,
+    nickname: user.nickname,
+    background: user.background,
+    avatar: user.avatar,
+    email: user.email,
+    status: user.status,
+    donator: user.donator,
+    admin: user.admin,
+    banned: user.banned
+  };
+
+  return { data: usuarioRetornado };
 };
 
 const getAllUsers = async () => {
@@ -132,22 +145,6 @@ const banUserById = async (id, reason = 'undefined') => {
   return userById;
 };
 
-const userEdit = async (id, body) => {
-  const { name, nickname, avatar, password, status } = body;
-
-  const { userById } = await findUserById(id);
-
-  userById.name = name || userById.name;
-  userById.nickname = nickname || userById.nickname;
-  userById.avatar = avatar || userById.avatar;
-  userById.password = password || userById.password;
-  userById.status = status || userById.status;
-
-  await userById.save();
-
-  return 'se actualizaron los datos correctamente';
-};
-
 // CONFIGURACION DE NODEMAILER --------------------------------------------------------
 
 const forgotPasswordController = async (email) => {
@@ -183,25 +180,46 @@ const changePasswordController = async (email, password) => {
   return { message: 'Change password successfully' };
 };
 
-const loginUserController = async (email, password, source) => {
+const loginUserController = async (source, email, password) => {
   const user = await Users.findOne({ where: { email } });
 
+  if (user.banned) {
+    return {
+      data: user,
+      message:
+        'We regret to inform you that your account has been suspended for violating the rules of our site, check your email or contact us.'
+    };
+  }
+
   console.log(source);
+
+  usuarioRetornado = {
+    id: user.id,
+    name: user.name,
+    nickname: user.nickname,
+    background: user.background,
+    avatar: user.avatar,
+    email: user.email,
+    status: user.status,
+    donator: user.donator,
+    admin: user.admin,
+    banned: user.banned
+  };
 
   if (!user) throw Error('incorrect email or password');
 
   if (source === 'gmail') {
     return {
       message: 'successful login',
-      data: user
+      data: usuarioRetornado
     };
   }
 
   if (user.password === password) {
-    console.log('ok');
+    console.log('logueado');
     return {
       message: 'successful login',
-      data: user
+      data: usuarioRetornado
     };
   } else throw Error('incorrect password');
 };
@@ -243,6 +261,43 @@ const getAllUsersForAdmin = async () => {
     totalReviews,
     data
   };
+};
+
+const userEdit = async (
+  id,
+  name,
+  nickname,
+  status,
+  backgroundImage,
+  avatarImage
+) => {
+  try {
+    const user = await Users.findByPk(id);
+
+    if (!user) {
+      return { error: 'Usuario no encontrado' };
+    }
+
+    const avatar = await cloudinary.uploader.upload(avatarImage);
+    const background =
+      backgroundImage !== 'default'
+        ? await cloudinary.uploader.upload(backgroundImage)
+        : { url: 'default' };
+
+    user.name = name || user.name;
+    user.nickname = nickname || user.nickname;
+    user.status = status || user.status;
+    user.avatar = avatar.url || user.avatar;
+    user.background = background.url || user.background;
+
+    await user.save();
+
+    console.log({ 'usuario guardado': user });
+
+    return { update: user };
+  } catch (error) {
+    return { error: 'Error interno del servidor', message: error };
+  }
 };
 
 module.exports = {

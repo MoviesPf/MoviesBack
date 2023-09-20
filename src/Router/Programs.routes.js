@@ -6,11 +6,10 @@ const {
   createProgramsHandler,
   deleteProgramsHandler,
   updateProgramsHandler,
-  getProgramsByGenre,
-  getProgramsByPlatform,
-  getProgramsByGenreAndPlatform,
+  getProgramsSimilares,
   getActiveMovies,
-  getActiveSeries
+  getActiveSeries,
+  programsFiltersHandler
 } = require("../Handlers/Programs.handler");
 const { loadMoviesApi } = require("../utils/loadMovies");
 const { loadSeriesApi } = require("../utils/loadSeries");
@@ -26,6 +25,7 @@ router.get("/load/series", loadSeriesApi);
 
 // GET DE TODOS LOS PROGRAMS
 router.get("/all", getAllProgramsHandler);
+
 
 // GET DE PROGRAMS ACTIVOS
 router.get("/", getActiveProgramsHandler);
@@ -48,13 +48,8 @@ router.delete("/:ProgramsId", deleteProgramsHandler);
 
 ////////////// Filtros //////////////////
 
-// GET DE PROGRAMS POR GÉNERO
-router.get("/filter/genre/:genreName/:type", getProgramsByGenre);
+router.get("/filter/genre/:genreName/:type", getProgramsSimilares);
 
-// GET DE PROGRAMS POR PLATAFORMA
-router.get("/filter/platform/:platformName/:type", getProgramsByPlatform);
-
-// GET DE PROGRAMS POR GÉNERO Y PLATAFORMA COMBINADOS
-router.get("/filter/genre/:genreName/platform/:platformName/:type", getProgramsByGenreAndPlatform);
+router.post("/filters", programsFiltersHandler);
 
 module.exports = router;
