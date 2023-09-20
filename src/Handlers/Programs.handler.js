@@ -10,7 +10,7 @@ const {
   getAllMovies,
   getAllSeries,
   programsFilters,
-  getProgramsByGenreController
+  getSimilarPrograms
 } = require('../Controllers/Programs.controller.js');
 // const {
 //   // validationBody,
@@ -128,9 +128,9 @@ const programsFiltersHandler = async (req, res, next) => {
   }
 };
 
-const getProgramsByGenre = async (req, res, next) => {
+const getProgramsSimilares = async (req, res, next) => {
   try {
-    const programsFound = await getProgramsByGenreController(
+    const programsFound = await getSimilarPrograms(
       req.params.genreName,
       req.params.type
     );
@@ -157,5 +157,5 @@ module.exports = {
   getActiveMovies,
   getActiveSeries,
   programsFiltersHandler,
-  getProgramsByGenre
+  getProgramsSimilares
 };
