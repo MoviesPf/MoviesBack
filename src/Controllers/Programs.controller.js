@@ -248,7 +248,7 @@ const updateProgramsController = async (
 
   await data.save();
 
-  return { message: 'data was updated correctly' };
+  return {data,  message: 'data was updated correctly' };
 };
 
 const deleteProgramsController = async (id) => {
