@@ -10,8 +10,6 @@ const {
   loginUserHandler,
   eliminarUsuario,
   getAllUsersAdminHandler,
-  uploadAvatarImageHandler,
-  uploadBackgroundImageHandler
 } = require('../Handlers/Users.handler.js');
 
 const router = Router();
