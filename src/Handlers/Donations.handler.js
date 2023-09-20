@@ -26,13 +26,13 @@ const createOrder = async (req, res) => {
         }
       ],
       back_urls: {
-        success: `https://movies-front-tau.vercel.app/donate?message=${encodeURIComponent(
+        success: `https://movies-front-tau.vercel.app/?message=${encodeURIComponent(
           successMessage
         )}`,
-        failure: `https://movies-front-tau.vercel.app/donate?message=${encodeURIComponent(
+        failure: `https://movies-front-tau.vercel.app/?message=${encodeURIComponent(
           failureMessage
         )}`,
-        pending: 'https://movies-front-tau.vercel.app/donate'
+        pending: 'https://movies-front-tau.vercel.app/'
       },
       auto_return: 'approved'
     });
