@@ -181,8 +181,10 @@ const changePasswordController = async (email, password) => {
 };
 
 const loginUserController = async (source, email, password) => {
+  console.log(source, email, password);
   const user = await Users.findOne({ where: { email } });
 
+  console.log(user);
   if (user.banned) {
     return {
       data: user,
