@@ -182,6 +182,12 @@ const changePasswordController = async (email, password) => {
 
 const loginUserController = async (email, password, source) => {
   const user = await Users.findOne({ where: { email } });
+
+  if (user.banned) {
+    return {
+      message: 'We regret to inform you that your account has been suspended for violating the rules of our site, check your email or contact us.'
+    }
+  } 
   
   console.log(source);
   
