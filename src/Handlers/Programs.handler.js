@@ -118,8 +118,6 @@ const deleteProgramsHandler = async (req, res, next) => {
 const programsFiltersHandler = async (req, res, next) => {
   try {
     const body = req.body;
-    console.log(body)
-    console.log(body);
     const { page = 1 } = req.query;
 
     const data = await programsFilters(body, page);

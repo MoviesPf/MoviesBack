@@ -92,9 +92,10 @@ const changePasswordHandler = async (req, res, next) => {
 };
 
 const loginUserHandler = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { source, email, password } = req.body;
+  console.log("body", req.body)
   try {
-    const data = await loginUserController(email, password);
+    const data = await loginUserController(source, email, password);
     return res.status(200).json(data);
   } catch (error) {
     next(error);
