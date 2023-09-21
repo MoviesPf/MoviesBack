@@ -2,9 +2,11 @@ const Programs = require("../Models/Programs.model");
 const Genres = require("../Models/Genres.model");
 const axios = require("axios");
 
-
-async function asociateProgramsAndGenres(req, res, next) {
+async function asociateMoviesAndGenres(req, res, next) {
     const { data } = await axios("https://eecsj67ln9.execute-api.us-east-2.amazonaws.com/moviespf");
+
+    const genreOpcional = await Genres.findOne({ where: { id: 10764}})
+    console.log(genreOpcional);
 
     const moviesIds = data.movies.map( (movie)=>{
         return movie.id;
@@ -24,6 +26,32 @@ async function asociateProgramsAndGenres(req, res, next) {
     };
 
     clearMoviesIds();
+
+    try {
+        
+        for( i = 0 ; i < clearedMoviesId.length ; i++){
+            const apiProgram =data.movies.filter( movie => {
+                return movie.id === clearedMoviesId[i]
+            })
+            const genres = apiProgram[0].genre_ids;
+
+            const actualProgram = await Programs.findByPk(clearedMoviesId[i])
+            const dbGenres = await Genres.findAll({ where: { id: genres}})
+            // const genreOpcional = await Genres.findOne({ where: { id: 10764}})
+
+            dbGenres.length > 0 ? await actualProgram.addGenres(dbGenres) : await actualProgram.addGenres(genreOpcional)
+
+            console.log(dbGenres)
+        }
+
+        res.status(200).json("generos asociados correctamente")
+    } catch (error) {
+        next(error)
+    }
+}
+
+async function asociateSeriesAndGenres(req, res, next) {
+    const { data } = await axios("https://eecsj67ln9.execute-api.us-east-2.amazonaws.com/moviespf");
 
     const seriesIds = data.series.map( (serie)=>{
         return serie.id
@@ -49,21 +77,6 @@ async function asociateProgramsAndGenres(req, res, next) {
     ClearSeriesIds();
 
     try {
-        
-        for( i = 0 ; i < clearedMoviesId.length ; i++){
-            const apiProgram =data.movies.filter( movie => {
-                return movie.id === clearedMoviesId[i]
-            })
-            const genres = apiProgram[0].genre_ids;
-
-            const actualProgram = await Programs.findByPk(clearedMoviesId[i])
-            const dbGenres = await Genres.findAll({ where: { id: genres}})
-            const genreOpcional = await Genres.findByPk(10770)
-
-            dbGenres.length > 0 ? await actualProgram.addGenres(dbGenres) : await actualProgram.addGenres(genreOpcional)
-
-            console.log(dbGenres)
-        }
 
         for( i = 0 ; i < clearedSeriesId.length ; i++){
             const apiProgram =data.series.filter( serie => {
@@ -85,5 +98,6 @@ async function asociateProgramsAndGenres(req, res, next) {
 }
 
 module.exports = {
-    asociateProgramsAndGenres,
+    asociateSeriesAndGenres,
+    asociateMoviesAndGenres
 };

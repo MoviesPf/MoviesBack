@@ -261,25 +261,29 @@ const deleteProgramsController = async (id) => {
   return { message: 'data was updated correctly' };
 };
 
-const programsFilters = async (filters, page, type) => {
+const programsFilters = async (datos, page) => {
+  console.log("datos",datos);
   const whereGenres = {};
   const wherePlatforms = {};
   const options = {
     banned: false
   };
 
-  if (!filters.type);
-  else if (filters.type) {
-    options.type = filters.type;
+  if (datos.programType === "main");
+  else if (datos.programType === "movies") {
+    options.type = "movie";
+  }
+  else if (datos.programType === "series") {
+    options.type = "serie";
   }
 
-  if (!filters.genres);
-  else if (filters.genres && filters.genres.length > 0) {
-    whereGenres.name = filters.genres;
+  if (!datos.filters.genres);
+  else if (datos.filters.genres && datos.filters.genres.length > 0) {
+    whereGenres.name = datos.filters.genres;
   }
-  if (!filters.platforms);
-  else if (filters.platforms && filters.platforms.length > 0) {
-    wherePlatforms.name = filters.platforms;
+  if (!datos.filters.platforms);
+  else if (datos.filters.platforms && datos.filters.platforms.length > 0) {
+    wherePlatforms.name = datos.filters.platforms;
   }
 
   const data = await Programs.findAndCountAll({
@@ -304,15 +308,15 @@ const programsFilters = async (filters, page, type) => {
   let total = 0;
 
   if (
-    (filters.genres.length === 0 && filters.platforms.length === 0) ||
-    (!filters.genres && !filters.platforms)
+    (datos.filters.genres.length === 0 && datos.filters.platforms.length === 0) ||
+    (!datos.filters.genres && !datos.filters.platforms)
   ) {
     total = await Programs.count({
       where: options
     });
   } else if (
-    (!filters.genres || filters.genres.length === 0) &&
-    filters.platforms
+    (!datos.filters.genres || datos.filters.genres.length === 0) &&
+    datos.filters.platforms
   ) {
     total = await Programs.count({
       where: options,
@@ -325,8 +329,8 @@ const programsFilters = async (filters, page, type) => {
       ]
     });
   } else if (
-    filters.genres &&
-    (!filters.platforms || filters.platforms.length === 0)
+    datos.filters.genres &&
+    (!datos.filters.platforms || datos.filters.platforms.length === 0)
   ) {
     total = await Programs.count({
       where: options,
@@ -339,7 +343,7 @@ const programsFilters = async (filters, page, type) => {
         }
       ]
     });
-  } else if (filters.genres && filters.platforms) {
+  } else if (datos.filters.genres && datos.filters.platforms) {
     total = await Programs.count({
       where: options,
       include: [
