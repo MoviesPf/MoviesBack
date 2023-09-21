@@ -2,6 +2,75 @@ const Genres = require("../Models/Genres.model");
 const axios = require("axios");
 const { APY_KEY } = process.env;
 
+const seriesData = {
+  genres: [
+  {
+  id: 10759,
+  name: "Action & Adventure"
+  },
+  {
+  id: 16,
+  name: "Animation"
+  },
+  {
+  id: 35,
+  name: "Comedy"
+  },
+  {
+  id: 80,
+  name: "Crime"
+  },
+  {
+  id: 99,
+  name: "Documentary"
+  },
+  {
+  id: 18,
+  name: "Drama"
+  },
+  {
+  id: 10751,
+  name: "Family"
+  },
+  {
+  id: 10762,
+  name: "Kids"
+  },
+  {
+  id: 9648,
+  name: "Mystery"
+  },
+  {
+  id: 10763,
+  name: "News"
+  },
+  {
+  id: 10764,
+  name: "Reality"
+  },
+  {
+  id: 10765,
+  name: "Sci-Fi & Fantasy"
+  },
+  {
+  id: 10766,
+  name: "Soap"
+  },
+  {
+  id: 10767,
+  name: "Talk"
+  },
+  {
+  id: 10768,
+  name: "War & Politics"
+  },
+  {
+  id: 37,
+  name: "Western"
+  }
+  ]
+}
+
 async function loadGenresApi() {
   try {
     const dataBase = await Genres.findAll();
@@ -11,11 +80,7 @@ async function loadGenresApi() {
         "https://eecsj67ln9.execute-api.us-east-2.amazonaws.com/moviespf"
       );
 
-      const seriesData = await axios(
-        `https://api.themoviedb.org/3/genre/tv/list?api_key=95e749339979dd55fd29df3fa91c46c3`
-      );
-
-      const seriesGenres = seriesData.data.genres;
+      const seriesGenres = seriesData.genres;
 
       const genresS = seriesGenres.map((genre) => {
         return {
